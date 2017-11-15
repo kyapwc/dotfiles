@@ -38,23 +38,20 @@ set showbreak=↪\
 set listchars=tab:\ \ ,eol:↲,nbsp:␣,extends:⟩,precedes:⟨
 
 inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
-autocmd FileType html inoremap ;h1 <h1></h1><Esc>FhT>i
-autocmd FileType html inoremap ;p <p></p><Esc>FpT>i
-autocmd FileType html inoremap ;.d <div class=""><++></div><Esc>F"T>i
-autocmd FileType html inoremap ;html <html><Enter><head><Enter><title><++></title><Enter></head><Enter><body><Enter><++><Enter></body><Enter></html><Esc>i
-autocmd FileType html inoremap ;#d <div id=""><++></div><Esc>F"T>i
-autocmd FileType javascript inoremap { {<Enter><Enter>}<Esc>F}T>i
-autocmd FileType typescript inoremap { {<Enter><Enter>}<Esc>F}T>i
-autocmd FileType javascript inoremap ( ()<Esc>F)T>i
-autocmd FileType javascript inoremap ;func function <++>(<++>){<Enter><++><Enter>}
-autocmd FileType html inoremap ( (<++>)
-autocmd FileType html inoremap { {<++>}
-autocmd FileType javascript inoremap { {<++>}
-autocmd FileType javascript inoremap ( (<++>)
-autocmd FileType typescript inoremap { {<++>}
-autocmd FileType typescript inoremap { {<++>}
-autocmd FileType javascript inoremap [ [<++>]
-autocmd FileType html inoremap [ [<++>]
+"autocmd FileType html inoremap ;h1 <h1></h1><Esc>FhT>i
+"autocmd FileType html inoremap ;p <p></p><Esc>FpT>i
+"autocmd FileType html inoremap ;.d <div class=""><++></div><Esc>F"T>i
+"autocmd FileType html inoremap ;html <html><Enter><head><Enter><title><++></title><Enter></head><Enter><body><Enter><++><Enter></body><Enter></html><Esc>i
+"autocmd FileType html inoremap ;#d <div id=""><++></div><Esc>F"T>i
+"autocmd FileType javascript inoremap { {<Enter><Enter>}<Esc>F}T>i
+"autocmd FileType typescript inoremap { {<Enter><Enter>}<Esc>F}T>i
+"autocmd FileType javascript inoremap ( ()<Esc>F)T>i
+"autocmd FileType javascript inoremap ;func function <++>(<++>){<Enter><++><Enter>}
+"inoremap ( (<++>)
+"inoremap { {<++>}
+"inoremap [ [<CR>]<Esc>ko
+"inoremap { {<CR>}<Esc>ko
+"autocmd FileType css inoremap { {<Enter><++><Enter>}
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -99,7 +96,7 @@ let g:syntastic_json_checkers = ['jsonlint']
 let g:syntastic_php_checkers = ['php', 'phplint']
 let g:syntastic_python_checkers = ['flake8', 'pylint']
 let g:syntastic_scss_checkers = ['sass']
-let g:syntastic_scss_checkers = ['tslint', 'tsc']
+let g:syntastic_typescript_checkers = ['tslint', 'tsc']
 
 Plugin 'ervandew/supertab'
 
@@ -197,6 +194,11 @@ Plugin 'mhinz/vim-startify'
 " vim-lastplace config
 let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
 
+Plugin 'ap/vim-css-color'
+
+Plugin 'hail2u/vim-css3-syntax'
+
+Plugin 'jiangmiao/auto-pairs'
 set noshowmode
 
 call vundle#end()
