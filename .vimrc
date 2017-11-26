@@ -1,7 +1,8 @@
 filetype indent on
 filetype plugin on
 filetype indent on
-
+set nocompatible
+set autoread
 " setting a clipboard, similar to windows;
 let &clipboard = has('unnamedplus') ? 'unnamedplus' : 'unnamed'
 vm <c-x> "+x
@@ -14,7 +15,6 @@ nnoremap <C-s> :w<CR>
 inoremap <C-s> <Esc>:w<CR>a
 
 set backspace=indent,eol,start
-set nocompatible
 set number
 "set relativenumber
 syntax on
@@ -37,6 +37,9 @@ hi SpecialKey ctermbg=NONE guifg=NONE
 set showbreak=↪\ 
 set listchars=tab:\ \ ,eol:↲,nbsp:␣,extends:⟩,precedes:⟨
 
+noremap <C-b> :bd<CR>
+inoremap <C-o> <Enter><Enter><Esc>ka
+noremap <C-o> i<Enter><Enter><Esc>ka
 inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
 "autocmd FileType html inoremap ;h1 <h1></h1><Esc>FhT>i
 "autocmd FileType html inoremap ;p <p></p><Esc>FpT>i
@@ -70,7 +73,7 @@ set noshowmode
 "\}
 
 Plugin 'scrooloose/nerdtree'
-nmap <F6> :NERDTreeToggle<CR>
+"nmap <Leader>n :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 
 Plugin 'mattn/emmet-vim'
@@ -114,8 +117,10 @@ Plugin 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode='ra'
+nnoremap <Leader>p :CtrlPBuffer<CR>
+inoremap <Leader>p <Esc>:CtrlPBuffer<CR>
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist|bin)|\.(git|hg|svn)$'
 "let g:ctrlp_custom_ignore = {
 "			\'dir': 'v[\/]\.(git|hg|svn)$',
 "			\'file': '\v\.(exe|so|dll)$'
@@ -130,6 +135,7 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#whitespace#enabled = 0
 Plugin 'vim-airline/vim-airline-themes'
 let g:airline_theme ="luna"
+"let g:airline_theme = "powerlineish"
 
 Plugin 'majutsushi/tagbar'
 nmap <F8> :TagbarToggle<CR>
@@ -147,14 +153,11 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
-
 map n <Plug>(easymotion-next)
 map N <Plug>(easymotion-prev)
 
 Plugin 'haya14busa/incsearch.vim'
-
 Plugin 'haya14busa/incsearch-fuzzy.vim'
-
 Plugin 'haya14busa/incsearch-easymotion.vim'
 function! s:config_easyfuzzymotion(...) abort
 	return extend(copy({
@@ -199,6 +202,30 @@ Plugin 'ap/vim-css-color'
 Plugin 'hail2u/vim-css3-syntax'
 
 Plugin 'jiangmiao/auto-pairs'
+
+Plugin 'juanwolf/browserlink.vim'
+
+"Plugin 'zeekay/vim-beautify'
+
+Plugin 'Chiel92/vim-autoformat'
+nnoremap <C-F> :Autoformat<CR>
+inoremap <C-F> <Esc>:Autoformat<CR>a
+
+Plugin 'tpope/vim-fugitive'
+
+Plugin 'tpope/vim-abolish'
+
+noremap <silent> <C-E> :Lexplore<CR>
+" Making netrw liststyle default
+let g:netrw_liststyle = 3
+" Removing useless banner at top
+let g:netrw_banner = 0
+let g:netrw_browse_split = 4
+let g:netrw_winsize = 20
+let g:netrw_altv = 1
+"set textwidth=80
+"highlight ColorColumn ctermbg=red guibg=red
+"set colorcolumn=+1
 set noshowmode
 
 call vundle#end()
