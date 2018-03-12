@@ -61,7 +61,6 @@ set noshowmode
 noremap <silent> <C-E> :Lexplore<CR>
 " Making netrw liststyle default
 let g:netrw_liststyle = 3
-" Removing useless banner at top
 let g:netrw_banner = 0
 let g:netrw_browse_split = 3
 let g:netrw_winsize = 20
