@@ -2,7 +2,6 @@ set nocompatible
 filetype indent on
 filetype plugin on
 let mapleader=","
-" set nowrap
 set wrap
 set title
 set nobackup
