@@ -1,13 +1,26 @@
+set nocompatible
 filetype indent on
 filetype plugin on
-set nocompatible
-set autoread
 let mapleader=","
-set nowrap
+" set nowrap
+set wrap
 set title
 set nobackup
 set noswapfile
 set hlsearch
+set autochdir
+set hidden
+
+"Fixing arrow keys
+noremap <silent> <C-[>OC <Right>|
+inoremap <silent> <C-[>OD <Left>|
+inoremap <silent> <C-[>OB <Down>|
+inoremap <silent> <C-[>OA <Up>|
+
+map <Up> <Nop>
+map <Down> <Nop>
+map <Left> <Nop>
+map <Right> <Nop>
 
 nnoremap <C-s> :w<CR>
 inoremap <C-s> <Esc>:w<CR>a
@@ -27,17 +40,11 @@ noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader><Tab> :tablast<cr>
 
-noremap <Up> <nop>
-noremap <Down> <nop>
-noremap <Left> <nop>
-noremap <Right> <nop>
-
 nnoremap j gj
 nnoremap k gk
 
 set backspace=indent,eol,start
-"set number
-set relativenumber
+set number relativenumber
 syntax on
 set guifont=Source\ Code\ Pro
 set term=screen-256color
@@ -64,13 +71,34 @@ let g:netrw_altv = 1
 set laststatus=2
 if !has('gui_running')
 	set t_Co=256
-	colorscheme vividchalk
+	" colorscheme vividchalk
 endif
 
+call plug#begin('~/.vim/plugs')
+
+Plug 'tpope/vim-fugitive'
+
+Plug 'NLKNguyen/papercolor-theme'
+set background=dark
+let g:PaperColor_Theme_Options = {
+		\ 'theme': {
+			\ 'default': {
+			\ 'override': {
+			\ 'linenumber_bg': ['#000000', '232'],
+			\},
+			\ 'transparent_background': 1
+		\}
+	\}
+\}
+colorscheme PaperColor
+set laststatus=2
 highlight Normal guibg=NONE ctermbg=NONE
 highlight NonText ctermbg=NONE
 
-call plug#begin('~/.vim/plugs')
+" Plug 'dikiaap/minimalist'
+" set t_Co=256
+" syntax on
+" colorscheme minimalist
 
 Plug 'mattn/emmet-vim', {'for': 'html,ejs'}
 let g:user_emmet_leader_key='<C-Z>'
@@ -122,9 +150,9 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#whitespace#enabled = 0
 Plug 'vim-airline/vim-airline-themes'
-"let g:airline_theme ="luna"
+let g:airline_theme ="luna"
 "let g:airline_theme ="distinguished"
-let g:airline_solarized_bg='dark'
+" let g:airline_solarized_bg='dark'
 "let g:airline_theme = "powerlineish"
 
 Plug 'w0rp/ale'
@@ -151,17 +179,20 @@ highlight ALEError ctermbg=DarkMagenta
 
 Plug 'valloric/youcompleteme'
 
-"Plug 'pangloss/vim-javascript'
-"let g:javascript_plugin_jsdoc = 1
-"let g:javascript_plugin_flow = 1
+Plug 'pangloss/vim-javascript'
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_flow = 1
 
 "Plug 'ternjs/tern_for_vim'
 "let g:tern_show_argument_hints='on_hold'
 "let g:tern_map_keys=1
 
-Plug 'scrooloose/nerdcommenter'
-inoremap <C-_> <C-o>: call NERDComment(0,"toggle")<C-m>
-nmap <C-_> :call NERDComment(0,"toggle")<Enter>
+"Plug 'scrooloose/nerdcommenter'
+"inoremap <C-_> <C-o>: call NERDComment(0,"toggle")<C-m>
+"nmap <C-_> :call NERDComment(0,"toggle")<Enter>
+
+Plug 'tpope/vim-commentary'
+map <C-_> gcc
 
 Plug 'Valloric/MatchTagAlways'
 highlight MatchTag ctermfg=black ctermbg=lightgreen guifg=lightgreen
