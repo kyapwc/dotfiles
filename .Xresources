@@ -1,0 +1,27 @@
+urxvt*depth: 32
+urxvt*background: [75]#000000
+/* URxvt.font: xft:Source\ Code\ Pro\ Italic:pixelsize=14:antialias=true:hinting=true,\ */
+/* URxvt.font: xft:DejaVu Sans Mono:autohint=true:size=12 */
+URxvt*font: xft:Terminus:size=10,xft:Inconsolata\ for\ Powerline:size=12,xft:Source Code Pro:size=10,xft=Ubuntu Mono:size=10,DejaVu Sans Mono:size=10,xft:System San Francisco Display:size=10,xft:Liberation Mono:size=10,xft:Space Mono:size=10,xft:Noto Mono:size=10,xft:Roboto Mono:size=10,xft:Fira Mono:size=10,xft:SymbolNeu:size=10,xft=monospace:size=10,xft=Ubuntu Mono:size=10
+/* URxvt.font: xft:Source Code Pro for Powerline:pixelsize=14,xft:Noto Emoji:minspace=False,pixelsize=14 */
+URxvt*foreground: #ffffff
+URxvt.scrollBar: false
+URxvt.letterSpace: -3
+/* URxvt.internalBorder:  15 */
+URxvt.cursorColor: #F50057
+URxvt.color0:           #d3d3d3
+URxvt.color1:           #705050
+URxvt.color2:           #00b45a
+URxvt.color3:           #dfcf8f
+URxvt.color4:           #506070
+URxvt.color5:           #dc8cc3
+URxvt.color6:           #8cd0d3
+URxvt.color7:           #dcdccc
+URxvt.color8:           #709080
+URxvt.color9:           #cc5454
+URxvt.color10:          #8BC34A
+URxvt.color11:          #f0dfaf
+URxvt.color12:          #4186be
+URxvt.color13:          #ec93d3
+URxvt.color14:          #93e0e3
+URxvt.color15:          #ffffff

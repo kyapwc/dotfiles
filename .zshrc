@@ -3,11 +3,13 @@
 
 # Path to your oh-my-zsh installation.
   export ZSH=/home/kyapwc/.oh-my-zsh
+  export ANDROID_HOME=/home/kyapwc/Android/Sdk/
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="spaceship"
+#ZSH_THEME="random"
 
 stty -ixon
 export EDITOR="vim"
@@ -18,6 +20,9 @@ source ~/.oh-my-zsh/lib/alias.zsh
 
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+#if [[ -z "$TMUX" ]]; then
+	#tmux
+#fi
 setopt beep
 
 # Set list of themes to load
@@ -75,6 +80,7 @@ plugins=(
 
 #Color Schemes
 export TERM="xterm-256color"
+# export TERM="rxvt-unicode-256color"
 #prompt whenever 'rm *' is invoked
 setopt RM_STAR_WAIT
 #Bash Style comments
@@ -115,3 +121,13 @@ source $ZSH/oh-my-zsh.sh
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+export PATH="$PATH:$HOME/scripts:$PATH"
+
+# (wal -r &)
+
+###-tns-completion-start-###
+if [ -f /home/kyapwc/.tnsrc ]; then 
+    source /home/kyapwc/.tnsrc 
+fi
+###-tns-completion-end-###
