@@ -7,6 +7,7 @@ URxvt*font: xft:Terminus:size=10,xft:Inconsolata\ for\ Powerline:size=12,xft:Sou
 URxvt*foreground: #ffffff
 URxvt.scrollBar: false
 URxvt.letterSpace: -3
+URxvt.fading: 20
 /* URxvt.internalBorder:  15 */
 URxvt.cursorColor: #F50057
 URxvt.color0:           #d3d3d3
