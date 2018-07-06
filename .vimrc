@@ -2,13 +2,24 @@ set nocompatible
 filetype indent on
 filetype plugin on
 let mapleader=","
+" set nowrap
 set wrap
 set title
 set nobackup
 set noswapfile
-set hlsearch
+" set hlsearch
 set autochdir
 set hidden
+set cursorline
+set nohlsearch
+
+" Set Esc Delay to have less delay
+" set timeoutlen=10 ttimeoutlen=0
+
+" Trying to map next tab key
+nnoremap <Leader><Tab> gt
+nnoremap <Leader><Leader><Tab> gT
+nnoremap <Leader>cd :cd %:h<CR>
 
 "Fixing arrow keys
 noremap <silent> <C-[>OC <Right>|
@@ -48,19 +59,36 @@ syntax on
 set guifont=Source\ Code\ Pro
 set term=screen-256color
 
-nnoremap <esc> :noh<return><esc>
+" nnoremap <esc> :noh<return><esc>
 
 set list
 "hi SpecialKey ctermbg=NONE guifg=NONE
 set showbreak=↪\
 set listchars=tab:\ \ ,eol:↲,nbsp:␣,extends:⌘,precedes:⛌
 noremap <C-x> :bd<CR>
+" settng tabstop for html for easier viewing
+autocmd Filetype html setlocal tabstop=2
+autocmd Filetype html setlocal softtabstop=2
+autocmd Filetype html setlocal shiftwidth=2
+autocmd Filetype html setlocal smarttab
+
+autocmd Filetype javascript setlocal tabstop=2
+autocmd Filetype javascript setlocal softtabstop=2
+autocmd Filetype javascript setlocal shiftwidth=2
+autocmd Filetype javascript setlocal smarttab
+
+inoremap <leader>; <C-o>A;
+noremap <leader>; A;<Esc>
+
+inoremap <leader><leader>, <Esc>A,<Esc>
+noremap <leader><leader>, A,<Esc>
 
 set noshowmode
 
 noremap <silent> <C-E> :Lexplore<CR>
 " Making netrw liststyle default
 let g:netrw_liststyle = 3
+" Removing useless banner at top
 let g:netrw_banner = 0
 let g:netrw_browse_split = 3
 let g:netrw_winsize = 20
@@ -75,6 +103,14 @@ endif
 call plug#begin('~/.vim/plugs')
 
 Plug 'tpope/vim-fugitive'
+
+Plug 'easymotion/vim-easymotion'
+map <Leader> <Plug>(easymotion-prefix)
+
+Plug 'haya14busa/incsearch.vim'
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
 
 Plug 'NLKNguyen/papercolor-theme'
 set background=dark
@@ -103,35 +139,13 @@ let g:user_emmet_leader_key='<C-Z>'
 
 Plug 'tpope/vim-surround'
 
-"Plug 'scrooloose/syntastic'
-"autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_error_symbol = "✗"
-"let g:syntastic_css_checkers = ['csslint', 'prettycss']
-"let g:syntastic_html_checkers = ['tidy', 'jshint']
-"let g:syntastic_html_tidy_exec = 'tidy5'
-"let g:syntastic_javascript_checkers = ['eslint', 'jsxhint']
-"let g:syntastic_json_checkers = ['jsonlint']
-"let g:syntastic_php_checkers = ['php', 'phplint']
-"let g:syntastic_python_checkers = ['flake8', 'pylint']
-"let g:syntastic_scss_checkers = ['sass']
-"let g:syntastic_typescript_checkers = ['tslint', 'tsc']
-
-Plug 'ervandew/supertab'
-
-Plug 'SirVer/ultisnips'
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion=['<C-p>', '<Up>']
-let g:SuperTabDefaultCompletionType='<C-n>'
+" Plug 'SirVer/ultisnips'
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<tab>"
+" let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+" let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
+" let g:ycm_key_list_previous_completion=['<C-p>', '<Up>']
+" let g:SuperTabDefaultCompletionType='<C-n>'
 
 Plug 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
@@ -148,10 +162,11 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#whitespace#enabled = 0
 Plug 'vim-airline/vim-airline-themes'
-let g:airline_theme ="luna"
-"let g:airline_theme ="distinguished"
+" let g:airline_theme ="luna"
+" let g:airline_theme ="distinguished"
 " let g:airline_solarized_bg='dark'
-"let g:airline_theme = "powerlineish"
+" let g:airline_theme="powerlineish"
+let g:airline_theme="base16_3024"
 
 Plug 'w0rp/ale'
 let g:ale_linters = { 'javascript': ['eslint', 'jshint'] }
@@ -161,6 +176,7 @@ let g:ale_linters = { 'php': ['phpcs'] }
 let g:ale_linters = { 'scss': ['sass-lint'] }
 let g:ale_linters = { 'css': ['csslint', 'stylelint'] }
 let g:ale_linters = { 'typescript': ['eslint', 'tslint', 'tsserver', 'prettier'] }
+let g:ale_linters = { 'cpp': ['gcc', 'clang'] }
 
 let g:airline#extensions#ale#enabled = 1
 let g:ale_echo_msg_error_str = 'E'
@@ -171,11 +187,15 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_completion_enabled = 1
 "nmap <silent> <leader>an :ALENext<cr>
 "nmap <silent> <leader>ap :ALEPrevious<cr>
-nmap <silent> an <Plug>(ale_previous_wrap)
-nmap <silent> ne <Plug>(ale_next_wrap)
+nmap <silent> <Leader>an <Plug>(ale_previous_wrap)
+nmap <silent> <Leader>ne <Plug>(ale_next_wrap)
 highlight ALEError ctermbg=DarkMagenta
 
 Plug 'valloric/youcompleteme'
+let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>']
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 Plug 'pangloss/vim-javascript'
 let g:javascript_plugin_jsdoc = 1
