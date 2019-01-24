@@ -1,1 +1,4 @@
-/Users/kenyap/.gitignore_global
+tags
+tags/**
+
+WorkspaceSettings.xcsettings

@@ -1,1 +1,12 @@
-/Users/kenyap/.gitconfig
+[core]
+  editor = vim
+	excludesfile = /Users/kenyap/.gitignore_global
+[user]
+	name = Ken Yap Wei Chun
+	email = wei.chun@pickupp.io
+[mergetool "fugitive"]
+	cmd = vim -f -c \"Gvdiff\" \"$MERGED\"
+[merge]
+	tool = fugitive
+[mergetool]
+	keepBackup = false
