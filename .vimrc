@@ -20,8 +20,6 @@ augroup END
 " reindent file
 nnoremap <leader>f mzgg=G`z
 " buffer commands
-nnoremap <space>b :bnext<CR>
-nnoremap <space>B :bprev<CR>
 nmap <space>1 <Plug>BufTabLine.Go(1)
 nmap <space>2 <Plug>BufTabLine.Go(2)
 nmap <space>3 <Plug>BufTabLine.Go(3)
@@ -37,7 +35,7 @@ nnoremap <silent> <space>q :bd<CR>
 " Setting copy into system clipboard
 vmap <c-c> "+y
 " Jump to buffer after buffer ls
-nnoremap <leader>b :buffers<cr>:b<space> 
+nnoremap <space>b :buffers<cr>:b<space> 
 
 " map cgn (Change go next)
 " nnoremap <space>cn cgn
@@ -83,7 +81,7 @@ set expandtab
 set autoindent
 
 " set mapping for replacing word under cursor with word in register
-map <leader>r ciw<C-r>0<ESC>
+map <space>r ciw<C-r>0<ESC>
 
 " set vertical resize to bigger
 nnoremap <c-w>> :vertical resize +15<CR>
@@ -118,6 +116,11 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+noremap <space>j <c-d>zz
+noremap <space>k <c-u>zz
+noremap <c-e> @='10<c-v><c-e>'<cr>
+noremap <c-y> @='10<c-v><c-y>'<cr>
 
 nnoremap j gj
 nnoremap k gk
@@ -183,13 +186,6 @@ let g:markbar_enable_peekaboo = v:false
 
 Plug 'terryma/vim-multiple-cursors'
 
-Plug 'junegunn/vim-easy-align'
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-
-Plug 'matze/vim-move'
-let g:move_key_modifier='A'
-
 Plug 'tpope/vim-vinegar'
 
 Plug 'tpope/vim-rhubarb'
@@ -226,11 +222,9 @@ aug END
 
 set completeopt=longest,menuone,preview
 
-" PEP 8 Checking
 " Plug 'nvie/vim-flake8', {'for': 'py'}
-let python_highlight_all=1
+" let python_highlight_all=1
 
-" SimpylFold for code folding
 Plug 'tmhedberg/SimpylFold', {'for': 'py'}
 let g:SimpylFold_docstring_preview=1
 
@@ -260,8 +254,8 @@ nmap <space>c <plug>(signify-next-hunk)
 nmap <space>C <plug>(signify-prev-hunk)
 Plug 'kshenoy/vim-signature'
 
-highlight Normal guibg=NONE ctermbg=NONE
-highlight NonText ctermbg=NONE
+" highlight Normal guibg=NONE ctermbg=NONE
+" highlight NonText ctermbg=NONE
 
 Plug 'jceb/emmet.snippets'
 
@@ -325,15 +319,15 @@ function! MyFileformat()
 endfunction
 
 Plug 'w0rp/ale'
-let g:ale_linters = { 'javascript': ['eslint'] }
-" let g:ale_linters = { 'jsx': ['eslint', 'jshint'] }
-" let g:ale_linters = { 'html': ['tidy'] }
-" let g:ale_linters = { 'json': ['jsonlint'] }
-" let g:ale_linters = { 'php': ['phpcs'] }
-" let g:ale_linters = { 'scss': ['sass-lint'] }
-" let g:ale_linters = { 'css': ['csslint', 'stylelint'] }
-" let g:ale_linters = { 'typescript': ['eslint', 'tslint', 'tsserver', 'prettier'] }
-" let g:ale_linters = { 'cpp': ['gcc', 'clang'] }
+let g:ale_linters = {
+\ 'javascript': ['eslint'],
+\ 'html': ['tidy'],
+\ 'json': ['jsonlint'],
+\ 'php': ['phpcs'],
+\ 'scss': ['sass-lint'],
+\ 'css': ['csslint', 'stylelint'],
+\ 'typescript': ['eslint', 'tslint', 'tsserver', 'prettier'],
+\ }
 " let g:ale_sign_error='●'
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
@@ -347,10 +341,6 @@ nmap <silent> <space>E <Plug>(ale_next_wrap)
 highlight ALEError ctermbg=DarkMagenta
 let g:ale_javascript_eslint_executable='../node_modules/.bin/eslint'
 " let g:ale_javascript_eslint_executable='npx eslint'
-
-" Plug 'ternjs/tern_for_vim', {'for': 'js,ts,ejs'}
-" let g:tern_show_argument_hints='on_hold'
-" let g:tern_map_keys=1
 
 Plug 'tpope/vim-commentary'
 

@@ -30,6 +30,21 @@ alias glog='git log --oneline --decorate --color --graph --all'
 alias dk="docker-compose"
 alias gco="git checkout"
 alias gb="git branch"
+alias gdiff="git log -p -1 | ydiff -s -w 0 --wrap"
+
+# cd into pickupp dir
+alias pickorder="cd $HOME/go/src/bitbucket.org/pick-up/orderservice/"
+alias pickgateway="cd $HOME/go/src/bitbucket.org/pick-up/gateway/"
+alias pickuserapp="cd $HOME/go/src/bitbucket.org/pick-up/pickuppuserapp/"
+alias pickmerchant="cd $HOME/go/src/bitbucket.org/pick-up/merchant-portal/"
+alias pickadmin="cd $HOME/go/src/bitbucket.org/pick-up/admin-portal/"
+
+alias vimrc="vim ~/.vimrc"
+alias zshrc="vim ~/.zshrc"
+alias ncmp="ncmpcpp"
+alias ideac="idea create "
+alias ideav="idea view"
+alias ideas="idea list"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -98,6 +113,7 @@ plugins=(
   git
   zsh-autosuggestions
   zsh-nvm
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -133,5 +149,10 @@ source $ZSH/oh-my-zsh.sh
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 
   # Set Spaceship ZSH as a prompt
-  autoload -U promptinit; promptinit
-  prompt spaceship
+autoload -U promptinit; promptinit
+prompt spaceship
+
+# Set kitty completion on zsh
+autoload -Uz compinit
+compinit
+kitty + complete setup zsh | source /dev/stdin

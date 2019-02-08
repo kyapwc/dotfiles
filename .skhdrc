@@ -1,0 +1,67 @@
+# Main usage
+alt - return : open /Applications/iTerm.app
+
+# Entering full screen mode
+alt - f : chunkc tiling::window --toggle fullscreen
+
+# Launching applications
+fn - c : open /Applications/Google\ Chrome.app
+fn - p : open /Applications/Postico.app
+fn - s : open /Applications/Slack.app
+fn - d : open ~/Downloads
+
+# Toggle floating
+shift + alt - space : chunkc tiling::window --toggle float
+
+# Focus window
+alt - h : chunkc tiling::window --focus west
+alt - j : chunkc tiling::window --focus south
+alt - k : chunkc tiling::window --focus north
+alt - l : chunkc tiling::window --focus east
+
+# Move window
+shift + alt - h : chunkc tiling::window --warp west
+shift + alt - j : chunkc tiling::window --warp south
+shift + alt - k : chunkc tiling::window --warp north
+shift + alt - l : chunkc tiling::window --warp east
+
+# Killing a window
+shift + alt - q : chunkc tiling::window --close
+
+# Focusing on workspaces (Desktops)
+alt - 1 : chunkc tiling::desktop --focus 1
+alt - 2 : chunkc tiling::desktop --focus 2
+alt - 3 : chunkc tiling::desktop --focus 3
+alt - 4 : chunkc tiling::desktop --focus 4
+alt - 5 : chunkc tiling::desktop --focus 5
+alt - 6 : chunkc tiling::desktop --focus 6
+alt - 7 : chunkc tiling::desktop --focus 7
+alt - 8 : chunkc tiling::desktop --focus 8
+alt - 9 : chunkc tiling::desktop --focus 9
+alt - 0 : chunkc tiling::desktop --focus 10
+
+# Shifting window to specific desktop
+shift + alt - 1 : chunkc tiling::window --send-to-desktop 1
+shift + alt - 2 : chunkc tiling::window --send-to-desktop 2
+shift + alt - 3 : chunkc tiling::window --send-to-desktop 3
+shift + alt - 4 : chunkc tiling::window --send-to-desktop 4
+shift + alt - 5 : chunkc tiling::window --send-to-desktop 5
+shift + alt - 6 : chunkc tiling::window --send-to-desktop 6
+shift + alt - 7 : chunkc tiling::window --send-to-desktop 7
+shift + alt - 8 : chunkc tiling::window --send-to-desktop 8
+shift + alt - 9 : chunkc tiling::window --send-to-desktop 9
+shift + alt - 0 : chunkc tiling::window --send-to-desktop 10
+
+# creating new desktop
+alt - c : chunkc tiling::desktop --create
+
+# Destroying desktop
+alt - d : chunkc tiling::desktop --annihilate
+
+# Sending window to monitor
+shift + fn - 1 : chunkc tiling::window --send-to-monitor 1
+shift + fn - 2 : chunkc tiling::window --send-to-monitor 2
+
+# Focusing monitor
+fn - 1 : chunkc tiling::monitor -f 1
+fn - 2 : chunkc tiling::monitor -f 2
