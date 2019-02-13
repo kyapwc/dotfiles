@@ -41,6 +41,8 @@ alias pickadmin="cd $HOME/go/src/bitbucket.org/pick-up/admin-portal/"
 
 alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
+alias chunk="vim ~/.chunkwmrc"
+alias skhd="vim ~/.skhdrc"
 alias ncmp="ncmpcpp"
 alias ideac="idea create "
 alias ideav="idea view"
@@ -114,6 +116,8 @@ plugins=(
   zsh-autosuggestions
   zsh-nvm
   zsh-syntax-highlighting
+  k
+  pm
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -153,6 +157,20 @@ autoload -U promptinit; promptinit
 prompt spaceship
 
 # Set kitty completion on zsh
-autoload -Uz compinit
-compinit
-kitty + complete setup zsh | source /dev/stdin
+# autoload -Uz compinit
+# compinit
+# kitty + complete setup zsh | source /dev/stdin
+
+# PM functions
+source ~/.pm/pm.zsh
+alias pma="pm add"
+alias pmg="pm go"
+alias pmrm="pm remove"
+alias pml="pm list"
+# end PM
+# LazyGit
+alias lg="lazygit"
+# Unalias GRV
+unalias grv
+# GITA
+alias gita="python3 -m gita"

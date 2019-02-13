@@ -65,3 +65,10 @@ shift + fn - 2 : chunkc tiling::window --send-to-monitor 2
 # Focusing monitor
 fn - 1 : chunkc tiling::monitor -f 1
 fn - 2 : chunkc tiling::monitor -f 2
+
+# using MPC
+fn - i : mpc volume +5
+shift + fn - i : mpc volume -5
+shift + fn - p : mpc toggle
+fn - 0x2F : mpc next
+fn - 0x2B : mpc prev
