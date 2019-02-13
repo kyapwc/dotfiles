@@ -111,8 +111,7 @@ map <Down> <Nop>
 map <Left> <Nop>
 map <Right> <Nop>
 
-nnoremap <C-s> :w<CR>
-inoremap <C-s> <Esc>:w<CR>a
+nnoremap <space>w :w<CR>
 
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -151,6 +150,8 @@ if !has('gui_running')
 endif
 
 call plug#begin('~/.vim/plugs')
+Plug 'markonm/traces.vim'
+
 Plug 'qwertologe/nextval.vim'
 
 Plug 'ap/vim-buftabline'
