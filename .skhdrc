@@ -57,6 +57,7 @@ alt - c : chunkc tiling::desktop --create
 
 # Destroying desktop
 alt - d : chunkc tiling::desktop --annihilate
+shift + alt - d : chunkc tiling::desktop --annihilate
 
 # Sending window to monitor
 shift + fn - 1 : chunkc tiling::window --send-to-monitor 1

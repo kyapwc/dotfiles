@@ -174,3 +174,5 @@ alias lg="lazygit"
 unalias grv
 # GITA
 alias gita="python3 -m gita"
+alias :q="exit"
+alias dkstart="dk up -d && dk stop merchant-portal && dk stop admin-portal"
