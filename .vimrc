@@ -47,16 +47,16 @@ augroup END
 " reindent file
 nnoremap <leader>f mzgg=G`z
 " buffer commands
-nnoremap <space>1 <Plug>BufTabLine.Go(1)
-nnoremap <space>2 <Plug>BufTabLine.Go(2)
-nnoremap <space>3 <Plug>BufTabLine.Go(3)
-nnoremap <space>4 <Plug>BufTabLine.Go(4)
-nnoremap <space>5 <Plug>BufTabLine.Go(5)
-nnoremap <space>6 <Plug>BufTabLine.Go(6)
-nnoremap <space>7 <Plug>BufTabLine.Go(7)
-nnoremap <space>8 <Plug>BufTabLine.Go(8)
-nnoremap <space>9 <Plug>BufTabLine.Go(9)
-nnoremap <space>0 <Plug>BufTabLine.Go(10)
+nmap <space>1 <Plug>BufTabLine.Go(1)
+nmap <space>2 <Plug>BufTabLine.Go(2)
+nmap <space>3 <Plug>BufTabLine.Go(3)
+nmap <space>4 <Plug>BufTabLine.Go(4)
+nmap <space>5 <Plug>BufTabLine.Go(5)
+nmap <space>6 <Plug>BufTabLine.Go(6)
+nmap <space>7 <Plug>BufTabLine.Go(7)
+nmap <space>8 <Plug>BufTabLine.Go(8)
+nmap <space>9 <Plug>BufTabLine.Go(9)
+nmap <space>0 <Plug>BufTabLine.Go(10)
 nnoremap <silent> <space>q :bd<CR>
 " Setting copy into system clipboard
 vmap <c-c> "+y
