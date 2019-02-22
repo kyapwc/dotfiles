@@ -28,9 +28,12 @@ alias code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/co
 alias gs='git status'
 alias glog='git log --oneline --decorate --color --graph --all'
 alias dk="docker-compose"
+alias dkl="docker-compose logs -f"
+alias dkr="docker-compose restart"
 alias gco="git checkout"
 alias gb="git branch"
 alias gdiff="git log -p -1 | ydiff -s -w 0 --wrap"
+alias ref="source ~/.zshrc | echo refreshing zsh"
 
 # cd into pickupp dir
 alias pickorder="cd $HOME/go/src/bitbucket.org/pick-up/orderservice/"
@@ -47,6 +50,7 @@ alias ncmp="ncmpcpp"
 alias ideac="idea create "
 alias ideav="idea view"
 alias ideas="idea list"
+alias c="clear"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME

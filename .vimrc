@@ -31,6 +31,14 @@ set guifont=Monaco:h13
 set completeopt=longest,menuone,preview
 set laststatus=2
 
+augroup VIMRC
+  autocmd!
+  autocmd BufLeave *.css,*.scss normal! mC
+  autocmd BufLeave *.html normal! mH
+  autocmd BufLeave *.js normal! mJ
+  autocmd BufLeave *.py normal! mP
+augroup END
+
 " Remembering cursor position on file
 function! ResCur()
   if line("'\"") <= line("$")
@@ -72,8 +80,8 @@ nnoremap <space>w :w<CR>
 nnoremap <space>z :q<CR>
 nnoremap <space><space>w :only<CR> :wq<CR>
 " Jumping lines!
-noremap <space>j <c-d>zz
-noremap <space>k <c-u>zz
+noremap <space>k 20k
+noremap <space>j 20j
 noremap <c-e> @='10<c-v><c-e>'<cr>
 noremap <c-y> @='10<c-v><c-y>'<cr>
 " More 'natural' movements
@@ -159,6 +167,7 @@ Plug 'ap/vim-css-color', {'for': 'html,css'}
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-sensible'
 Plug 'ryanoasis/vim-devicons'
+Plug 'ntpeters/vim-better-whitespace'
 " Set UTF 8 for dev icons
 set encoding=UTF-8
 call plug#end()
@@ -259,19 +268,19 @@ let g:lightline.component_function={
       \ 'gitbranch': 'fugitive#head',
       \ 'filetype': 'MyFiletype',
       \ 'fileformat': 'MyFileformat'
-      \ 
+      \
       \}
 let g:lightline.component_expand={
       \ 'linter_checking': 'lightline#ale#checking',
       \ 'linter_warnings': 'lightline#ale#warnings',
       \ 'linter_errors': 'lightline#ale#errors'
-      \ 
+      \
       \}
 let g:lightline.component_type={
       \ 'linter_checking': 'left',
       \ 'linter_warnings': 'warning',
       \ 'linter_errors': 'error'
-      \ 
+      \
       \}
 let g:lightline.active={
       \ 'left' : [ [ 'mode', 'paste'  ],
@@ -279,7 +288,7 @@ let g:lightline.active={
       \ 'right': [ [ 'linter_checking', 'linter_errors', 'linter_warnings'  ],
       \            [ 'lineinfo'  ],
       \            [ 'gutentags', 'filetype', 'percent'  ] ]
-      \ 
+      \
       \}
 let g:lightline#ale#indicator_checking="\uf110 "
 let g:lightline#ale#indicator_warnings="\uf071 "
