@@ -33,7 +33,14 @@ alias dkr="docker-compose restart"
 alias gco="git checkout"
 alias gb="git branch"
 alias gdiff="git log -p -1 | ydiff -s -w 0 --wrap"
-alias ref="source ~/.zshrc | echo refreshing zsh"
+alias ref="source ~/.zshrc && echo refresh zshrc done"
+
+# Task warrior alias
+alias tka="task all"
+alias tkl="task list"
+alias ta="task add"
+alias calc="task calc"
+alias tki="task information"
 
 # cd into pickupp dir
 alias pickorder="cd $HOME/go/src/bitbucket.org/pick-up/orderservice/"

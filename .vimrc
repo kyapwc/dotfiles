@@ -5,12 +5,12 @@ let mapleader=","
 set nocompatible
 filetype indent on
 filetype plugin indent on
+syntax on
 set shortmess=atOI
 set ignorecase
 set pumheight=20
 set backspace=indent,eol,start
 set number relativenumber
-syntax on
 set guifont=Source\ Code\ Pro
 set term=screen-256color
 set list
@@ -131,43 +131,56 @@ if !has('gui_running')
 endif
 
 call plug#begin('~/.vim/plugs')
+" Better searching
 Plug 'markonm/traces.vim'
+
+" Buffer realted plugs
 Plug 'ap/vim-buftabline'
-Plug 'henrik/vim-indexed-search'
-Plug 'tpope/vim-eunuch'
-Plug 'fatih/vim-go'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'Yggdroot/indentLine'
 Plug 'Yilin-Yang/vim-markbar'
 Plug 'junegunn/vim-peekaboo'
-Plug 'terryma/vim-multiple-cursors'
+
+" Index searching
+Plug 'henrik/vim-indexed-search'
+
+" extending vim
+Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-rhubarb'
-Plug 'RRethy/vim-illuminate'
-Plug 'majutsushi/tagbar'
-Plug 'morhetz/gruvbox'
-Plug 'ervandew/supertab'
-Plug 'SirVer/ultisnips'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-abolish'
+Plug 'ntpeters/vim-better-whitespace'
+
+" coding related plugs
+Plug 'w0rp/ale'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'jiangmiao/auto-pairs'
+Plug 'jceb/emmet.snippets'
 Plug 'honza/vim-snippets'
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'tpope/vim-fugitive'
+Plug 'fatih/vim-go'
+Plug 'ap/vim-css-color', {'for': 'html,css'}
+Plug 'Valloric/MatchTagAlways'
+
+" Sugaring
+Plug 'RRethy/vim-illuminate'
 Plug 'mhinz/vim-signify'
 Plug 'kshenoy/vim-signature'
-Plug 'jceb/emmet.snippets'
+Plug 'morhetz/gruvbox'
+Plug 'itchyny/lightline.vim'
+Plug 'ryanoasis/vim-devicons'
+
+" utils
+Plug 'Yggdroot/indentLine'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tpope/vim-rhubarb'
+Plug 'majutsushi/tagbar'
+Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'embear/vim-localvimrc'
 Plug 'kien/ctrlp.vim'
-Plug 'itchyny/lightline.vim'
-Plug 'w0rp/ale'
-Plug 'tpope/vim-commentary'
-Plug 'Valloric/MatchTagAlways'
-Plug 'jiangmiao/auto-pairs'
-Plug 'ap/vim-css-color', {'for': 'html,css'}
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-sensible'
-Plug 'ryanoasis/vim-devicons'
-Plug 'ntpeters/vim-better-whitespace'
 " Set UTF 8 for dev icons
 set encoding=UTF-8
 call plug#end()
@@ -227,7 +240,6 @@ set statusline+=%{gutentags#statusline()}
 let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", ".git", "node_modules", "*.vim/bundle/*"]
 
 " Git push inside vim on current branch
-
 " Git push function
 function! FuGitPush()
   let a:branchName = fugitive#head()
