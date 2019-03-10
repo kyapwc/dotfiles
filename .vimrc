@@ -31,14 +31,6 @@ set guifont=Monaco:h13
 set completeopt=longest,menuone,preview
 set laststatus=2
 
-augroup VIMRC
-  autocmd!
-  autocmd BufLeave *.css,*.scss normal! mC
-  autocmd BufLeave *.html normal! mH
-  autocmd BufLeave *.js normal! mJ
-  autocmd BufLeave *.py normal! mP
-augroup END
-
 " Remembering cursor position on file
 function! ResCur()
   if line("'\"") <= line("$")
@@ -53,7 +45,7 @@ augroup END
 
 " REMAPS ARE BELOW HERE
 " reindent file
-nnoremap <leader>f mzgg=G`z
+nnoremap <leader>f gg=G
 " buffer commands
 nmap <space>1 <Plug>BufTabLine.Go(1)
 nmap <space>2 <Plug>BufTabLine.Go(2)
@@ -77,13 +69,15 @@ nnoremap <c-w>+ :resize +10<CR>
 nnoremap <leader><leader> '
 nnoremap <Leader>cd :cd %:h<CR>
 nnoremap <space>w :w<CR>
-nnoremap <space>z :q<CR>
+nnoremap <space>z :qa<CR>
 nnoremap <space><space>w :only<CR> :wq<CR>
+nnoremap <space>d gd
 " Jumping lines!
 noremap <space>k 20k
 noremap <space>j 20j
-noremap <c-e> @='10<c-v><c-e>'<cr>
-noremap <c-y> @='10<c-v><c-y>'<cr>
+" unsure if below is necessary for scrolling files, feels clunky
+" noremap <c-e> @='10<c-v><c-e>'<cr>
+" noremap <c-y> @='10<c-v><c-y>'<cr>
 " More 'natural' movements
 nnoremap j gj
 nnoremap k gk
@@ -116,9 +110,9 @@ if executable('ag')
   " ag is fast enough that CtrlP doesn't need to cache
 endif
 
-nnoremap <c-F> :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+" nnoremap <c-F> :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-nnoremap \ :Ag<SPACE>--column<SPACE>
+" nnoremap \ :Ag<SPACE>--column<SPACE>
 
 let g:netrw_liststyle = 3
 let g:netrw_banner = 0
@@ -131,13 +125,17 @@ if !has('gui_running')
 endif
 
 call plug#begin('~/.vim/plugs')
+" Dirvish for file navigation
+Plug 'justinmk/vim-dirvish'
+
+" CtrlSF for searching text in files
+Plug 'dyng/ctrlsf.vim'
+
 " Better searching
 Plug 'markonm/traces.vim'
 
 " Buffer realted plugs
 Plug 'ap/vim-buftabline'
-Plug 'Yilin-Yang/vim-markbar'
-Plug 'junegunn/vim-peekaboo'
 
 " Index searching
 Plug 'henrik/vim-indexed-search'
@@ -171,9 +169,7 @@ Plug 'ryanoasis/vim-devicons'
 
 " utils
 Plug 'Yggdroot/indentLine'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-rhubarb'
-Plug 'majutsushi/tagbar'
 Plug 'ervandew/supertab'
 Plug 'SirVer/ultisnips'
 Plug 'ludovicchabant/vim-gutentags'
@@ -181,6 +177,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'embear/vim-localvimrc'
 Plug 'kien/ctrlp.vim'
+
+Plug 'taohexxx/lightline-buffer'
+
 " Set UTF 8 for dev icons
 set encoding=UTF-8
 call plug#end()
@@ -203,25 +202,15 @@ nnoremap <leader>b :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
 " indentLine settings
 let g:indentLine_char = '|'
 
-" Markbar Settings
-map <Leader><Leader>m <Plug>ToggleMarkbar
-
-" Peekaboo settings
-nmap <space>` <Plug>OpenMarkbarPeekabooApostrophe
-let g:markbar_enable_peekaboo = v:false
-
-" Tagbar settings
-nnoremap <F8> :TagbarToggle<CR>
-
 " Colorscheme options
-colorscheme gruvbox
-let g:quantum_black=1
-set background=dark
-let g:quantum_italics=1
-let g:gruvbox_underline = 1
-let g:gruvbox_italic = 1
-let g:gruvbox_undercurl = 1
-let g:gruvbox_contrast_dark = 'soft'
+colorscheme desertink
+" colorscheme sourcerer
+" colorscheme gruvbox
+" set background=dark
+" let g:gruvbox_underline = 1
+" let g:gruvbox_italic = 1
+" let g:gruvbox_undercurl = 1
+" let g:gruvbox_contrast_dark = 'soft'
 
 " Ultisnips configs along with a few other things
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -243,7 +232,7 @@ let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", ".g
 " Git push function
 function! FuGitPush()
   let a:branchName = fugitive#head()
-  execute ':Git push origin ' . a:branchName
+  execute ':Git push -u origin ' . a:branchName
 endfunction
 " Fugitive mappings
 nnoremap <space>gs :Gstatus<CR>
@@ -332,8 +321,8 @@ let g:ale_sign_warning='--'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_completion_enabled = 1
 let g:ale_lint_on_text_changed = 'never'
-nmap <silent> <space>e <Plug>(ale_previous_wrap)
-nmap <silent> <space>E <Plug>(ale_next_wrap)
+nmap <silent> <space>E <Plug>(ale_previous_wrap)
+nmap <silent> <space>e <Plug>(ale_next_wrap)
 highlight ALEError ctermbg=DarkMagenta
 let g:ale_javascript_eslint_executable='../node_modules/.bin/eslint'
 " let g:ale_javascript_eslint_executable='npx eslint'
@@ -343,3 +332,13 @@ highlight MatchTag ctermfg=black ctermbg=lightgreen guifg=lightgreen
 
 " Ignore lastplace
 let g:lastplace_ignore = "gitcommit,gitrebase,svn,hgcommit"
+
+" Dirvish settings
+let g:dirvish_mode = ':sort ,^.*[\/],'
+
+" Settings for splitting
+set splitright
+set splitbelow
+
+" create a session file
+nnoremap <space>ms :mksession! ~/.vim/vim-session.vim<CR>

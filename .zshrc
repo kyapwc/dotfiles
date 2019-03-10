@@ -32,8 +32,10 @@ alias dkl="docker-compose logs -f"
 alias dkr="docker-compose restart"
 alias gco="git checkout"
 alias gb="git branch"
-alias gdiff="git log -p -1 | ydiff -s -w 0 --wrap"
+# alias gdiff="git log -m | ydiff -s -w 0 --wrap"
+alias gdiff="git diff | ydiff -s"
 alias ref="source ~/.zshrc && echo refresh zshrc done"
+alias mpv="open -na /Applications/mpv.app"
 
 # Task warrior alias
 alias tka="task all"
@@ -57,7 +59,10 @@ alias ncmp="ncmpcpp"
 alias ideac="idea create "
 alias ideav="idea view"
 alias ideas="idea list"
-alias c="clear"
+alias cl="clear"
+
+# Vim start session
+alias vims="vim -S ~/.vim/vim-session.vim"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
