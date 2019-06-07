@@ -8,6 +8,7 @@ export GOPATH=$HOME/go
 export GOROOT="/usr/local/opt/go/libexec"
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
+export RIPGREP_CONFIG_PATH='/Users/kenyap/.ripgreprc'
 export POSTGRES_USER='pickup'
 export PATH="$HOME/.npm-packages/bin:$PATH"
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_192.jdk/Contents/Home/"
@@ -19,6 +20,8 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 export NVM_DIR="$HOME/.custom-nvm"
 export NVM_LAZY_LOAD=true
 export PATH="$PATH:$HOME/.custom-nvm/versions/node/v8.15.0/bin"
+export PATH="$PATH:$HOME/workspace/flutter/bin"
+export PATH="$PATH:$HOME/.pub-cache/bin"
 # source /usr/local/opt/nvm/nvm.sh
 # Load rupa's z if installed
 [ -f /usr/local/etc/profile.d/z.sh  ] && source /usr/local/etc/profile.d/z.sh
@@ -28,14 +31,18 @@ alias code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/co
 alias gs='git status'
 alias glog='git log --oneline --decorate --color --graph --all'
 alias dk="docker-compose"
+alias dks="docker-compose -f docker-compose-shopify.yml"
+alias dksl="docker-compose -f docker-compose-shopify.yml logs -f"
+alias dksr="docker-compose -f docker-compose-shopify.yml restart"
 alias dkl="docker-compose logs -f"
 alias dkr="docker-compose restart"
 alias gco="git checkout"
 alias gb="git branch"
 # alias gdiff="git log -m | ydiff -s -w 0 --wrap"
 alias gdiff="git diff | ydiff -s"
-alias ref="source ~/.zshrc && echo refresh zshrc done"
+alias ref="quote qotd && source ~/.zshrc && echo refresh zshrc done"
 alias mpv="open -na /Applications/mpv.app"
+alias conflicts="vim $(git diff --name-only --diff-filter=U)"
 
 # Task warrior alias
 alias tka="task all"
@@ -54,7 +61,7 @@ alias pickadmin="cd $HOME/go/src/bitbucket.org/pick-up/admin-portal/"
 alias vimrc="vim ~/.vimrc"
 alias zshrc="vim ~/.zshrc"
 alias chunk="vim ~/.chunkwmrc"
-alias skhd="vim ~/.skhdrc"
+alias skhdrc="vim ~/.skhdrc"
 alias ncmp="ncmpcpp"
 alias ideac="idea create "
 alias ideav="idea view"
@@ -63,10 +70,7 @@ alias cl="clear"
 
 # Vim start session
 alias vims="vim -S ~/.vim/vim-session.vim"
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# Set name of the theme to load --- if set to "random"
 ZSH_THEME="spaceship"
 
 HISTSIZE=1000
@@ -75,11 +79,6 @@ SAVEHIST=1000
 # Set word movement
 bindkey "[D" backward-word
 bindkey "[C" forward-word
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -98,39 +97,12 @@ bindkey "[C" forward-word
 # DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+DISABLE_AUTO_TITLE="true"
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-  zsh-autosuggestions
   zsh-nvm
+  zsh-autosuggestions
   zsh-syntax-highlighting
   k
   pm
@@ -139,11 +111,7 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
 # export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -152,23 +120,12 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 
-  # Set Spaceship ZSH as a prompt
+# Set Spaceship ZSH as a prompt
 autoload -U promptinit; promptinit
 prompt spaceship
 
@@ -178,17 +135,38 @@ prompt spaceship
 # kitty + complete setup zsh | source /dev/stdin
 
 # PM functions
-source ~/.pm/pm.zsh
-alias pma="pm add"
-alias pmg="pm go"
-alias pmrm="pm remove"
-alias pml="pm list"
+# source ~/.pm/pm.zsh
+# alias pma="pm add"
+# alias pmg="pm go"
+# alias pmrm="pm remove"
+# alias pml="pm list"
 # end PM
 # LazyGit
 alias lg="lazygit"
 # Unalias GRV
-unalias grv
+# unalias grv
 # GITA
 alias gita="python3 -m gita"
 alias :q="exit"
-alias dkstart="dk up -d && dk stop merchant-portal && dk stop admin-portal"
+alias dkstart="dk up -d address admin agent geo postgres redis order rating notification cronjob geo wallet payroll warehouse merchant gateway"
+
+# Annihilate all containers in docker
+alias dockannihilate="docker kill $(docker ps -q) && docker rm $(docker ps -a -q)"
+# alias tnew="tmux new -s "
+# alias tatt="tmux attach -t "
+# alias tls="tmux ls"
+# alias tkill="tmux kill-session -t "
+# alias tkillall="tmux ls | grep : | cut -d. -f1 | awk '{print substr($1, 0, length($1)-1)}' | xargs kill"
+alias portcheck="lsof -i"
+# alias rgl="f() { rg --pretty %s | less  };f"
+# alias rgv="f() { vim $(rg --files-with-matches $@)  };f"
+alias bump="vim package.json package-lock.json"
+alias scripts="cat package.json | jq -C .'scripts' | less -R"
+alias rn="react-native"
+alias killandroid="sudo killall -9 $(ps aux | grep -i Best_Testing_Device | awk 'NR==1{print $11}' | xargs basename)"
+alias filesize="du -hs "
+alias prunelocal="git fetch --prune && git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
+export TRELLO_USER=wei.chun@pickupp.io
+export TRELLO_KEY=8b0432db022d41906325bf89c8cf1f44
+export TRELLO_TOKEN=17dbea824a69b59288cf79ec975bf4f9be42efb088d9af2b8459d7ae3214081e
+export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'

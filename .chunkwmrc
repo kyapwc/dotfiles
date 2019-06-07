@@ -40,6 +40,9 @@ chunkc set focused_border_radius         0
 chunkc set focused_border_skip_floating  1
 chunkc set focused_border_skip_monocle   1
 
+# Make floating windows above everything
+chunkc set window_float_topmost 1
+
 # Load plugins
 chunkc core::load border.so
 chunkc core::load tiling.so

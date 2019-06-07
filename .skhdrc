@@ -54,10 +54,11 @@ shift + alt - 0 : chunkc tiling::window --send-to-desktop 10
 
 # creating new desktop
 alt - c : chunkc tiling::desktop --create
+fn - c : chunkc tiling::desktop --create
 
 # Destroying desktop
-alt - d : chunkc tiling::desktop --annihilate
-shift + alt - d : chunkc tiling::desktop --annihilate
+# alt - d : chunkc tiling::desktop --annihilate
+# shift + alt - d : chunkc tiling::desktop --annihilate
 
 # Sending window to monitor
 shift + fn - 1 : chunkc tiling::window --send-to-monitor 1
@@ -73,3 +74,15 @@ shift + fn - i : mpc volume -5
 shift + fn - p : mpc toggle
 fn - 0x2F : mpc next
 fn - 0x2B : mpc prev
+
+# Increase region size
+shift + alt - a : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge west
+shift + alt - s : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge south
+shift + alt - w : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge north
+shift + alt - d : chunkc tiling::window --use-temporary-ratio 0.1 --adjust-window-edge east
+
+# Decrease region size
+shift + cmd - d : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge west
+shift + cmd - w : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge south
+shift + cmd - s : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge north
+shift + cmd - a : chunkc tiling::window --use-temporary-ratio -0.1 --adjust-window-edge east
