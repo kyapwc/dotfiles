@@ -33,6 +33,7 @@ set completeopt=longest,menuone,preview
 set laststatus=2
 set ttyfast
 set breakindent
+set showcmd
 " set showbreak=↳
 " set showbreak=∥
 set showbreak=\>\ 
@@ -169,11 +170,12 @@ if !has('gui_running')
 endif
 
 call plug#begin('~/.vim/plugs')
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'junegunn/gv.vim'
 " Flutter/Dart plugins
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'thosakwe/vim-flutter'
-Plug 'natebosch/vim-lsc'
+Plug 'natebosch/vim-lsc', {'for': 'dart.js,dart'}
 Plug 'natebosch/vim-lsc-dart'
 
 Plug 'JamshedVesuna/vim-markdown-preview'
@@ -286,19 +288,13 @@ aug END
 set statusline+=%{gutentags#statusline()}
 let g:gutentags_ctags_exclude = ["*.min.js", "*.min.css", "build", "vendor", ".git", "node_modules", "*.vim/bundle/*"]
 
-" Git push inside vim on current branch
-" Git push function
-function! FuGitPush()
-  let a:branchName = fugitive#head()
-  execute ':Git push -u origin ' . a:branchName
-endfunction
 " Fugitive mappings
 nnoremap <space>gs :Gstatus<CR>
 nnoremap <space>gb :Gblame<CR>
 nnoremap <space>ga :Git add .<CR>
 nnoremap <space>gc :Git commit -am "
 nnoremap <space>gC :Gcommit --verbose<CR>
-nnoremap <space>gp :call FuGitPush()<CR>
+nnoremap <space>gp :!git push -u<CR>
 nnoremap <leader>2 :diffget //2<CR>
 nnoremap <leader>3 :diffget //3<CR>
 
@@ -384,6 +380,7 @@ let g:ale_sign_warning='--'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_completion_enabled = 1
 let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
 nmap <silent> <space>E <Plug>(ale_previous_wrap)
 nmap <silent> <space>e <Plug>(ale_next_wrap)
 highlight ALEError ctermbg=DarkMagenta
@@ -410,26 +407,6 @@ nnoremap <space>ms :mksession! ~/.vim/vim-session.vim<CR>
 let g:closetag_filename = '*.jsx,*.html'
 let g:closetag_xhtml_filenames = '*.jsx'
 
-" Vim WM configs
-let g:vwm#layouts = [
-      \{
-      \  'name': 'term',
-      \  'bot':
-      \  {
-      \    'init': ['call termopen("zsh", {"detach": 0})'],
-      \    'sz': 12,
-      \    'left':
-      \    {
-      \      'init': ['call termopen("zsh", {"detach": 0})'],
-      \    },
-      \    'right':
-      \    {
-      \      'init': ['call termopen("zsh", {"detach": 0})'],
-      \    }
-      \  }
-      \}
-    \]
-
 " Vim WebSearch
 let g:web_search_engine = "google"
 let g:web_search_browser = "firefox"
@@ -446,8 +423,8 @@ nnoremap <space><Tab> :buffer<Space><Tab>
 match Todo '\v^(\<|\=|\>){7}([^=].+)?$'
 
 " jump to conflict markers
-nnoremap <silent> ]c /\v^(\<\|\=\|\>){7}([^=].+)?$<CR>
-nnoremap <silent> [c ?\v^(\<\|\=\|\>){7}([^=].+)\?$<CR>
+nnoremap <silent> [c /\v^(\<\|\=\|\>){7}([^=].+)?$<CR>
+nnoremap <silent> [C ?\v^(\<\|\=\|\>){7}([^=].+)\?$<CR>
 
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
@@ -461,19 +438,6 @@ let vim_markdown_preview_hotkey='<C-m>'
 " changing cursorshape
 " let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 " let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-" Smooth scroll in vim
-nnoremap <silent> <c-u> :call <sid>smoothScroll(1)<cr>
-nnoremap <silent> <c-d> :call <sid>smoothScroll(0)<cr>
-fun! s:smoothScroll(up)
-  execute "normal " . (a:up ? "\<c-y>" : "\<c-e>")
-  redraw
-  for l:count in range(3, &scroll, 2)
-    sleep 6m
-    execute "normal " . (a:up ? "\<c-y>" : "\<c-e>")
-    redraw
-  endfor
-  execute "normal M"
-endf
 
 " Hexokinase
 " let g:Hexokinase_ftAutoload = ['css', 'jsx', 'js', 'html', 'xml']

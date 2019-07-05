@@ -4,9 +4,35 @@
 [user]
 	name = Ken Yap Wei Chun
 	email = wei.chun@pickupp.io
-[mergetool "fugitive"]
-	cmd = vim -f -c \"Gvdiff\" \"$MERGED\"
-[merge]
-	tool = fugitive
-[mergetool]
-	keepBackup = false
+[alias]
+  churn = \
+    !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count\tfile"} {print $1 "\t" $2}' | sort -g
+  staging =\
+    !git checkout staging && \
+    git pull && \
+    git merge -
+  conflicts = \
+    !vim $(git diff --name-only --diff-filter=U)
+  resolved = \
+    !git add $(git diff --name-only --diff-filter=U) && \
+    git commit
+  recent = \
+    !git for-each-ref --sort=committerdate --color=always refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))' \
+    | less
+  st = \
+    !git status -sb
+  list = !git show --pretty=format:"" --name-only | sed '/^$/d' | sed \"s|^|`git top`/|g\"
+  contrib = shortlog -sn --no-merges
+  lp = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  update = !git pull --rebase --prune
+  recentFiles = !git log --pretty=format:"" --name-only --since="2 days ago" | sort | uniq
+  up = !git push -u origin $(git branch | grep '\\*' | cut -d ' ' -f2)
+  push = push -u
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[push]
+	default = current

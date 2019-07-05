@@ -34,7 +34,7 @@ alias dk="docker-compose"
 alias dks="docker-compose -f docker-compose-shopify.yml"
 alias dksl="docker-compose -f docker-compose-shopify.yml logs -f"
 alias dksr="docker-compose -f docker-compose-shopify.yml restart"
-alias dkl="docker-compose logs -f"
+alias dkl='docker-compose logs --tail=1000 -f'
 alias dkr="docker-compose restart"
 alias gco="git checkout"
 alias gb="git branch"
@@ -105,7 +105,6 @@ plugins=(
   zsh-autosuggestions
   zsh-syntax-highlighting
   k
-  pm
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -163,10 +162,13 @@ alias portcheck="lsof -i"
 alias bump="vim package.json package-lock.json"
 alias scripts="cat package.json | jq -C .'scripts' | less -R"
 alias rn="react-native"
-alias killandroid="sudo killall -9 $(ps aux | grep -i Best_Testing_Device | awk 'NR==1{print $11}' | xargs basename)"
+# alias killandroid="sudo killall -9 $(ps aux | grep -i Best_Testing_Device | awk 'NR==1{print $11}' | xargs basename)"
 alias filesize="du -hs "
-alias prunelocal="git fetch --prune && git branch -r | awk '{print $1}' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '{print $1}' | xargs git branch -d"
-export TRELLO_USER=wei.chun@pickupp.io
-export TRELLO_KEY=8b0432db022d41906325bf89c8cf1f44
-export TRELLO_TOKEN=17dbea824a69b59288cf79ec975bf4f9be42efb088d9af2b8459d7ae3214081e
-export LESS='--quit-if-one-screen --ignore-case --status-column --LONG-PROMPT --RAW-CONTROL-CHARS --HILITE-UNREAD --tabs=4 --no-init --window=-4'
+alias dockprune="docker image prune -a"
+alias genMigration='f() { DATABASE_URL=postgresql://pickup@localhost/$1 ./node_modules/.bin/sequelize migration:generate --name $2 };f'
+alias migrateUp='f() { DATABASE_URL=postgresql://pickup@localhost/$1 ./node_modules/.bin/sequelize db:migrate };f'
+alias migrateDown='f() { DATABASE_URL=postgresql://pickup@localhost/$1 ./node_modules/.bin/sequelize db:migrate:undo };f'
+alias agl='f() { ag -l $@ };f'
+alias gsd='git diff --cached'
+alias cleanbranches='git fetch --prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -d'
+export LC_ALL=en_US.UTF-8

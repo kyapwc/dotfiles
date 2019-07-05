@@ -4,7 +4,7 @@ chunkc core::plugin_dir /usr/local/opt/chunkwm/share/chunkwm/plugins
 chunkc core::hotload 1
 
 chunkc set global_desktop_mode           bsp
-# chunkc set 2_desktop_mode                bsp
+chunkc set 1_desktop_mode                monocle
 # chunkc set 4_desktop_mode                monocle
 
 # Gap

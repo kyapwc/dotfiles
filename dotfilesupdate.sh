@@ -4,6 +4,7 @@ cp ~/.vimrc ./
 cp ~/.zshrc ./
 cp ~/.chunkwmrc ./
 cp ~/.skhdrc ./
+cp ~/.gitconfig ./
 
 cp -r ~/bitbar_plugins ./
 
