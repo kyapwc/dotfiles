@@ -58,7 +58,7 @@ shift + alt - 9 : chunkc tiling::window --send-to-desktop 9
 shift + alt - 0 : chunkc tiling::window --send-to-desktop 10
 
 # creating new desktop
-alt - c : chunkc tiling::desktop --create
+# alt - c : chunkc tiling::desktop --create
 fn - c : chunkc tiling::desktop --create
 
 # Destroying desktop

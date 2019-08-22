@@ -77,7 +77,8 @@ nmap <space>7 <Plug>BufTabLine.Go(7)
 nmap <space>8 <Plug>BufTabLine.Go(8)
 nmap <space>9 <Plug>BufTabLine.Go(9)
 nmap <space>0 <Plug>BufTabLine.Go(10)
-nnoremap <silent> <space>q :bd<CR>
+nnoremap <silent> <space>q :BD<CR>
+nnoremap <silent> <c-c> :bd<CR>
 " Setting copy into system clipboard
 vmap <c-c> "+y
 nnoremap <space>b :buffers<cr>:b<space>
@@ -132,6 +133,8 @@ onoremap aQ a"
 onoremap sq s'
 onoremap sQ s"
 onoremap , t,
+vnoremap iq i'
+vnoremap iQ i""
 " REMAPS END
 inoremap <C-J> <C-O>b
 inoremap <C-K> <C-O>w
@@ -170,6 +173,11 @@ if !has('gui_running')
 endif
 
 call plug#begin('~/.vim/plugs')
+" Plug 'shime/vim-livedown'
+
+" Plug 'bagrat/vim-buffet'
+Plug 'qpkorr/vim-bufkill'
+
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'junegunn/gv.vim'
 " Flutter/Dart plugins
@@ -178,7 +186,7 @@ Plug 'thosakwe/vim-flutter'
 Plug 'natebosch/vim-lsc', {'for': 'dart.js,dart'}
 Plug 'natebosch/vim-lsc-dart'
 
-Plug 'JamshedVesuna/vim-markdown-preview'
+" Plug 'JamshedVesuna/vim-markdown-preview'
 
 " VUI for todo
 Plug 'waldson/vui'
@@ -259,6 +267,10 @@ highlight link BufTabLineActive LightlineRight_normal_2
 highlight link BufTabLineHidden LightlineRight_normal_2
 nnoremap <leader>b :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
 
+" Buffet settings
+" let g:buffet_powerline_separators = 1
+" let g:buffet_separator = "|"
+
 " indentLine settings
 let g:indentLine_char = '|'
 
@@ -313,6 +325,7 @@ let g:localvimrc_persistent=1
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode='ra'
+let g:ctrlp_open_multiple_files='ri'
 nnoremap <space>p :CtrlPBuffer<CR>
 nnoremap <Leader><Leader>p :CtrlPTag<CR>
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*
@@ -432,8 +445,11 @@ if !exists(":DiffOrig")
 endif
 nnoremap <space>do :DiffOrig<CR>
 
-let vim_markdown_preview_github=1
-let vim_markdown_preview_hotkey='<C-m>'
+" let vim_markdown_preview_hotkey='<C-m>'
+" let vim_markdown_preview_browser='Firefox'
+
+" Markdown preview (Livedown)
+" nnoremap <C-m> :LivedownToggle<CR>
 
 " changing cursorshape
 " let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -447,6 +463,10 @@ let dart_style_guide = 2
 
 " Command to open vim
 command! Vimrc :vs $MYVIMRC
+command! Uniq :sort u
+command! Test :!tmux send-keys -t right 'npm test' Enter
 
 " Do not redraw screen in middle of macro
 set lazyredraw
+" Make it unnecessary to unzip the epub file first
+au BufReadCmd *.epub call zip#Browse(expand("<amatch>"))

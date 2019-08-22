@@ -105,6 +105,7 @@ plugins=(
   zsh-autosuggestions
   zsh-syntax-highlighting
   k
+  docker-compose
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -171,4 +172,12 @@ alias migrateDown='f() { DATABASE_URL=postgresql://pickup@localhost/$1 ./node_mo
 alias agl='f() { ag -l $@ };f'
 alias gsd='git diff --cached'
 alias cleanbranches='git fetch --prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -d'
+alias readepub='f() { pandoc -f epub -t html "$1" | elinks -dump 1 | less -R };f'
+alias conv='f() { pandoc "$1" -t plain -o "$2".text };f'
 export LC_ALL=en_US.UTF-8
+
+# Base16 shell
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1"  ] && \
+  [ -s "$BASE16_SHELL/profile_helper.sh"  ] && \
+  eval "$("$BASE16_SHELL/profile_helper.sh")"

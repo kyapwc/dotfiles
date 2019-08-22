@@ -5,6 +5,7 @@
 	name = Ken Yap Wei Chun
 	email = wei.chun@pickupp.io
 [alias]
+  lg = !git log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
   churn = \
     !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN {print "count\tfile"} {print $1 "\t" $2}' | sort -g
   staging =\
@@ -28,6 +29,13 @@
   recentFiles = !git log --pretty=format:"" --name-only --since="2 days ago" | sort | uniq
   up = !git push -u origin $(git branch | grep '\\*' | cut -d ' ' -f2)
   push = push -u
+  what = !git whatchanged --decorate -p
+  forget = rm --cached
+  cm = commit --verbose
+[pretty]
+  log = %C(240)%h%C(reset) -%C(auto)%d%Creset %s %C(242)(%an %ar)
+  detailed = %C(cyan)%h %C(red)%ad %C(blue)[%an]%C(magenta)%d %C(white)%s
+  shorter = %C(auto)%D %C(240)--%C(242)%gD%N %ad by %C(white)%cn%C(reset)
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path =
@@ -36,3 +44,5 @@
 	trustExitCode = true
 [push]
 	default = current
+[help]
+	autocorrect = 1
