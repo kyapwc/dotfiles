@@ -470,3 +470,12 @@ command! Test :!tmux send-keys -t right 'npm test' Enter
 set lazyredraw
 " Make it unnecessary to unzip the epub file first
 au BufReadCmd *.epub call zip#Browse(expand("<amatch>"))
+
+" Vim go
+let g:go_def_mode = 'godef'
+let g:go_highlight_operators = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_types = 1
+let g:go_highlight_extra_types = 1
