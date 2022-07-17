@@ -38,6 +38,7 @@ packer.startup(function(use)
   use 'nvim-treesitter/nvim-treesitter'
   use 'junegunn/seoul256.vim'
   use 'sainnhe/everforest'
+  use 'folke/tokyonight.nvim'
 
   -- Git-related
   use 'tpope/vim-fugitive'
@@ -95,9 +96,19 @@ packer.startup(function(use)
     'kylechui/nvim-surround',
     config = function()
       require('nvim-surround').setup({
-        aliases = {
-          ["q"] = { "'", '"', '`' },
+        delimiters = {
+          pairs = {
+            ["q"] = { "'", "'" },
+            ["Q"] = { '"', '"' },
+          },
+          aliases = {
+            ["q"] = { "'" },
+            ["Q"] = { '"' },
+          }
         },
+        highlight_motion = {
+          duration = 10,
+        }
       })
     end
   }
@@ -114,7 +125,6 @@ packer.startup(function(use)
     end,
   }
 
-
   use {
     "rcarriga/nvim-notify",
     event = "VimEnter",
@@ -123,6 +133,7 @@ packer.startup(function(use)
     end,
   }
 
+  -- lspconfig - Language Server Protocol config
   use {
     'neovim/nvim-lspconfig',
     opt = true,
@@ -139,8 +150,10 @@ packer.startup(function(use)
 
   use 'ray-x/lsp_signature.nvim'
 
-  use { 'ms-jpq/coq_nvim' }
+  -- coq is better than coc
+  use 'ms-jpq/coq_nvim'
 
+  -- AutoTag for html <body>, etc tags
   use {
     'windwp/nvim-ts-autotag',
     config = function()
@@ -148,7 +161,38 @@ packer.startup(function(use)
     end
   }
 
+  -- SplitJoin to split and join long lists
   use 'AndrewRadev/splitjoin.vim'
+
+  -- lastplace to save "sessions"
+  use {
+    'ethanholz/nvim-lastplace',
+    config = function()
+      require('nvim-lastplace').setup({
+        lastplace_ignore_buftype = { 'quickfix', 'nofile', 'help' },
+        lastplace_ignore_filetype = { 'gitcommit', 'gitrebase', 'svn', 'hgcommit' },
+      })
+    end,
+  }
+
+  -- Commenter
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require('Comment').setup()
+    end
+  }
+
+  -- Playing around
+  use {
+    "beauwilliams/focus.nvim",
+    config = function()
+      require("focus").setup({
+        excluded_filetypes = { 'fzf' },
+        excluded_buftypes = { 'TelescopePrompt', 'prompt', 'nofile', 'popup' },
+      })
+    end,
+  }
 
   if PACKER_BOOTSTRAP then
     require('packer').sync()

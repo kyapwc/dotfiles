@@ -21,6 +21,13 @@ local chadtree_settings = {
     },
     text_colour_set = "nerdtree_syntax_dark",
   },
+  view = {
+    window_options = {
+      number = true,
+      relativenumber = true,
+      wrap = false,
+    },
+  },
 }
 
 vim.api.nvim_set_var('chadtree_settings', chadtree_settings)

@@ -26,7 +26,8 @@ require('fzf-lua').setup({
   },
   actions = {
     files = {
-      ["default"] = actions.file_edit
+      ['default'] = actions.file_edit,
+      ['ctrl-v'] = actions.file_vsplit,
     }
   },
 })
