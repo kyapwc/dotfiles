@@ -188,7 +188,7 @@ packer.startup(function(use)
     "beauwilliams/focus.nvim",
     config = function()
       require("focus").setup({
-        excluded_filetypes = { 'fzf' },
+        excluded_filetypes = { 'fzf', 'gitcommit', 'fugitive' },
         excluded_buftypes = { 'TelescopePrompt', 'prompt', 'nofile', 'popup' },
       })
     end,
