@@ -3,13 +3,27 @@
 -- =======================
 local vim = vim
 
+vim.cmd[[
+  tnoremap <Esc> <C-\><C-n>
+]]
+
 -- =======================
 -- Making <SPACE> as leader key
 -- =======================
 vim.g.mapleader = ' '
-vim.g.colors_name = 'everforest'
-vim.g.everforest_background = 'medium'
-vim.g.everforest_better_performance = 1
+-- vim.g.colors_name = 'everforest'
+-- vim.g.everforest_background = 'medium'
+-- vim.g.everforest_better_performance = 1
+
+-- ======================
+-- Tokyonight config
+-- ======================
+vim.g.colors_name = 'tokyonight'
+vim.g.tokyonight_style = 'storm' -- storm / night / day
+vim.g.tokyonight_italic_functions = true
+-- vim.g.tokyonight_sidebars = { 'CHADTree' }
+vim.g.tokyonight_dark_sidebar = false
+vim.g.tokyonight_lualine_bold = true
 
 -- =======================
 -- Declaring Local Variables
@@ -98,8 +112,8 @@ key_mapper('', '<right>', '<nop>')
 -- =======================
 -- Git-related mappings
 -- =======================
-key_mapper('n', '<leader>gs', ':Git<CR>')
-key_mapper('n', '<leader>gC', ':Git commit')
+key_mapper('n', '<space>gs', ':Git<CR>')
+key_mapper('n', '<space>gC', ':Git commit<CR>')
 
 -- =======================
 -- FZF / Treesitter mappings
@@ -117,7 +131,8 @@ key_mapper('n', '<C-c>', ':bd<CR>')
 key_mapper('n', '<leader>w', ':w<CR>')
 key_mapper('n', '<leader>q', ':bd<CR>')
 key_mapper('n', '<C-\\>', ':CHADopen<CR>')
-key_mapper('n', '<leader>ms', ':mksession! ~/.config/nvim/vim-session.vim')
+key_mapper('n', '<leader>ms', ':mksession! ~/.config/nvim/vim-session.vim<CR>')
+key_mapper('n', '<leader>l', ':FocusSplitNicely<CR>')
 
 -- =======================
 -- Easier scrolling
