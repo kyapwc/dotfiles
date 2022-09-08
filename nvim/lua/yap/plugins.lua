@@ -14,6 +14,13 @@ vim.cmd([[
     autocmd!
     autocmd BufWritePost plugins.lua source <afile> | PackerSync
   augroup end
+
+  augroup presentation
+    autocmd!
+
+    " Presentation mode
+    au FileType markdown nnoremap <buffer> <space>ps :PresentingStart<CR>
+  augroup end
 ]])
 
 local status_ok, packer = pcall(require, "packer")
@@ -35,10 +42,12 @@ packer.startup(function(use)
   use 'wbthomason/packer.nvim'
 
   -- Treesitter and theme
-  use 'nvim-treesitter/nvim-treesitter'
-  use 'junegunn/seoul256.vim'
-  use 'sainnhe/everforest'
-  use 'folke/tokyonight.nvim'
+  use { 'nvim-treesitter/nvim-treesitter' }
+  use { 'junegunn/seoul256.vim' }
+  use { 'sainnhe/everforest' }
+  use { 'folke/tokyonight.nvim' }
+  use { 'tiagovla/tokyodark.nvim' }
+  use { 'Rigellute/shades-of-purple.vim' }
 
   -- Git-related
   use 'tpope/vim-fugitive'
@@ -73,12 +82,6 @@ packer.startup(function(use)
     requires = 'kyazdani42/nvim-web-devicons'
   }
 
-  -- CHADTREE
-  use {
-    'ms-jpq/chadtree',
-    run = 'python3 -m chadtree deps'
-  }
-
   -- AUTOPAIRING
   use {
     "windwp/nvim-autopairs",
@@ -86,7 +89,7 @@ packer.startup(function(use)
       require("nvim-autopairs").setup({
         disable_filetype = { "TelescopePrompt" },
         map_c_w = true,
-        map_cr = true,
+        map_cr = false,
       })
     end
   }
@@ -136,7 +139,7 @@ packer.startup(function(use)
   -- lspconfig - Language Server Protocol config
   use {
     'neovim/nvim-lspconfig',
-    opt = true,
+    -- opt = true,
     event = 'BufEnter',
     wants = { 'nvim-lsp-installer', 'coq_nvim', 'lsp_signature.nvim' },
     config = function()
@@ -183,16 +186,53 @@ packer.startup(function(use)
     end
   }
 
-  -- Playing around
+  use 'lewis6991/gitsigns.nvim'
+
   use {
-    "beauwilliams/focus.nvim",
+    'chentoast/marks.nvim',
     config = function()
-      require("focus").setup({
-        excluded_filetypes = { 'fzf', 'gitcommit', 'fugitive' },
-        excluded_buftypes = { 'TelescopePrompt', 'prompt', 'nofile', 'popup' },
-      })
-    end,
+      require('marks').setup()
+    end
   }
+
+  use 'sotte/presenting.vim'
+
+  use 'rhysd/conflict-marker.vim'
+
+  use {
+    'SirVer/ultisnips',
+    requires = { { 'honza/vim-snippets' } }
+  }
+
+  use { 'elihunter173/dirbuf.nvim' }
+
+  use { 'fatih/vim-go' }
+
+  use { 'liuchengxu/vista.vim' }
+
+  use {
+    'j-hui/fidget.nvim',
+    config = function()
+      require('fidget').setup({})
+    end
+  }
+
+  use { 'arkav/lualine-lsp-progress' }
+
+  use { 'numToStr/FTerm.nvim' }
+
+  use { 'lewis6991/impatient.nvim' }
+
+  use { 'wfxr/minimap.vim' }
+
+  use {
+    'zakharykaplan/nvim-retrail',
+    config = function()
+      require('retrail').setup({})
+    end
+  }
+
+  -- use { 'nvim-orgmode/orgmode' }
 
   if PACKER_BOOTSTRAP then
     require('packer').sync()
