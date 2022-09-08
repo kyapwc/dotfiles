@@ -1,10 +1,38 @@
 -- =======================
+-- Require impatient before every other config
+-- =======================
+require('impatient')
+
+-- =======================
 -- Local vim declaration
 -- =======================
 local vim = vim
+local nvim_treesitter = require('nvim-treesitter')
 
+-- =======================
+-- Misc vim autocmds
+-- =======================
 vim.cmd[[
   tnoremap <Esc> <C-\><C-n>
+  autocmd Filetype python setlocal ts=2 sw=2 expandtab
+  nnoremap <expr> j v:count ? 'j' : 'gj'
+  nnoremap <expr> k v:count ? 'k' : 'gk'
+  autocmd FileType python map <buffer> <F9> :exec '!python3' shellescape(@%, 1)
+]]
+
+-- =======================
+-- Personal text objects
+-- =======================
+vim.cmd[[
+  onoremap iq i'
+  onoremap iQ i"
+  onoremap aq a'
+  onoremap aQ a"
+  onoremap sq s'
+  onoremap sQ s"
+  onoremap , t,
+  vnoremap iq i'
+  vnoremap iQ i""
 ]]
 
 -- =======================
@@ -21,9 +49,21 @@ vim.g.mapleader = ' '
 vim.g.colors_name = 'tokyonight'
 vim.g.tokyonight_style = 'storm' -- storm / night / day
 vim.g.tokyonight_italic_functions = true
--- vim.g.tokyonight_sidebars = { 'CHADTree' }
-vim.g.tokyonight_dark_sidebar = false
 vim.g.tokyonight_lualine_bold = true
+
+-- ======================
+-- TokyoDark config
+-- ======================
+-- vim.g.colors_name = 'tokyodark'
+-- vim.g.tokyodark_transparent_background = false
+-- vim.g.tokyodark_enable_italic = true
+-- vim.g.tokyodark_enable_italic_comment = true
+-- vim.g.tokyodark_color_gamma = '0.9'
+
+-- ======================
+-- Shades of Purple config
+-- ======================
+-- vim.g.colors_name = 'shades_of_purple'
 
 -- =======================
 -- Declaring Local Variables
@@ -47,8 +87,8 @@ o.errorbells = false
 o.smartcase = true
 o.showmode = false
 o.backup = false
-o.undodir = vim.fn.stdpath('config') .. '/undodir'
-o.undofile = true
+-- o.undodir = vim.fn.stdpath('config') .. '/undodir'
+o.undofile = false
 o.incsearch = true
 o.hidden = true
 o.completeopt='menuone,noinsert,noselect'
@@ -76,6 +116,11 @@ wo.number = true
 wo.relativenumber = true
 wo.signcolumn = 'yes'
 wo.wrap = true
+wo.scrolloff = 8
+
+-- wo.foldlevel = 20
+-- wo.foldmethod = 'expr'
+-- wo.foldexpr = 'nvim_treesitter#foldexpr()'
 
 -- =======================
 -- Window options
@@ -113,6 +158,8 @@ key_mapper('', '<right>', '<nop>')
 -- Git-related mappings
 -- =======================
 key_mapper('n', '<space>gs', ':Git<CR>')
+key_mapper('n', '<space>gp', ':Git push<CR>')
+key_mapper('n', '<space>gb', ':Git blame<CR>')
 key_mapper('n', '<space>gC', ':Git commit<CR>')
 
 -- =======================
@@ -133,6 +180,10 @@ key_mapper('n', '<leader>q', ':bd<CR>')
 key_mapper('n', '<C-\\>', ':CHADopen<CR>')
 key_mapper('n', '<leader>ms', ':mksession! ~/.config/nvim/vim-session.vim<CR>')
 key_mapper('n', '<leader>l', ':FocusSplitNicely<CR>')
+key_mapper('v', '<C-c>', '"+y')
+key_mapper('n', '<space>dd', ':lua vim.diagnostic.disable()<CR>')
+key_mapper('n', '<space>de', ':lua vim.diagnostic.enable()<CR>')
+key_mapper('n', '<space>t', ':Vista!!<CR>')
 
 -- =======================
 -- Easier scrolling
@@ -167,7 +218,12 @@ require('yap/treesitter')
 require('yap/fzf-lua')
 require('yap/lualine')
 require('yap/bufferline')
-require('yap/chadtree')
 require('yap/indent-blankline')
 require('yap/config/lsp')
 require('yap/coq')
+require('yap/gitsigns')
+require('yap/ultisnips')
+require('yap/vim-go')
+require('yap/fterm')
+require('yap/minimap')
+-- require('yap/orgmode')

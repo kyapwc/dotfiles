@@ -21,7 +21,8 @@ local servers = {
       },
     },
   },
-  tsserver = {},
+  tsserver = {
+  },
   vimls = {},
   eslint = {},
   bashls = {},
@@ -46,10 +47,10 @@ local function on_attach(client, bufNo)
   api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
   local signs = {
-    { name = 'DiagnosticSignError', text = ' ' },
-    { name = 'DiagnosticSignWarn', text = ' ' },
-    { name = 'DiagnosticSignHint', text = ' ' },
-    { name = 'DiagnosticSignInfo', text = ' ' },
+    { name = 'DiagnosticSignError', text = 'E' },
+    { name = 'DiagnosticSignWarn', text = 'W' },
+    { name = 'DiagnosticSignHint', text = 'H' },
+    { name = 'DiagnosticSignInfo', text = 'I' },
   }
 
   local config = {
@@ -57,17 +58,18 @@ local function on_attach(client, bufNo)
     signs = {
       active = signs,
     },
-    update_in_insert = true,
+    update_in_insert = false,
     underline = true,
     severity_sort = true,
     float = {
+      update_in_insert = false,
       focusable = false,
       style = 'minimal',
       border = 'rounded',
       source = 'always',
       header = '',
       prefix = '',
-    }
+    },
   }
 
   vim.diagnostic.config(config)
@@ -78,7 +80,8 @@ end
 local options = {
   on_attach = on_attach,
   flags = {
-    debounce_text_changes = 150,
+    debounce_text_changes = 200,
+    exit_timeout = 0,
   },
 }
 
