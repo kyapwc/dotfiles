@@ -1,0 +1,125 @@
+# Loading Addons
+sudo yabai --load-sa
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+
+# First Desktop
+yabai -m config layout float
+yabai -m config window_placement second_child
+
+# Second Desktop
+yabai -m config --space 1 layout bsp
+yabai -m config --space 2 layout bsp
+yabai -m config --space 3 layout bsp
+yabai -m config --space 4 layout bsp
+yabai -m config --space 5 layout bsp
+yabai -m config --space 6 layout bsp
+yabai -m config --space 7 layout bsp
+yabai -m config --space 7 layout bsp
+yabai -m config --space 8 layout bsp
+yabai -m config --space 9 layout bsp
+yabai -m config --space 10 layout bsp
+
+# Labelling Spaces
+yabai -m space 1 --label Code
+yabai -m space 2 --label Slack
+yabai -m space 3 --label "XCode / Postico"
+yabai -m space 4 --label "Browser / Testing"
+yabai -m space 5 --label Misc
+
+yabai -m config top_padding 36
+yabai -m config bottom_padding 10
+yabai -m config left_padding 10
+yabai -m config right_padding 10
+yabai -m config window_gap 10
+
+yabai -m config --space 1 window_gap 5
+yabai -m config --space 1 top_padding 36
+yabai -m config --space 1 bottom_padding 0
+yabai -m config --space 1 left_padding 0
+yabai -m config --space 1 right_padding 0
+
+yabai -m config auto_balance on
+
+yabai -m config mouse_modifier ctrl
+
+# yabai -m config focus_follows_mouse on
+yabai -m config focus_follows_mouse autoraise
+yabai -m config mouse_action1 move
+yabai -m config mouse_follows_focus on
+
+# Settings for window borders (disable for now)
+# disabled due to it injecting code to the windows
+# and slowing down the system
+# yabai -m config window_border off
+
+# Yabai borders
+yabai -m config window_border on
+yabai -m config window_border_width 6
+yabai -m config active_window_border_color 0xff00b3f4
+yabai -m config normal_window_border_color 0xff555555
+
+# Settings for window opacity
+# yabai -m config window_opacity on
+# yabai -m config active_window_opacity 1.0
+# yabai -m config normal_window_opacity 0.9
+
+# https://github.com/koekeishiya/yabai/issues/1156#issuecomment-1072417210
+yabai -m config window_topmost off
+
+yabai -m rule --add app="^System Preferences$" manage=off layer=above
+yabai -m rule --add app="^System Information$" manage=off layer=above
+yabai -m rule --add app="^Accessibility Inspector$" manage=off layer=above
+yabai -m rule --add app="^Activity Monitor$" manage=off layer=above
+yabai -m rule --add app="^Calendar$" manage=off layer=above
+yabai -m rule --add app="^Disk Utility$" manage=off layer=above
+yabai -m rule --add app="^FaceTime$" manage=off layer=above
+yabai -m rule --add app="^Finder$" manage=off layer=above
+yabai -m rule --add app="^Firefox$" title="^Opening " manage=off
+yabai -m rule --add app="^Firefox$" title="^Picture-in-Picture$" manage=off
+yabai -m rule --add app="^Font Book$" manage=off
+yabai -m rule --add app="^Keychain Access$" manage=off layer=above
+yabai -m rule --add app="^Mail$" manage=off
+yabai -m rule --add app="^Photos$" manage=off
+yabai -m rule --add app="^Postgres$" manage=off
+yabai -m rule --add app="^Swipes$" manage=off
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^The Unarchiver$" manage=off
+yabai -m rule --add app="^Security & Privacy$" manage=off
+yabai -m rule --add app="^Network$" manage=off
+yabai -m rule --add app="^Digital Colour Meter$" manage=off layer=above
+yabai -m rule --add app="^Simulator$" manage=off border=off layer=above
+yabai -m rule --add app="^Reactotron$" manage=off border=off sticky=off layer=above
+yabai -m rule --add app="^emulator64-crash-service" manage=off border=off layer=above
+yabai -m rule --add app="^emulator" manage=off border=off layer=above
+yabai -m rule --add app="^QuickTime Player$" manage=off layer=above
+yabai -m rule --add app="^Movie Recording$" manage=off layer=above
+yabai -m rule --add app="^Firefox$" title="^Opening .*$" manage=off layer=above
+yabai -m rule --add app="^Monosnap$" manage=off layer=above
+yabai -m rule --add app="^Slack \| Slack call.*" manage=off layer=above
+yabai -m rule --add app="^Postico$" title="^Find$" manage=off layer=above
+yabai -m rule --add app="^iTerm2$" title="^Preferences$" manage=off layer=above
+yabai -m rule --add app="^qutebrowser$" layer=above
+yabai -m rule --add app="^Expressions$" manage=off layer=above
+yabai -m rule --add app="^Notes$" manage=off layer=above
+yabai -m rule --add app="^emulator$" manage=off layer=above
+yabai -m rule --add app="^Slack$" manage=off layer=above
+yabai -m rule --add app="^TeamViewer$" manage=off layer=above
+yabai -m rule --add app="^Godot$" manage=off layer=above
+yabai -m rule --add app="^Bear$" manage=off layer=above
+yabai -m rule --add app="^Panda$" manage=off layer=above
+yabai -m rule --add app="^KeyCastr$" manage=off layer=above
+yabai -m rule --add app="^Firefox$" title="Print" manage=off layer=above
+yabai -m rule --add app="^Alacritty$" manage=off layer=above border=off
+yabai -m rule --add app="^Notational Velocity$" manage=off layer=above
+yabai -m rule --add app="^Craft$" manage=off layer=above
+yabai -m rule --add app="^Typora$" manage=off layer=above
+yabai -m rule --add app="^Notable$" manage=off layer=above
+yabai -m rule --add app="^Obsidian$" manage=off layer=above
+# yabai -m rule --add app="^Python$" title="^pygame window$" manage=off layer=above
+# yabai -m rule --add app="^Python$" manage=off layer=above
+# yabai -m rule --add app="^Archive Utility$" manage=off layer=above
+yabai -m rule --add app="^iTerm2$" opacity=0.8 border=off
+
+# Refresh item
+# yabai -m signal --add event=window_focused \
+#   action="osascript -e 'display notification \"Testing\" with title \"Yabai\"'"

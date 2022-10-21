@@ -3,78 +3,65 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/kenyap/.oh-my-zsh"
-export GO111MODULE=off
+export GO111MODULE=on
 export GOPATH=$HOME/go
 export GOROOT="/usr/local/opt/go/libexec"
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
+export GOPRIVATE="bitbucket.org/pick-up"
+export TESSDATA_PREFIX="/usr/local/share/tessdata/"
+export TERM="xterm-256color-italic"
+export GST_PLUGIN_PATH=/usr/local/lib/gstreamer-1.0
+
+# Flutter
+# export PATH="$PATH:/Users/kenyap/flutter/bin"
+
 export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
-export RIPGREP_CONFIG_PATH='/Users/kenyap/.ripgreprc'
 export POSTGRES_USER='pickup'
-export PATH="$HOME/.npm-packages/bin:$PATH"
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_192.jdk/Contents/Home/"
+export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
+
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/"
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-export NVM_DIR="$HOME/.custom-nvm"
-export NVM_LAZY_LOAD=true
-export PATH="$PATH:$HOME/.custom-nvm/versions/node/v8.15.0/bin"
-export PATH="$PATH:$HOME/workspace/flutter/bin"
-export PATH="$PATH:$HOME/.pub-cache/bin"
-# source /usr/local/opt/nvm/nvm.sh
-# Load rupa's z if installed
-[ -f /usr/local/etc/profile.d/z.sh  ] && source /usr/local/etc/profile.d/z.sh
+export PATH="/usr/local/Cellar/openvpn/2.5.7/sbin:$PATH"
 
 # Setting aliases for dev
-alias code='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 alias gs='git status'
 alias glog='git log --oneline --decorate --color --graph --all'
 alias dk="docker-compose"
-alias dks="docker-compose -f docker-compose-shopify.yml"
-alias dksl="docker-compose -f docker-compose-shopify.yml logs -f"
-alias dksr="docker-compose -f docker-compose-shopify.yml restart"
 alias dkl='docker-compose logs --tail=1000 -f'
-alias dkr="docker-compose restart"
 alias gco="git checkout"
 alias gb="git branch"
 # alias gdiff="git log -m | ydiff -s -w 0 --wrap"
-alias gdiff="git diff | ydiff -s"
-alias ref="quote qotd && source ~/.zshrc && echo refresh zshrc done"
-alias mpv="open -na /Applications/mpv.app"
-alias conflicts="vim $(git diff --name-only --diff-filter=U)"
+alias ref="source ~/.zshrc && echo refresh zshrc done"
+# alias conflicts="nvim $(git diff --name-only --diff-filter=U)"
+alias pml="pm2 logs --lines 100"
+alias pmr="pm2 restart"
+alias pms="pm2 start"
+alias pmstop="pm2 stop all && pm2 delete all && pm2 flush logs"
 
-# Task warrior alias
-alias tka="task all"
-alias tkl="task list"
-alias ta="task add"
-alias calc="task calc"
-alias tki="task information"
-
-# cd into pickupp dir
-alias pickorder="cd $HOME/go/src/bitbucket.org/pick-up/orderservice/"
-alias pickgateway="cd $HOME/go/src/bitbucket.org/pick-up/gateway/"
-alias pickuserapp="cd $HOME/go/src/bitbucket.org/pick-up/pickuppuserapp/"
-alias pickmerchant="cd $HOME/go/src/bitbucket.org/pick-up/merchant-portal/"
-alias pickadmin="cd $HOME/go/src/bitbucket.org/pick-up/admin-portal/"
-
-alias vimrc="vim ~/.vimrc"
-alias zshrc="vim ~/.zshrc"
-alias chunk="vim ~/.chunkwmrc"
-alias skhdrc="vim ~/.skhdrc"
-alias ncmp="ncmpcpp"
-alias ideac="idea create "
-alias ideav="idea view"
-alias ideas="idea list"
+alias vimrc="nvim ~/.vimrc"
+alias zshrc="nvim ~/.zshrc"
+alias yabairc="nvim ~/.yabairc"
+alias skhdrc="nvim ~/.skhdrc"
 alias cl="clear"
+alias work="cd ~/go/src/bitbucket.org/pick-up"
+alias pick="cd ~/go/src/bitbucket.org/pick-up/pickupp"
 
-# Vim start session
+# alias vr="nvim `git show --pretty='' --name-only`"
+
+# nvim start session
 alias vims="vim -S ~/.vim/vim-session.vim"
+alias nvims="nvim -S ~/.config/nvim/vim-session.nvim"
 # Set name of the theme to load --- if set to "random"
 ZSH_THEME="spaceship"
 
-HISTSIZE=1000
-SAVEHIST=1000
+HISTFILE=~/.zsh_history
+HISTSIZE=5000
+SAVEHIST=5000
+setopt appendhistory
 
 # Set word movement
 bindkey "[D" backward-word
@@ -101,83 +88,100 @@ DISABLE_AUTO_TITLE="true"
 
 plugins=(
   git
-  zsh-nvm
   zsh-autosuggestions
   zsh-syntax-highlighting
-  k
   docker-compose
+  zsh-nvm
 )
+export NVM_LAZY_LOAD=true
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
-
-# Set Spaceship ZSH as a prompt
-autoload -U promptinit; promptinit
-prompt spaceship
-
-# Set kitty completion on zsh
-# autoload -Uz compinit
-# compinit
-# kitty + complete setup zsh | source /dev/stdin
-
-# PM functions
-# source ~/.pm/pm.zsh
-# alias pma="pm add"
-# alias pmg="pm go"
-# alias pmrm="pm remove"
-# alias pml="pm list"
-# end PM
-# LazyGit
-alias lg="lazygit"
-# Unalias GRV
-# unalias grv
 # GITA
 alias gita="python3 -m gita"
 alias :q="exit"
-alias dkstart="dk up -d address admin agent geo postgres redis order rating notification cronjob geo wallet payroll warehouse merchant gateway"
 
-# Annihilate all containers in docker
-alias dockannihilate="docker kill $(docker ps -q) && docker rm $(docker ps -a -q)"
-# alias tnew="tmux new -s "
-# alias tatt="tmux attach -t "
-# alias tls="tmux ls"
-# alias tkill="tmux kill-session -t "
-# alias tkillall="tmux ls | grep : | cut -d. -f1 | awk '{print substr($1, 0, length($1)-1)}' | xargs kill"
 alias portcheck="lsof -i"
-# alias rgl="f() { rg --pretty %s | less  };f"
-# alias rgv="f() { vim $(rg --files-with-matches $@)  };f"
-alias bump="vim package.json package-lock.json"
+alias bump="nvim package.json package-lock.json"
 alias scripts="cat package.json | jq -C .'scripts' | less -R"
 alias rn="react-native"
-# alias killandroid="sudo killall -9 $(ps aux | grep -i Best_Testing_Device | awk 'NR==1{print $11}' | xargs basename)"
+
 alias filesize="du -hs "
 alias dockprune="docker image prune -a"
-alias genMigration='f() { DATABASE_URL=postgresql://pickup@localhost/$1 ./node_modules/.bin/sequelize migration:generate --name $2 };f'
-alias migrateUp='f() { DATABASE_URL=postgresql://pickup@localhost/$1 ./node_modules/.bin/sequelize db:migrate };f'
-alias migrateDown='f() { DATABASE_URL=postgresql://pickup@localhost/$1 ./node_modules/.bin/sequelize db:migrate:undo };f'
 alias agl='f() { ag -l $@ };f'
-alias gsd='git diff --cached'
 alias cleanbranches='git fetch --prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -d'
-alias readepub='f() { pandoc -f epub -t html "$1" | elinks -dump 1 | less -R };f'
-alias conv='f() { pandoc "$1" -t plain -o "$2".text };f'
+alias pstore='f() { psql -h localhost -p 5432 -d $1 -f $1.sql -U pickup };f'
+alias localdump='f() { pg_dump -h localhost -p 5432 -U pickup $1 > $1.sql };f'
+alias remotedump='f() { pg_dump -h $1 -U pickupp $2 > $2.sql };f'
+alias vag='f() { nvim $(ag -l $@) };f'
+
+alias ver="cat package.json | jq .version"
+alias gti="f() { git update-index --assume-unchanged $@ };f"
+alias gtic="f() { git update-index --no-assume-unchanged $@ };f"
+
+alias nme='f() { osascript -e "display notification \"$1\" with title \"$2\" sound name \"Hero\"" };f'
+
+alias clearcache='f() { rm -rf ~/Library/Developer/Xcode/Archives \
+rm -rf ~/Library/Developer/Xcode/DerivedData \
+rm -rf ~/Library/Developer/Xcode/iOS Device Logs/ \
+rm -rf ~/Library/Caches/CocoaPods \
+rm -rf ~/Library/Caches/com.apple.dt.Xcode/ \
+};f'
+
+alias tms='f() { tmuxp load $1 };f'
+
+alias boilr="~/bin/boilr"
+
+function kill-node-port() {
+  if [ -n "$1" ]; then
+    lsof -i -P -n | grep LISTEN | grep "$@" | for i in `awk {'print$2'}`; do kill -9 $i; done
+  else
+    echo "Specify node port!"
+  fi
+}
+
+alias pmkill='kill-node-port'
+
+alias migrateUp='f() { DATABASE_URL=postgresql://postgres@localhost/$1 ./node_modules/.bin/sequelize migration:generate --name $2 };f'
+alias migrateDown='f() { DATABASE_URL=postgresql://postgres@localhost/$1 ./node_modules/.bin/sequelize db:migrate:undo };f'
+
+# Tre directory listing numerals
+# tre() { command tre "$@" -e && source "/tmp/tre_aliases_$USER" 2>/dev/null;  }
+
 export LC_ALL=en_US.UTF-8
 
-# Base16 shell
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1"  ] && \
-  [ -s "$BASE16_SHELL/profile_helper.sh"  ] && \
-  eval "$("$BASE16_SHELL/profile_helper.sh")"
+autoload -Uz compinit && compinit
+if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
+  compinit
+else
+  compinit -C
+fi
+
+export KITTY_CONFIG_DIRECTORY="~/.config/kitty/kitty.conf"
+
+# NVM stuff
+# export NVM_DIR=~/.nvm
+# source /usr/local/opt/nvm/nvm.sh
+# source ~/.zsh_npm
+export BITBUCKET_APP_PASSWORD=Kv7ChvThwqQA3Z8wBdFT
+export BITBUCKET_USERNAME=kyapweichun
+export FZF_CTRL_R_OPTS='--border --info=inline'
+export FZF_COMPLETION_TRIGGER='~~'
+
+export FZF_DEFAULT_COMMAND='ag -g ""'
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export EDITOR="/usr/local/bin/nvim"
+export DISABLE_AUTO_TITLE='true'
+
+# bun completions
+[ -s "/Users/kenyap/.bun/_bun" ] && source "/Users/kenyap/.bun/_bun"
+
+# Bun
+export BUN_INSTALL="/Users/kenyap/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
