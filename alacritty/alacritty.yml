@@ -1,0 +1,105 @@
+font:
+  normal:
+    family: FiraCode Nerd Font Mono
+    style: Bold
+
+  bold:
+    family: FiraCode Nerd Font Mono
+    style: Bold
+
+  italic:
+    family: FiraCode Nerd Font Mono
+    style: Bold
+
+  bold_italic:
+    family: FiraCode Nerd Font Mono
+    style: Bold
+
+  # normal:
+  #   family: mononoki
+  #   style: Bold
+  #
+  # bold:
+  #   family: mononoki
+  #   style: Bold
+  #
+  # italic:
+  #   family: mononoki
+  #   style: Bold
+  #
+  # bold_italic:
+  #   family: mononoki
+  #   style: BoldItalic
+
+  size: 10
+
+window:
+  dynamic_padding: true
+  padding:
+    x: 5
+    y: 5
+  decorations: buttonless
+  startup_mode: Windowed
+  dimensions:
+    columns: 133
+    lines: 40
+  # opacity: 0.8
+
+hint:
+  start:
+   foreground: '#1d1f21'
+   background: '#e9ff5e'
+
+colors:
+  # Default colors
+  primary:
+    background: '#282a36'
+    foreground: '#f8f8f2'
+
+  # Normal colors
+  normal:
+    black:   '#000000'
+    red:     '#ff5555'
+    green:   '#50fa7b'
+    yellow:  '#f1fa8c'
+    blue:    '#caa9fa'
+    magenta: '#ff79c6'
+    cyan:    '#8be9fd'
+    white:   '#bfbfbf'
+
+  # Bright colors
+  bright:
+    black:   '#575b70'
+    red:     '#ff6e67'
+    green:   '#5af78e'
+    yellow:  '#f4f99d'
+    blue:    '#caa9fa'
+    magenta: '#ff92d0'
+    cyan:    '#9aedfe'
+    white:   '#e6e6e6'
+
+  cursor:
+    cursor: '#ffffff'
+    text: '#5A5A5A'
+
+key_bindings:
+  - { key: Q,        mods: Command,  action: Quit                         } # Kill command
+  - { key: Left,     mods: Alt,      chars: "\x1bb"                       } # Skip word left
+  - { key: Right,    mods: Alt,      chars: "\x1bf"                       } # Skip word right
+  - { key: Back,     mods: Command,  chars: "\x15"                        } # Delete line
+  - { key: Back,     mods: Alt,      chars: "\x1b\x7f"                    } # Delete word
+  - { key: Return,   mods: Shift,    chars: "\x1b[13;2u"                  } # Shift for vim
+  - { key: Return,   mods: Control,  chars: "\x1b[13;5u"                  } # Ctrl for vim
+  - { key: Key6,     mods: Control,  chars: "\x1e"                        } # Ctrl-^ to work for vim
+  - { key: Left,     mods: Command,  chars: "\x1bOH",   mode: AppCursor   }
+  - { key: Left,     mods: Command,  chars: "\x1b[H",   mode: ~AppCursor  }
+  - { key: Right,    mods: Command,  chars: "\x1bOF",   mode: AppCursor   }
+  - { key: Right,    mods: Command,  chars: "\x1b[F",   mode: ~AppCursor  }
+  - { key: F11, mods: Command, action: ToggleFullScreen } # Open full screen
+
+shell:
+  program: /bin/zsh
+  args:
+    - -l
+    - -c
+    - "source ~/.zshrc; tmux attach 2> /dev/null || tmux"
