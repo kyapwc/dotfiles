@@ -5,21 +5,30 @@
 export ZSH="/Users/kenyap/.oh-my-zsh"
 export GO111MODULE=on
 export GOPATH=$HOME/go
-export GOROOT="/usr/local/opt/go/libexec"
+export GOROOT="/usr/local/opt/go@1.16/libexec"
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 export GOPRIVATE="bitbucket.org/pick-up"
 export TESSDATA_PREFIX="/usr/local/share/tessdata/"
-export TERM="xterm-256color-italic"
+# export TERM="xterm-256color"
+export TERM="screen-256color"
 export GST_PLUGIN_PATH=/usr/local/lib/gstreamer-1.0
+export UEBERSICHT_PATH=$HOME/Library/Application\ Support/Übersicht/widgets/
+# Add emacs into path
+export PATH="$HOME/.emacs.d/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/flutter/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:$PATH"
 
 # Flutter
 # export PATH="$PATH:/Users/kenyap/flutter/bin"
 
+# Re-enable this later
 export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
-export POSTGRES_USER='pickup'
+export POSTGRES_USER='pickupp'
 export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
 
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home/"
+export INTEL_HAXM_HOME=/usr/local/Caskroom/intel-haxm
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
@@ -39,8 +48,8 @@ alias ref="source ~/.zshrc && echo refresh zshrc done"
 # alias conflicts="nvim $(git diff --name-only --diff-filter=U)"
 alias pml="pm2 logs --lines 100"
 alias pmr="pm2 restart"
-alias pms="pm2 start"
-alias pmstop="pm2 stop all && pm2 delete all && pm2 flush logs"
+# alias pmstop="pm2 stop all && pm2 delete all && pm2 flush logs"
+alias pms="pm2 stop all && pm2 flush logs && pm2 kill"
 
 alias vimrc="nvim ~/.vimrc"
 alias zshrc="nvim ~/.zshrc"
@@ -90,36 +99,22 @@ plugins=(
   git
   zsh-autosuggestions
   zsh-syntax-highlighting
-  docker-compose
-  zsh-nvm
 )
-export NVM_LAZY_LOAD=true
 
 source $ZSH/oh-my-zsh.sh
 
-# GITA
-alias gita="python3 -m gita"
 alias :q="exit"
 
 alias portcheck="lsof -i"
-alias bump="nvim package.json package-lock.json"
 alias scripts="cat package.json | jq -C .'scripts' | less -R"
 alias rn="react-native"
 
 alias filesize="du -hs "
-alias dockprune="docker image prune -a"
 alias agl='f() { ag -l $@ };f'
 alias cleanbranches='git fetch --prune && git branch -r | awk "{print \$1}" | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk "{print \$1}" | xargs git branch -d'
 alias pstore='f() { psql -h localhost -p 5432 -d $1 -f $1.sql -U pickup };f'
 alias localdump='f() { pg_dump -h localhost -p 5432 -U pickup $1 > $1.sql };f'
 alias remotedump='f() { pg_dump -h $1 -U pickupp $2 > $2.sql };f'
-alias vag='f() { nvim $(ag -l $@) };f'
-
-alias ver="cat package.json | jq .version"
-alias gti="f() { git update-index --assume-unchanged $@ };f"
-alias gtic="f() { git update-index --no-assume-unchanged $@ };f"
-
-alias nme='f() { osascript -e "display notification \"$1\" with title \"$2\" sound name \"Hero\"" };f'
 
 alias clearcache='f() { rm -rf ~/Library/Developer/Xcode/Archives \
 rm -rf ~/Library/Developer/Xcode/DerivedData \
@@ -128,9 +123,7 @@ rm -rf ~/Library/Caches/CocoaPods \
 rm -rf ~/Library/Caches/com.apple.dt.Xcode/ \
 };f'
 
-alias tms='f() { tmuxp load $1 };f'
-
-alias boilr="~/bin/boilr"
+alias ydiffs='f() { ydiff -s -w 0 --wrap };f'
 
 function kill-node-port() {
   if [ -n "$1" ]; then
@@ -149,8 +142,10 @@ alias migrateDown='f() { DATABASE_URL=postgresql://postgres@localhost/$1 ./node_
 # tre() { command tre "$@" -e && source "/tmp/tre_aliases_$USER" 2>/dev/null;  }
 
 export LC_ALL=en_US.UTF-8
+zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+fpath=(~/.zsh $fpath)
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit
 if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
   compinit
 else
@@ -159,10 +154,6 @@ fi
 
 export KITTY_CONFIG_DIRECTORY="~/.config/kitty/kitty.conf"
 
-# NVM stuff
-# export NVM_DIR=~/.nvm
-# source /usr/local/opt/nvm/nvm.sh
-# source ~/.zsh_npm
 export BITBUCKET_APP_PASSWORD=Kv7ChvThwqQA3Z8wBdFT
 export BITBUCKET_USERNAME=kyapweichun
 export FZF_CTRL_R_OPTS='--border --info=inline'
@@ -185,3 +176,12 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+export SPACESHIP_NODE_SHOW=false
+export SPACESHIP_PROMPT_ASYNC=false
+
+. /usr/local/opt/asdf/libexec/asdf.sh
