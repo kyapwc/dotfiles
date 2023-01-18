@@ -1,0 +1,23 @@
+require('retrail').setup({
+  strict = false,
+  exclude = {
+    "",
+    "alpha",
+    "checkhealth",
+    "diff",
+    "help",
+    "lspinfo",
+    "man",
+    "mason",
+    "TelescopePrompt",
+    "Telescope",
+    "Trouble",
+    "WhichKey",
+    "fzf",
+    "fzf-lua",
+    "FzfLua",
+    "term",
+    "TERMINAL",
+    "terminal",
+  },
+})
