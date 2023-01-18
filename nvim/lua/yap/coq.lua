@@ -9,6 +9,7 @@ vim.g.coq_settings = {
   keymap = {
     jump_to_mark = '',
     eval_snips = '',
+    bigger_preview = '<c-k>',
     recommended = false,
   },
   clients = {
