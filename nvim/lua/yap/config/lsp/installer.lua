@@ -1,29 +1,33 @@
-local lsp_installer_servers = require('nvim-lsp-installer.servers')
+local mason_lspconfig = require('mason-lspconfig')
+-- local notify = require('notify')
+local lspconfig = require('lspconfig')
+local coq = require('coq')
 
 local M = {}
 
-function M.setup(servers, options)
-  for server_name, _ in pairs(servers or {}) do
-    local server_available, server = lsp_installer_servers.get_server(server_name)
+function M.setup(servers)
+  local config = {
+    function(server_name)
+      lspconfig[server_name].setup()
+    end,
+  }
 
-    if server_available then
-      server:on_ready(function()
-        local opts = vim.tbl_deep_extend('force', options, servers[server.name] or {})
+  local mason_config = {
+    ensure_installed = {},
+  }
 
-        local coq = require('coq')
-        server:setup(coq.lsp_ensure_capabilities(opts))
+  for server_name, server_options in pairs(servers or {}) do
+    table.insert(mason_config.ensure_installed, server_name)
 
-        -- server:setup(opts)
-      end)
-
-      if not server:is_installed() then
-        vim.notify('Installing ' .. server.name, vim.log.levels.INFO)
-        server:install()
-      end
-    else
-      vim.notify('Installing ' .. server.name, vim.log.levels.ERROR)
+    config[server_name] = function()
+      lspconfig[server_name].setup(coq.lsp_ensure_capabilities(server_options))
     end
   end
+
+  -- notify(vim.inspect(ensure_installed), vim.log.levels.INFO)
+
+  mason_lspconfig.setup(mason_config)
+  mason_lspconfig.setup_handlers(config)
 end
 
 return M
