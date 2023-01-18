@@ -18,6 +18,9 @@ vim.cmd[[
   nnoremap <expr> j v:count ? 'j' : 'gj'
   nnoremap <expr> k v:count ? 'k' : 'gk'
   autocmd FileType python map <buffer> <F9> :exec '!python3' shellescape(@%, 1)
+  let g:python3_host_prog = '/usr/local/bin/python3'
+  nnoremap <silent> <C-6> <C-^>
+  set noswapfile
 ]]
 
 -- =======================
@@ -36,6 +39,13 @@ vim.cmd[[
 ]]
 
 -- =======================
+-- Splitjoin config
+-- =======================
+vim.cmd[[
+  let g:splitjoin_trailing_comma = 1
+]]
+
+-- =======================
 -- Making <SPACE> as leader key
 -- =======================
 vim.g.mapleader = ' '
@@ -46,9 +56,9 @@ vim.g.mapleader = ' '
 -- ======================
 -- Tokyonight config
 -- ======================
-vim.g.colors_name = 'tokyonight'
-vim.g.tokyonight_style = 'storm' -- storm / night / day
-vim.g.tokyonight_italic_functions = true
+vim.g.colors_name = 'tokyonight-moon'
+vim.g.tokyonight_style = 'night' -- storm / night / day / moon
+-- vim.g.tokyonight_italic_functions = true
 vim.g.tokyonight_lualine_bold = true
 
 -- ======================
@@ -128,6 +138,7 @@ wo.scrolloff = 8
 -- opt.cursorline = true
 opt.guicursor = "n-v-c-i:block"
 opt.termguicolors = true
+opt.mouse = ""
 
 -- =======================
 -- Custom Functions
@@ -183,7 +194,9 @@ key_mapper('n', '<leader>l', ':FocusSplitNicely<CR>')
 key_mapper('v', '<C-c>', '"+y')
 key_mapper('n', '<space>dd', ':lua vim.diagnostic.disable()<CR>')
 key_mapper('n', '<space>de', ':lua vim.diagnostic.enable()<CR>')
-key_mapper('n', '<space>t', ':Vista!!<CR>')
+key_mapper('n', '<space>v', ':Vista!!<CR>')
+key_mapper('n', '<space>ss', ':lua vim.lsp.buf.signature_help()<CR>')
+key_mapper('n', '<space>p', ':lua require("player").toggle_player()<CR>')
 
 -- =======================
 -- Easier scrolling
@@ -213,8 +226,45 @@ key_mapper('n', '<leader>8', ':lua require("bufferline").go_to_buffer(8, true)<C
 key_mapper('n', '<leader>9', ':lua require("bufferline").go_to_buffer(9, true)<CR>')
 key_mapper('n', '<leader>0', ':lua require("bufferline").go_to_buffer(10, true)<CR>')
 
+-- =======================
+-- Trouble
+-- =======================
+key_mapper('n', '<leader>tt', '<cmd>TroubleToggle<cr>')
+
+-- =======================
+-- Goto Preview
+-- =======================
+key_mapper('n', '<leader>gt', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>")
+key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<CR>")
+
+-- vim.cmd[[
+-- function! OnUIEnter(event) abort
+--   if 'Firenvim' ==# get(get(nvim_get_chan_info(a:event.chan), 'client', {}), 'name', '')
+--       set noruler
+--       set noshowcmd
+--       set laststatus=0
+--       set showtabline=0
+--   endif
+-- endfunction
+-- autocmd UIEnter * call OnUIEnter(deepcopy(v:event))
+-- ]]
+
+vim.cmd[[
+  if exists("g:neovide")
+    " set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h10
+    set guifont=FiraCode\ Nerd\ Font\ Mono:h10
+    let g:neovide_transparency = 0.9
+    let g:transparency = 0.9
+    let g:neovide_cursor_animation_length = 0.01
+  endif
+]]
+
+require('yap/globals')
 require('yap/plugins')
+require('yap/telescope')
+require('yap/retrail')
 require('yap/treesitter')
+require('yap/twilight')
 require('yap/fzf-lua')
 require('yap/lualine')
 require('yap/bufferline')
@@ -226,4 +276,17 @@ require('yap/ultisnips')
 require('yap/vim-go')
 require('yap/fterm')
 require('yap/minimap')
+require('yap/tokyonight')
+-- require('yap/noice')
+require('yap/gojira')
+require('yap/alpha')
+-- require('fidget').setup({
+--   debug = { logging = true }
+-- })
 -- require('yap/orgmode')
+
+-- =======================
+-- Tips for plugin development
+-- =======================
+-- :lua package.loaded['gojira.gojira'] = print(require('gojira.gojira'))
+-- this is to reload the file into the stack on neovim without restart neovim
