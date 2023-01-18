@@ -17,6 +17,7 @@ require('fzf-lua').setup({
     height = 0.3,
     width = 1.0,
     row = 1.0,
+    -- row = 0.5,
     border = 'rounded',
     preview = {
       layout = 'horizontal',

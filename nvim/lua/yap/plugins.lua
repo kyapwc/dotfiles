@@ -1,12 +1,18 @@
 local fn = vim.fn
 
 -- Ensure packer is installed
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  PACKER_BOOTSTRAP = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-  print("Installing Packer, close and reopen Neovim...")
-  vim.cmd([[packadd packer.nvim]])
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    vim.cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
 end
+
+local packer_bootstrap = ensure_packer()
 
 -- Autocommand that reloads neovim whenever you save plugins.lua file
 vim.cmd([[
@@ -41,13 +47,18 @@ packer.startup(function(use)
   -- Plugin manager
   use 'wbthomason/packer.nvim'
 
+  if packer_bootstrap then
+    require('packer').sync()
+  end
+
   -- Treesitter and theme
   use { 'nvim-treesitter/nvim-treesitter' }
-  use { 'junegunn/seoul256.vim' }
-  use { 'sainnhe/everforest' }
+  use { 'nvim-treesitter/playground' }
+  -- use { 'junegunn/seoul256.vim' }
+  -- use { 'sainnhe/everforest' }
   use { 'folke/tokyonight.nvim' }
-  use { 'tiagovla/tokyodark.nvim' }
-  use { 'Rigellute/shades-of-purple.vim' }
+  -- use { 'tiagovla/tokyodark.nvim' }
+  -- use { 'Rigellute/shades-of-purple.vim' }
 
   -- Git-related
   use 'tpope/vim-fugitive'
@@ -99,7 +110,7 @@ packer.startup(function(use)
     'kylechui/nvim-surround',
     config = function()
       require('nvim-surround').setup({
-        delimiters = {
+        surronds = {
           pairs = {
             ["q"] = { "'", "'" },
             ["Q"] = { '"', '"' },
@@ -109,7 +120,7 @@ packer.startup(function(use)
             ["Q"] = { '"' },
           }
         },
-        highlight_motion = {
+        highlight = {
           duration = 10,
         }
       })
@@ -120,13 +131,13 @@ packer.startup(function(use)
   use 'lukas-reineke/indent-blankline.nvim'
 
   -- Native LSP setup
-  use {
-    "folke/which-key.nvim",
-    event = "VimEnter",
-    config = function()
-      require('yap.whichkey').setup()
-    end,
-  }
+  -- use {
+  --   "folke/which-key.nvim",
+  --   event = "VimEnter",
+  --   config = function()
+  --     require('yap.whichkey').setup()
+  --   end,
+  -- }
 
   use {
     "rcarriga/nvim-notify",
@@ -136,17 +147,20 @@ packer.startup(function(use)
     end,
   }
 
+  -- migrate from nvim-lsp-installer to mason
+  use { "williamboman/mason.nvim" }
+  use { "williamboman/mason-lspconfig.nvim" }
+
   -- lspconfig - Language Server Protocol config
   use {
     'neovim/nvim-lspconfig',
     -- opt = true,
     event = 'BufEnter',
-    wants = { 'nvim-lsp-installer', 'coq_nvim', 'lsp_signature.nvim' },
+    wants = { 'coq_nvim', 'lsp_signature.nvim' },
     config = function()
       require('yap/config/lsp').setup()
     end,
     requires = {
-      'williamboman/nvim-lsp-installer',
       'ray-x/lsp_signature.nvim',
     },
   }
@@ -197,7 +211,7 @@ packer.startup(function(use)
 
   use 'sotte/presenting.vim'
 
-  use 'rhysd/conflict-marker.vim'
+  -- use 'rhysd/conflict-marker.vim'
 
   use {
     'SirVer/ultisnips',
@@ -210,31 +224,132 @@ packer.startup(function(use)
 
   use { 'liuchengxu/vista.vim' }
 
-  use {
-    'j-hui/fidget.nvim',
-    config = function()
-      require('fidget').setup({})
-    end
-  }
-
-  use { 'arkav/lualine-lsp-progress' }
-
   use { 'numToStr/FTerm.nvim' }
 
   use { 'lewis6991/impatient.nvim' }
 
-  use { 'wfxr/minimap.vim' }
+  use { 'zakharykaplan/nvim-retrail' }
 
   use {
-    'zakharykaplan/nvim-retrail',
+    "ghillb/cybu.nvim",
+    branch = "main",
+    requires = { "kyazdani42/nvim-web-devicons", "nvim-lua/plenary.nvim"},
     config = function()
-      require('retrail').setup({})
+      local ok, cybu = pcall(require, "cybu")
+      if not ok then
+        return
+      end
+      cybu.setup()
+      -- vim.keymap.set("n", "K", "<Plug>(CybuPrev)")
+      -- vim.keymap.set("n", "J", "<Plug>(CybuNext)")
+      vim.keymap.set({"n", "v"}, "<s-Tab>", "<Plug>(CybuPrev)")
+      vim.keymap.set({"n", "v"}, "<Tab>", "<Plug>(CybuNext)")
+    end,
+  }
+
+  use {
+    'rrethy/vim-hexokinase',
+    run = 'make hexokinase',
+  }
+
+  use {
+    'folke/trouble.nvim',
+    config = function()
+      require('trouble').setup({
+        position = 'bottom',
+        height = 20,
+        icons = true,
+        use_diagnostic_signs = true,
+      })
+    end,
+  }
+
+  use {
+    'rmagatti/goto-preview',
+    config = function()
+      require('goto-preview').setup({
+        width = 120,
+        height = 50,
+      })
     end
   }
 
-  -- use { 'nvim-orgmode/orgmode' }
+  use {
+    'goolord/alpha-nvim',
+    config = function ()
+      require'alpha'.setup(require'alpha.themes.dashboard'.config)
+    end
+  }
 
-  if PACKER_BOOTSTRAP then
-    require('packer').sync()
-  end
+  use { 'rust-lang/rust.vim' }
+
+  use { 'simrat39/rust-tools.nvim' }
+
+  use {
+    'akinsho/flutter-tools.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    config = function()
+      require('flutter-tools').setup({})
+    end,
+  }
+
+  -- use {
+  --   'glacambre/firenvim',
+  --   run = function() vim.fn['firenvim#install'](0) end
+  -- }
+
+  use { 'folke/twilight.nvim' }
+
+  use { 'nathom/filetype.nvim' }
+
+  use {
+    "gnikdroy/projections.nvim",
+    config = function()
+      require("projections").setup({
+        workspaces = {
+          { "~/go/src/bitbucket.org/pick-up/pickupp/packages", {} },
+          { "~/go/src/bitbucket.org/pick-up/pickupp/apps", {} },
+          { "~/go/src/bitbucket.org/pick-up/pickupp/shared", {} },
+          -- { "~/go/src/bitbucket.org/pick-up/pickupp", { ".git" } },
+          patterns = { ".git" },
+        }
+      })
+
+      -- Bind <leader>fp to Telescope projections
+      require('telescope').load_extension('projections')
+      vim.keymap.set("n", "<leader>fp", function() vim.cmd("Telescope projections") end)
+
+      -- Autostore session on DirChange and VimExit
+      -- local Session = require("projections.session")
+      -- vim.api.nvim_create_autocmd({ 'DirChangedPre', 'VimLeavePre' }, {
+      --   callback = function() Session.store(vim.loop.cwd()) end,
+      -- })
+    end
+  }
+
+  -- use { 'bennypowers/nvim-regexplainer',
+  --   config = function() require'regexplainer'.setup() end,
+  --   requires = {
+  --     'nvim-treesitter/nvim-treesitter',
+  --     'MunifTanjim/nui.nvim',
+  --   },
+  -- }
+
+  use { 'tamton-aquib/stuff.nvim' }
+
+  use { 'adelarsq/vim-matchit' }
+
+  use { 'rafcamlet/nvim-luapad' }
+
+  -- use { 'kyapwc/gojira.nvim' }
+  use { '~/workspace/gojira.nvim' }
+
+  use { 'folke/neodev.nvim' }
+
+  -- use { 'j-hui/fidget.nvim' }
+  -- use {
+  --   'folke/noice.nvim',
+  --   requires = { 'MunifTanjim/nui.nvim', 'rcarriga/nvim-notify' }
+  -- }
+
 end)
