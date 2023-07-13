@@ -1,3 +1,31 @@
+require('yap/globals')
+
+-- =======================
+-- Making <SPACE> as leader key
+-- =======================
+vim.g.mapleader = ' '
+-- vim.g.colors_name = 'everforest'
+-- vim.g.everforest_background = 'medium'
+-- vim.g.everforest_better_performance = 1
+
+
+local fn = vim.fn
+
+local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require('lazy').setup('plugins')
+
 -- =======================
 -- Require impatient before every other config
 -- =======================
@@ -45,21 +73,18 @@ vim.cmd[[
   let g:splitjoin_trailing_comma = 1
 ]]
 
--- =======================
--- Making <SPACE> as leader key
--- =======================
-vim.g.mapleader = ' '
--- vim.g.colors_name = 'everforest'
--- vim.g.everforest_background = 'medium'
--- vim.g.everforest_better_performance = 1
-
 -- ======================
 -- Tokyonight config
 -- ======================
 vim.g.colors_name = 'tokyonight-moon'
 vim.g.tokyonight_style = 'night' -- storm / night / day / moon
--- vim.g.tokyonight_italic_functions = true
+vim.g.tokyonight_italic_functions = true
 vim.g.tokyonight_lualine_bold = true
+
+-- ======================
+-- Catppuccin config
+-- ======================
+-- vim.cmd.colorscheme 'catppuccin'
 
 -- ======================
 -- TokyoDark config
@@ -237,6 +262,12 @@ key_mapper('n', '<leader>tt', '<cmd>TroubleToggle<cr>')
 key_mapper('n', '<leader>gt', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>")
 key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<CR>")
 
+
+-- =======================
+-- Extras
+-- =======================
+key_mapper('i', ';;', "&nbsp;")
+
 -- vim.cmd[[
 -- function! OnUIEnter(event) abort
 --   if 'Firenvim' ==# get(get(nvim_get_chan_info(a:event.chan), 'client', {}), 'name', '')
@@ -259,8 +290,13 @@ vim.cmd[[
   endif
 ]]
 
-require('yap/globals')
-require('yap/plugins')
+vim.cmd[[
+  let g:UltiSnipsExpandTrigger = '<Tab>'
+  let g:UltiSnipsJumpForwardTrigger = '<c-l>'
+  let g:UlitSnipsSnipetsDir = '~/.config/nvim/UltiSnips'
+  let g:UltiSnipsEditSplit = 'vertical'
+]]
+
 require('yap/telescope')
 require('yap/retrail')
 require('yap/treesitter')
@@ -269,7 +305,7 @@ require('yap/fzf-lua')
 require('yap/lualine')
 require('yap/bufferline')
 require('yap/indent-blankline')
-require('yap/config/lsp')
+-- require('yap/config/lsp')
 require('yap/coq')
 require('yap/gitsigns')
 require('yap/ultisnips')
