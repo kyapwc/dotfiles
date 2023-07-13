@@ -5,6 +5,7 @@ configs.setup {
     enable = true,
     additional_vim_regex_highlighting = false,
   },
+  ignore_install = { "help" },
   indent = {
     enable = true,
     disable = { "go", "python", "help" },
@@ -30,6 +31,7 @@ configs.setup {
     'rust',
     'help',
     'regex',
+    'embedded_template',
   },
   playground = {
     enable = true,

@@ -8,7 +8,7 @@ local M = {}
 function M.setup(servers)
   local config = {
     function(server_name)
-      lspconfig[server_name].setup()
+      lspconfig[server_name].setup({})
     end,
   }
 

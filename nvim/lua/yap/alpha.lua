@@ -27,7 +27,7 @@ dashboard.section.buttons.val = {
 }
 
 local function footer()
-  local total_plugin_command = io.popen('find ~/.local/share/nvim/site/pack/packer/start/ -maxdepth 1 -type d | wc -l')
+  local total_plugin_command = io.popen('find ~/.local/share/nvim/lazy -maxdepth 1 -type d | wc -l')
   local total_plugins = total_plugin_command:read('*a')
   total_plugin_command:close()
 
