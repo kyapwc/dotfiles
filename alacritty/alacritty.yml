@@ -9,7 +9,7 @@ font:
 
   italic:
     family: FiraCode Nerd Font Mono
-    style: Bold
+    style: SemiBold
 
   bold_italic:
     family: FiraCode Nerd Font Mono
