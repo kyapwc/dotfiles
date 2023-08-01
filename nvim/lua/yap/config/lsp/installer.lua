@@ -1,5 +1,4 @@
 local mason_lspconfig = require('mason-lspconfig')
--- local notify = require('notify')
 local lspconfig = require('lspconfig')
 local coq = require('coq')
 
@@ -13,7 +12,7 @@ function M.setup(servers)
   }
 
   local mason_config = {
-    ensure_installed = {},
+    ensure_installed = { 'eslint' },
   }
 
   for server_name, server_options in pairs(servers or {}) do

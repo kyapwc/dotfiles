@@ -14,7 +14,7 @@ require('fzf-lua').setup({
     ['--layout'] = 'reverse-list',
   },
   winopts = {
-    height = 0.3,
+    height = 0.4,
     width = 1.0,
     row = 1.0,
     -- row = 0.5,
@@ -30,5 +30,11 @@ require('fzf-lua').setup({
       ['default'] = actions.file_edit,
       ['ctrl-v'] = actions.file_vsplit,
     }
+  },
+  keymap = {
+    builtin = {
+      ["<C-u>"] = 'preview-page-up',
+      ["<C-d>"] = 'preview-page-down',
+    },
   },
 })

@@ -127,15 +127,14 @@ o.undofile = false
 o.incsearch = true
 o.hidden = true
 o.completeopt='menuone,noinsert,noselect'
-o.tabstop = 2
-o.softtabstop = 2
-o.shiftwidth = 2
-o.expandtab = true
 o.background = 'dark'
 o.splitbelow = true
 o.splitright = true
 o.ignorecase = true
-
+o.tabstop = 2
+o.softtabstop = 2
+o.shiftwidth = 2
+o.expandtab = true
 
 -- =======================
 -- Buffer options
@@ -205,6 +204,7 @@ key_mapper('n', '<space>gC', ':Git commit<CR>')
 -- key_mapper('n', '<leader>fs', ':lua require("telescope.builtin").live_grep()<CR>')
 key_mapper('n', '<C-p>', ':lua require("fzf-lua").files()<CR>')
 key_mapper('n', '<C-f>', ':lua require("fzf-lua").live_grep_native()<CR>')
+key_mapper('n', '<C-a>', ':lua require("fzf-lua").lsp_code_actions()<CR>')
 
 -- =======================
 -- Misc Mappings
@@ -267,18 +267,11 @@ key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<
 -- Extras
 -- =======================
 key_mapper('i', ';;', "&nbsp;")
-
--- vim.cmd[[
--- function! OnUIEnter(event) abort
---   if 'Firenvim' ==# get(get(nvim_get_chan_info(a:event.chan), 'client', {}), 'name', '')
---       set noruler
---       set noshowcmd
---       set laststatus=0
---       set showtabline=0
---   endif
--- endfunction
--- autocmd UIEnter * call OnUIEnter(deepcopy(v:event))
--- ]]
+-- vim.api.nvim_create_autocmd('BufWritePre', {
+--   command = 'silent! EslintFixAll',
+--   -- command = 'EslintFixAll',
+--   group = vim.api.nvim_create_augroup('MyAutocmdsJavaScripFormatting', {}),
+-- })
 
 vim.cmd[[
   if exists("g:neovide")
@@ -305,7 +298,6 @@ require('yap/fzf-lua')
 require('yap/lualine')
 require('yap/bufferline')
 require('yap/indent-blankline')
--- require('yap/config/lsp')
 require('yap/coq')
 require('yap/gitsigns')
 require('yap/ultisnips')
@@ -313,9 +305,10 @@ require('yap/vim-go')
 require('yap/fterm')
 require('yap/minimap')
 require('yap/tokyonight')
--- require('yap/noice')
 require('yap/gojira')
 require('yap/alpha')
+require('yap/formatter')
+-- require('yap/inlay-hints')
 -- require('fidget').setup({
 --   debug = { logging = true }
 -- })
