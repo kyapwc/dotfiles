@@ -1,5 +1,5 @@
 [core]
-  editor = vim
+  editor = nvim
 	excludesfile = /Users/kenyap/.gitignore_global
 [user]
 	name = Ken Yap Wei Chun
@@ -13,7 +13,7 @@
     git pull && \
     git merge -
   conflicts = \
-    !vim $(git diff --name-only --diff-filter=U)
+    !nvim $(git diff --name-only --diff-filter=U)
   resolved = \
     !git add $(git diff --name-only --diff-filter=U) && \
     git commit
@@ -36,13 +36,18 @@
   log = %C(240)%h%C(reset) -%C(auto)%d%Creset %s %C(242)(%an %ar)
   detailed = %C(cyan)%h %C(red)%ad %C(blue)[%an]%C(magenta)%d %C(white)%s
   shorter = %C(auto)%D %C(240)--%C(242)%gD%N %ad by %C(white)%cn%C(reset)
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+[mergetool "nvim"]
+  cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+# set "nvim" as tool for merging
+[merge]
+  tool = nvim
+# automatically launch merge tool without displaying a prompt
+[mergetool]
+  prompt = false
 [push]
 	default = current
+	followTags = true
 [help]
 	autocorrect = 1
+[protocol]
+	version = 2

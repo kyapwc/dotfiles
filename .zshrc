@@ -18,6 +18,8 @@ export PATH="$HOME/.emacs.d/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/flutter/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="/usr/local/bin/lua:$PATH"
+export PATH="/usr/local/bin/luarocks:$PATH"
 
 # Flutter
 # export PATH="$PATH:/Users/kenyap/flutter/bin"
@@ -124,6 +126,7 @@ rm -rf ~/Library/Caches/com.apple.dt.Xcode/ \
 };f'
 
 alias ydiffs='f() { ydiff -s -w 0 --wrap };f'
+alias evicclear='f() { kubectl get pod -n $1 | grep Evicted | awk "{print \$1}" | xargs kubectl delete pod -n $1 };f'
 
 function kill-node-port() {
   if [ -n "$1" ]; then
@@ -183,5 +186,9 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 export SPACESHIP_NODE_SHOW=false
 export SPACESHIP_PROMPT_ASYNC=false
+export NEOVIDE_FRAME=none
+alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
+# alias emacss="/Applications/Emacs.app/Contents/MacOS/Emacs -c -a 'emacs'"
+alias emacss="emacsclient -c -a 'emacs' -n"
 
 . /usr/local/opt/asdf/libexec/asdf.sh
