@@ -1,6 +1,7 @@
 # Loading Addons
-sudo yabai --load-sa
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+sudo yabai --load-sa
+
 
 # First Desktop
 yabai -m config layout float
@@ -27,16 +28,18 @@ yabai -m space 4 --label "Browser / Testing"
 yabai -m space 5 --label Misc
 
 yabai -m config top_padding 36
+# yabai -m config top_padding 5
 yabai -m config bottom_padding 10
 yabai -m config left_padding 10
 yabai -m config right_padding 10
-yabai -m config window_gap 10
+yabai -m config window_gap 12
 
+yabai -m config --space 1 top_padding 32
+# yabai -m config --space 1 top_padding 0
+yabai -m config --space 1 bottom_padding 5
+yabai -m config --space 1 left_padding 5
+yabai -m config --space 1 right_padding 5
 yabai -m config --space 1 window_gap 5
-yabai -m config --space 1 top_padding 36
-yabai -m config --space 1 bottom_padding 0
-yabai -m config --space 1 left_padding 0
-yabai -m config --space 1 right_padding 0
 
 yabai -m config auto_balance on
 
@@ -54,9 +57,11 @@ yabai -m config mouse_follows_focus on
 
 # Yabai borders
 yabai -m config window_border on
-yabai -m config window_border_width 6
-yabai -m config active_window_border_color 0xff00b3f4
+yabai -m config window_border_width 3
+# yabai -m config active_window_border_color 0xff00b3f4
+yabai -m config active_window_border_color 0xbdff93f9
 yabai -m config normal_window_border_color 0xff555555
+yabai -m config window_border_blur off
 
 # Settings for window opacity
 # yabai -m config window_opacity on
@@ -97,19 +102,18 @@ yabai -m rule --add app="^Firefox$" title="^Opening .*$" manage=off layer=above
 yabai -m rule --add app="^Monosnap$" manage=off layer=above
 yabai -m rule --add app="^Slack \| Slack call.*" manage=off layer=above
 yabai -m rule --add app="^Postico$" title="^Find$" manage=off layer=above
-yabai -m rule --add app="^iTerm2$" title="^Preferences$" manage=off layer=above
 yabai -m rule --add app="^qutebrowser$" layer=above
 yabai -m rule --add app="^Expressions$" manage=off layer=above
 yabai -m rule --add app="^Notes$" manage=off layer=above
 yabai -m rule --add app="^emulator$" manage=off layer=above
-yabai -m rule --add app="^Slack$" manage=off layer=above
+# yabai -m rule --add app="^Slack$" manage=off layer=above
 yabai -m rule --add app="^TeamViewer$" manage=off layer=above
 yabai -m rule --add app="^Godot$" manage=off layer=above
 yabai -m rule --add app="^Bear$" manage=off layer=above
 yabai -m rule --add app="^Panda$" manage=off layer=above
 yabai -m rule --add app="^KeyCastr$" manage=off layer=above
 yabai -m rule --add app="^Firefox$" title="Print" manage=off layer=above
-yabai -m rule --add app="^Alacritty$" manage=off layer=above border=off
+# yabai -m rule --add app="^Alacritty$" manage=off layer=above border=off
 yabai -m rule --add app="^Notational Velocity$" manage=off layer=above
 yabai -m rule --add app="^Craft$" manage=off layer=above
 yabai -m rule --add app="^Typora$" manage=off layer=above
@@ -118,7 +122,13 @@ yabai -m rule --add app="^Obsidian$" manage=off layer=above
 # yabai -m rule --add app="^Python$" title="^pygame window$" manage=off layer=above
 # yabai -m rule --add app="^Python$" manage=off layer=above
 # yabai -m rule --add app="^Archive Utility$" manage=off layer=above
-yabai -m rule --add app="^iTerm2$" opacity=0.8 border=off
+# yabai -m rule --add app="^Alacritty$" opacity=0.8 manage=on
+yabai -m rule --add app="^Alacritty$" manage=on
+yabai -m rule --add app="^Steam$" manage=off
+yabai -m rule --add app="^Archive Utility$" manage=off
+yabai -m rule --add app="^Arc$" subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off
+yabai -m rule --add app="^Arc$" title="^Shortcuts$" manage=off
+yabai -m rule --add app="^Arc$" title="^Space [0-9]+" subrole="^AXSystemDialog$" manage=off layer=above
 
 # Refresh item
 # yabai -m signal --add event=window_focused \
