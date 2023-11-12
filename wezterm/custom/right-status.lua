@@ -1,32 +1,4 @@
 local wezterm = require 'wezterm'
-local act = wezterm.action
-
-local config = {}
-
-if wezterm.config_builder then
-  config = wezterm.config_builder()
-end
-
--- Tab Bar styling
-config.tab_bar_at_bottom = true
-config.use_fancy_tab_bar = false
-config.colors = {
-  tab_bar = {
-    background = '#3c1361',
-
-    active_tab = {
-      bg_color = '#ff79c6',
-      fg_color = 'white',
-      italic = false,
-    },
-
-    inactive_tab = {
-      bg_color = '#2A0D43',
-      fg_color = 'grey',
-      italic = true,
-    }
-  }
-}
 
 -- Window Statuses
 wezterm.on('update-right-status', function(window, pane)
@@ -88,7 +60,6 @@ wezterm.on('update-right-status', function(window, pane)
     else
       batt_icon = wezterm.nerdfonts.fa_battery_full
     end
-    wezterm.log_info(batt_icon)
 
     table.insert(cells, batt_icon .. ' ' .. string.format('%.0f%%', battery_state))
   end
@@ -142,91 +113,3 @@ wezterm.on('update-right-status', function(window, pane)
 
   window:set_right_status(wezterm.format(elements))
 end)
-config.status_update_interval = 500
-
--- Colorschemeas and font
-config.color_scheme = 'Tokyo Night'
-config.font = wezterm.font_with_fallback({
-  {
-    family = 'Monaspace Radon',
-    weight = 'ExtraBold',
-    harfbuzz_features = { 'liga=1' },
-  },
-})
-
--- Settings
-config.window_decorations = 'RESIZE'
--- config.hide_tab_bar_if_only_one_tab = true
-config.window_padding = {
-  left = 5,
-  right = 5,
-  top = 0,
-  bottom = 0,
-}
-config.window_background_opacity = 0.95
-config.window_close_confirmation = 'AlwaysPrompt'
-config.scrollback_lines = 3000
-config.default_workspace = 'HOME'
-config.inactive_pane_hsb = {
-  saturation = 0.8,
-  brightness = 0.5,
-}
-
--- Keys
-config.leader = {
-  key = ']',
-  timeout_milliseconds = 1000,
-}
-config.keys = {
-  { key = 'a', mods = 'LEADER', action = act.SendKey({ key = 'a', mods = 'CTRL' }) },
-  { key = 'y', mods = 'LEADER', action = act.ActivateCopyMode },
-
-  -- Tab actions
-  { key = 'c', mods = 'LEADER', action = act.SpawnTab('CurrentPaneDomain') },
-  { key = 'w', mods = 'CMD', action = act.CloseCurrentTab({ confirm = true }) },
-  { key = 't', mods = 'LEADER', action = act.ShowTabNavigator },
-
-  -- Pane configs
-  { key = '|', mods = 'LEADER', action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
-  { key = '-', mods = 'LEADER', action = act.SplitVertical({ domain = 'CurrentPaneDomain' }) },
-  { key = 'x', mods = 'LEADER', action = act.CloseCurrentPane({ confirm = true }) },
-  { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection('Left') },
-  { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection('Down') },
-  { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection('Up') },
-  { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection('Right') },
-  { key = 'h', mods = 'CTRL', action = act.ActivatePaneDirection('Left') },
-  { key = 'j', mods = 'CTRL', action = act.ActivatePaneDirection('Down') },
-  { key = 'k', mods = 'CTRL', action = act.ActivatePaneDirection('Up') },
-  { key = 'l', mods = 'CTRL', action = act.ActivatePaneDirection('Right') },
-  { key = 'z', mods = 'LEADER', action = act.TogglePaneZoomState },
-
-  { key = 'p', mods = 'LEADER', action = act.ActivateCommandPalette },
-
-  { key = 'r', mods = 'LEADER', action = act.ActivateKeyTable({ name = 'resize_pane', one_shot = false }) },
-
-  {
-    key = '9',
-    mods = 'LEADER',
-    action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }),
-  },
-}
-
-config.key_tables = {
-  resize_pane = {
-    { key = 'h', action = act.AdjustPaneSize({ 'Left', 5 }) },
-    { key = 'j', action = act.AdjustPaneSize({ 'Down', 2 }) },
-    { key = 'k', action = act.AdjustPaneSize({ 'Up', 2 }) },
-    { key = 'l', action = act.AdjustPaneSize({ 'Right', 5 }) },
-    { key = 'Escape', action = 'PopKeyTable' },
-  }
-}
-
-for i = 1, 8 do
-  table.insert(config.keys, {
-    key = tostring(i),
-    mods = 'LEADER',
-    action = act.ActivateTab(i - 1)
-  })
-end
-
-return config
