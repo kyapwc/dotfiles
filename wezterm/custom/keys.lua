@@ -54,6 +54,21 @@ local keys = {
       end)
     }),
   },
+
+  { key = ' ', mods = 'LEADER', action = act.QuickSelect },
+
+  {
+    key = ',',
+    mods = 'LEADER',
+    action = act.PromptInputLine({
+      description = 'Enter a new name for current tab',
+      action = wezterm.action_callback(function(window, pane, line)
+        if line then
+          window:active_tab():set_title(line)
+        end
+      end)
+    }),
+  }
 }
 
 return keys
