@@ -84,7 +84,22 @@ config.leader = {
   key = ']',
   timeout_milliseconds = 1000,
 }
+config.mouse_bindings = {
+  -- Ctrl-click will open the link under the mouse cursor
+  {
+    event = { Up = { streak = 1, button = 'Left' } },
+    mods = 'CMD',
+    action = act.OpenLinkAtMouseCursor,
+  },
+
+  {
+    event = { Up = { streak = 1, button = 'Left' } },
+    mods = '',
+    action = act.Nop,
+  },
+}
 config.keys = custom_keys
+-- table.insert(config.keys, custom_keys)
 
 config.key_tables = {
   resize_pane = {
