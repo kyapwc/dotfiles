@@ -1,6 +1,81 @@
 local wezterm = require('wezterm')
-local act = wezterm.action
 local smart_splits = require('custom/smart-splits')
+
+local act = wezterm.action
+
+local function get_process_id(command)
+  local success, stdout = wezterm.run_child_process(command)
+
+  if success == true then
+    return stdout:gsub('\n', '')
+  end
+
+  return nil
+end
+
+local function handle_nats_redis_create(window)
+  local project_dir = '~/go/src/bitbucket.org/pick-up/pickupp'
+  local mux_window = window:mux_window()
+  local nats_id = get_process_id({
+    'lsof',
+    '-i',
+    ':4222',
+    '-t',
+  })
+  local redis_id = get_process_id({
+    'lsof',
+    '-i',
+    ':6379',
+    '-t',
+  })
+
+  if nats_id == nil and redis_id == nil then
+    local tab, nats_pane = mux_window:spawn_tab({
+      cwd = project_dir,
+      set_environment_variables = {
+        TYPE = 'AUTOMATED',
+      },
+    })
+
+    tab:set_title('Nats-Redis Server')
+
+    local redis_pane = nats_pane:split({
+      direction = 'Right',
+      cwd = project_dir,
+    })
+    redis_pane:send_text('redis-server\n')
+
+    nats_pane:send_text('nats-server -js\n')
+  else
+    local tabs = mux_window:tabs()
+    wezterm.run_child_process({
+      'kill',
+      '-9',
+      nats_id,
+    })
+    wezterm.run_child_process({
+      'kill',
+      '-9',
+      redis_id,
+    })
+
+    for _, tab in ipairs(tabs) do
+      if tab:get_title() == 'Nats-Redis Server' then
+        tab:activate()
+        for _, pane in ipairs(tab:panes()) do
+          wezterm.run_child_process({
+            '/opt/homebrew/bin/wezterm',
+            'cli',
+            'kill-pane',
+            '--pane-id',
+            pane:pane_id(),
+          })
+        end
+      end
+    end
+  end
+
+end
 
 local keys = {
   { key = 'a', mods = 'LEADER', action = act.SendKey({ key = 'a', mods = 'CTRL' }) },
@@ -10,6 +85,7 @@ local keys = {
   { key = 'c', mods = 'LEADER', action = act.SpawnTab('CurrentPaneDomain') },
   { key = 'w', mods = 'CMD', action = act.CloseCurrentTab({ confirm = true }) },
   { key = 't', mods = 'LEADER', action = act.ShowTabNavigator },
+  { key = ']', mods = 'LEADER', action = act.SendString(']') },
 
   -- Pane configs
   { key = '|', mods = 'LEADER', action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
@@ -68,7 +144,19 @@ local keys = {
         end
       end)
     }),
-  }
+  },
+
+  { key = "LeftArrow", mods = "OPT", action = act.SendString('\x1bb') },
+
+  { key = "RightArrow", mods = "OPT", action = act.SendString('\x1bf') },
+
+  { key = 'Backspace', mods = 'CMD', action = act.SendString('\x15') },
+
+  { key = 'LeftArrow', mods = 'CMD', action = act.SendString('\x1bOH') },
+
+  { key = 'RightArrow', mods = 'CMD', action = act.SendString('\x1bOF') },
+
+  { key = 's', mods = 'LEADER|SHIFT', action = wezterm.action_callback(handle_nats_redis_create) },
 }
 
 return keys
