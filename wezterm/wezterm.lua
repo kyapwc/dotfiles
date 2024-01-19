@@ -1,6 +1,7 @@
 local wezterm = require 'wezterm'
 local act = wezterm.action
 local custom_keys = require('custom/keys')
+local session_manager = require('custom/wezterm-session-manager')
 
 local config = {}
 
@@ -57,7 +58,15 @@ config.adjust_window_size_when_changing_font_size = false
 --     family = 'FiraCode Nerd Font Propo',
 --     weight = 'Bold',
 --     harfbuzz_features = { 'liga=1' },
---     scale = 0.9,
+--     scale = 1,
+--   },
+-- })
+
+-- config.font = wezterm.font_with_fallback({
+--   {
+--     family = 'MesloLGS NF',
+--     harfbuzz_features = { 'liga=1' },
+--     scale = 1,
 --   },
 -- })
 
@@ -126,6 +135,11 @@ config.quick_select_patterns = {
 config.unix_domains = {
   { name = 'unix' }
 }
+
+--- Session Manager
+wezterm.on("save_session", function(window) session_manager.save_state(window) end)
+wezterm.on("load_session", function(window) session_manager.load_state(window) end)
+wezterm.on("restore_session", function(window) session_manager.restore_state(window) end)
 
 require('custom/right-status')
 
