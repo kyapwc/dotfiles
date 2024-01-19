@@ -8,10 +8,10 @@ vim.g.mapleader = ' '
 -- vim.g.everforest_background = 'medium'
 -- vim.g.everforest_better_performance = 1
 
-
 local fn = vim.fn
 
 local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
+P(lazypath)
 if not vim.loop.fs_stat(lazypath) then
   fn.system({
     "git",
@@ -76,10 +76,16 @@ vim.cmd[[
 -- ======================
 -- Tokyonight config
 -- ======================
+require('yap/tokyonight')
 vim.g.colors_name = 'tokyonight-moon'
 vim.g.tokyonight_style = 'night' -- storm / night / day / moon
 vim.g.tokyonight_italic_functions = true
 vim.g.tokyonight_lualine_bold = true
+-- vim.g.tokyonight_colors = { border = "#8D19C6" }
+-- vim.cmd[[
+--   highlight WinSeparator guifg=#8D19C6
+--   highlight VertSplit guifg=#8D19C6
+-- ]]
 
 -- ======================
 -- Catppuccin config
@@ -116,6 +122,7 @@ local opt = vim.opt
 -- =======================
 -- Editor options
 -- =======================
+vim.opt.termguicolors = true
 o.termguicolors = true
 o.syntax = 'on'
 o.errorbells = false
@@ -232,10 +239,10 @@ key_mapper('', '<leader>k', '20k')
 -- =======================
 -- Vim -> TMUX Navigation
 -- =======================
-key_mapper('n', '<C-h>', ':lua require("nvim-tmux-navigation").NvimTmuxNavigateLeft()<CR>')
-key_mapper('n', '<C-j>', ':lua require("nvim-tmux-navigation").NvimTmuxNavigateDown()<CR>')
-key_mapper('n', '<C-k>', ':lua require("nvim-tmux-navigation").NvimTmuxNavigateUp()<CR>')
-key_mapper('n', '<C-l>', ':lua require("nvim-tmux-navigation").NvimTmuxNavigateRight()<CR>')
+-- key_mapper('n', '<C-h>', ':lua require("nvim-tmux-navigation").NvimTmuxNavigateLeft()<CR>')
+-- key_mapper('n', '<C-j>', ':lua require("nvim-tmux-navigation").NvimTmuxNavigateDown()<CR>')
+-- key_mapper('n', '<C-k>', ':lua require("nvim-tmux-navigation").NvimTmuxNavigateUp()<CR>')
+-- key_mapper('n', '<C-l>', ':lua require("nvim-tmux-navigation").NvimTmuxNavigateRight()<CR>')
 
 -- =======================
 -- Bufferline
@@ -283,12 +290,78 @@ vim.cmd[[
   endif
 ]]
 
-vim.cmd[[
-  let g:UltiSnipsExpandTrigger = '<Tab>'
-  let g:UltiSnipsJumpForwardTrigger = '<c-l>'
-  let g:UlitSnipsSnipetsDir = '~/.config/nvim/UltiSnips'
-  let g:UltiSnipsEditSplit = 'vertical'
+local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.go",
+  callback = function()
+   require('go.format').goimport()
+  end,
+  group = format_sync_grp,
+})
+
+local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.prisma",
+  callback = function()
+    vim.lsp.buf.format()
+  end,
+  group = format_sync_grp,
+})
+
+vim.cmd [[
+  inoremap <silent><expr> <CR> pumvisible() ? "\<C-y><CR>" : "\<CR>"
+  set scrolloff=5
 ]]
+
+vim.api.nvim_create_autocmd("UIEnter", {
+  callback = function ()
+    local groups = {
+      "Normal",
+      "NormalNC",
+      "NormalFloat",
+      "Float",
+      "FloatBorder",
+      "SignColumn",
+      "GitSignsAdd",
+      "GitSignsChange",
+      "GitSignsDelete",
+      -- "Pmenu",
+      -- "PmenuSel",
+      "WinSeparator",
+      "TelescopeNormal",
+      "TelescopeBorder",
+      "TelescopeSelection",
+      "TelescopePreviewNormal",
+      "WhichKeyFloat",
+    }
+
+    for _, group in ipairs(groups) do
+      -- vim.cmd("hi " .. group .. " ctermbg=None guibg=None")
+      vim.cmd("hi " .. group .. " guibg=None")
+    end
+
+    return true
+  end,
+  desc = "Transparent backgrounds",
+})
+
+local function switch_case()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local word = vim.fn.expand('<cword>')
+  local word_start = vim.fn.matchstrpos(vim.fn.getline('.'), '\\k*\\%' .. (col + 1) .. 'c\\k*')[2]
+
+  if word:find('[a-z][A-Z]') then
+    local snake_case_word = word:gsub('([a-z])([A-Z])', '%1_%2'):lower()
+    vim.api.nvim_buf_set_text(0, line - 1, word_start, line - 1, word_start + #word, { snake_case_word })
+  elseif word:find('_[a-z]') then
+    local camel_case_word = word:gsub('(_)([a-z])', function(_, l) return l:upper() end)
+    vim.api.nvim_buf_set_text(0, line - 1, word_start, line - 1, word_start + #word, {camel_case_word})
+  else
+    print('Not a snake_case or camelCase word')
+  end
+end
+
+vim.keymap.set('n', '<Space>ss', switch_case, {noremap = true, silent = true})
 
 require('yap/telescope')
 require('yap/retrail')
@@ -300,14 +373,18 @@ require('yap/bufferline')
 require('yap/indent-blankline')
 require('yap/coq')
 require('yap/gitsigns')
-require('yap/ultisnips')
 require('yap/vim-go')
 require('yap/fterm')
 require('yap/minimap')
-require('yap/tokyonight')
 require('yap/gojira')
 require('yap/alpha')
 require('yap/formatter')
+require('yap/luasnip')
+require('yap/autocmds')
+require('yap/dressing')
+require('yap/oil')
+require('yap/rest')
+require('yap/smart-splits')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({
 --   debug = { logging = true }

@@ -8,6 +8,7 @@ require('bufferline').setup {
     color_icons = true,
     show_buffer_close_icons = false,
     always_show_bufferline = true,
+    diagnostic = 'nvim_lsp',
     name_formatter = function(buf)
       return vim.fn.fnamemodify(buf.path, ':~:t')
     end,

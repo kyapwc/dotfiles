@@ -18,7 +18,7 @@ local function keymappings(client, bufNo)
   keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
   keymap.set('n', '<space>a', vim.lsp.buf.code_action, bufopts)
   keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
+  keymap.set('n', '<space>ff', vim.lsp.buf.format, bufopts)
   keymap.set('n', '<C-]>', vim.lsp.buf.definition, bufopts)
   keymap.set('n', '<space>h', require('yap/config/lsp/hover').hover, bufopts)
 end

@@ -1,4 +1,4 @@
-require('indent_blankline').setup({
-  show_current_context = true,
-  char_blankline = '',
+require('ibl').setup({
+  scope = { enabled = true },
+  indent = { char = '|' },
 })

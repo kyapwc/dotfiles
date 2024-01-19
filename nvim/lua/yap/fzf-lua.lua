@@ -1,7 +1,7 @@
 local actions = require('fzf-lua.actions')
 
 require('fzf-lua').setup({
-  file_ignore_patterns = { "undodir$" },
+  file_ignore_patterns = { "undodir$", "dist" },
   previewers = {
     builtin = {
       extensions = {
@@ -27,7 +27,8 @@ require('fzf-lua').setup({
   },
   actions = {
     files = {
-      ['default'] = actions.file_edit,
+      -- ['default'] = actions.file_edit,
+      ['default'] = actions.file_edit_or_qf,
       ['ctrl-v'] = actions.file_vsplit,
     }
   },

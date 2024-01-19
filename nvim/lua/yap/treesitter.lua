@@ -32,6 +32,8 @@ configs.setup {
     'help',
     'regex',
     'embedded_template',
+    'http',
+    'json',
   },
   playground = {
     enable = true,
