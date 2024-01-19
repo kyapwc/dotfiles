@@ -1,5 +1,5 @@
--- local gojira = require('gojira')
---
+local gojira = require('gojira')
+
 -- gojira.setup({
 --   host = 'pickupp',
 --   username = 'wei.chun@pickupp.io',
@@ -7,3 +7,6 @@
 --
 --   projectFilter = '(Hercules|Chemical X)',
 -- })
+
+
+gojira.setup()

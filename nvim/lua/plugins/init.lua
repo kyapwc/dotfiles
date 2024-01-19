@@ -44,7 +44,7 @@ return {
 
   -- FZF-related
   { 'ibhagwan/fzf-lua',
-    dependencies = { 'kyazdani42/nvim-web-devicons' }
+    dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
   { 'junegunn/fzf', build = './install --bin', },
   'jremmen/vim-ripgrep',
@@ -52,18 +52,11 @@ return {
   -- LuaLine (status Line)
   {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'kyazdani42/nvim-web-devicons', opt = true }
+    dependencies = { 'nvim-tree/nvim-web-devicons', opt = true }
   },
-
-  -- Vim -> TMUX navigation
-  'alexghergh/nvim-tmux-navigation',
 
   -- Bufferline
-  {
-    'akinsho/bufferline.nvim',
-    branch = "v2.*",
-    dependencies = 'kyazdani42/nvim-web-devicons'
-  },
+  { 'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
 
   -- AUTOPAIRING
   {
@@ -100,7 +93,7 @@ return {
   },
 
   -- MISC
-  'lukas-reineke/indent-blankline.nvim',
+  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl' },
 
   -- Native LSP setup
   {
@@ -134,6 +127,14 @@ return {
     end,
     dependencies = {
       'ray-x/lsp_signature.nvim',
+      {
+        "SmiteshP/nvim-navbuddy",
+        dependencies = {
+          "SmiteshP/nvim-navic",
+          "MunifTanjim/nui.nvim"
+        },
+        opts = { lsp = { auto_attach = true } }
+      }
     },
   },
 
@@ -183,15 +184,6 @@ return {
 
   'sotte/presenting.vim',
 
-  -- 'rhysd/conflict-marker.vim',
-
-  {
-    'SirVer/ultisnips',
-    dependencies = { { 'honza/vim-snippets' } }
-  },
-
-  { 'elihunter173/dirbuf.nvim' },
-
   { 'fatih/vim-go' },
 
   { 'liuchengxu/vista.vim' },
@@ -205,7 +197,7 @@ return {
   {
     "ghillb/cybu.nvim",
     branch = "main",
-    dependencies = { "kyazdani42/nvim-web-devicons", "nvim-lua/plenary.nvim"},
+    dependencies = { "nvim-tree/nvim-web-devicons", "nvim-lua/plenary.nvim"},
     config = function()
       local ok, cybu = pcall(require, "cybu")
       if not ok then
@@ -315,14 +307,77 @@ return {
   { 'rafcamlet/nvim-luapad' },
 
   -- { 'kyapwc/gojira.nvim' },
-  -- { '~/workspace/gojira.nvim' },
+  {
+    dir = '/Users/kenyap/workspace/gojira.nvim',
+  },
 
   { 'folke/neodev.nvim' },
 
-  -- { 'j-hui/fidget.nvim' },
+  {
+    "j-hui/fidget.nvim",
+    tag = "legacy",
+    event = "LspAttach",
+    opts = {
+      -- options
+    },
+    config = function()
+      require('fidget').setup({})
+    end
+  },
   -- {
   --   'folke/noice.nvim',
   --   dependencies = { 'MunifTanjim/nui.nvim', 'rcarriga/nvim-notify' }
   -- },
   { 'mhartington/formatter.nvim' },
+
+  {
+    "ray-x/go.nvim",
+    dependencies = {  -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = {"CmdlineEnter"},
+    ft = {"go", 'gomod'},
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+  },
+
+  {
+    "L3MON4D3/LuaSnip",
+    -- follow latest release.
+    version = "2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    -- install jsregexp (optional!).
+    build = "make install_jsregexp"
+  },
+
+  {
+    'stevearc/dressing.nvim',
+    opts = {},
+  },
+
+  {
+    'stevearc/oil.nvim',
+    version = '1.0.0',
+    opts = {},
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+
+  {
+    'akinsho/git-conflict.nvim',
+    version = "*",
+    config = true,
+  },
+
+  {
+    'rest-nvim/rest.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+  },
+
+  { 'mrjones2014/smart-splits.nvim' }
 }

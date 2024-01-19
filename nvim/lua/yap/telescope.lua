@@ -7,6 +7,7 @@ telescope.setup({
         ['<esc>'] = require('telescope.actions').close,
         ['<C-k>'] = require('telescope.actions').move_selection_previous,
         ['<C-j>'] = require('telescope.actions').move_selection_next,
+        ['<C-q>'] = require('telescope.builtin').quickfix,
       }
     },
   }

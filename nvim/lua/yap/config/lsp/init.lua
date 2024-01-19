@@ -3,6 +3,7 @@ local api = vim.api
 local neodev = require('neodev')
 local mason = require('mason')
 local notify = require('notify')
+local navbuddy = require('nvim-navbuddy')
 
 mason.setup({
   ui = { border = 'rounded' }
@@ -20,6 +21,7 @@ lsp_signature.setup {
   doc_lines = 50,
   wrap = true,
   fix_pos = true,
+  max_width = 200,
   -- always_trigger = true,
 }
 
@@ -134,6 +136,8 @@ end
 local function on_attach(client, bufNo)
   client.server_capabilities.document_formatting = true;
 
+  navbuddy.attach(client, bufNo)
+
   api.nvim_buf_set_option(bufNo, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
@@ -185,7 +189,9 @@ local function on_attach(client, bufNo)
 end
 
 local servers = {
-  gopls = {},
+  -- gopls = {
+  --   on_attach = on_attach,
+  -- },
   html = {},
   jsonls = {},
   pyright = {},
@@ -251,6 +257,8 @@ local servers = {
   cssls = {},
   vuels = {},
   rust_analyzer = {},
+  sqlls = {},
+  bufls = {},
 }
 
 

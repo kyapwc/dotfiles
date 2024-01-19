@@ -9,12 +9,13 @@ vim.g.coq_settings = {
   keymap = {
     jump_to_mark = '',
     eval_snips = '',
-    bigger_preview = '<c-k>',
+    bigger_preview = '<C-b>',
     recommended = false,
   },
   clients = {
     snippets = {
       warn = {},
+      enabled = false,
     },
   },
 }
@@ -24,8 +25,8 @@ vim.cmd[[
   ino <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
   ino <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
   ino <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
-  ino <silent><expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-  ino <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<BS>"
+  ino <silent><expr> <C-n>   pumvisible() ? "\<C-n>" : "\<Tab>"
+  ino <silent><expr> <C-p>   pumvisible() ? "\<C-p>" : "\<BS>"
 ]]
 
 
@@ -54,4 +55,4 @@ vim.cmd[[
 -- end
 -- remap('i', '<bs>', 'v:lua.MUtils.BS()', { expr = true, noremap = true })
 
-vim.cmd('COQnow')
+vim.cmd('COQnow --shut-up')
