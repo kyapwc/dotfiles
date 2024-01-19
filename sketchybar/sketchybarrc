@@ -1,0 +1,320 @@
+# This is a demo config to show some of the most important commands more easily.
+# This is meant to be changed and configured, as it is intentionally kept sparse.
+# For a more advanced configuration example see my dotfiles:
+# https://github.com/FelixKratz/dotfiles
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+background_color="0xff1a212e"
+white_color="0xFFFFFFFF"
+black_color="0xff000000"
+active_background_color="0xbdff93f9"
+volume_background_color="0xffdc61d2"
+date_time_background_color=""
+mic_background_color=""
+transparent_color="0x00000000"
+
+# EVENT SUBSCRIBER
+sketchybar -m --add event window_focus \
+              --add event title_change \
+              --add event mouse.entered \
+              --add event mouse.clicked
+
+##### Bar Appearance #####
+# Configuring the general appearance of the bar, these are only some of the
+# options available. For all options see:
+# https://felixkratz.github.io/SketchyBar/config/bar
+# If you are looking for other colors, see the color picker:
+# https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
+
+bar=(
+height=28
+blur_radius=30
+position=top
+sticky=off
+color=0x00FFFFFF
+topmost=false
+y_offset=4
+)
+sketchybar --bar "${bar[@]}"
+
+FONT="Hack Nerd Font"
+
+##### Changing Defaults #####
+# We now change some default values that are applied to all further items
+# For a full list of all available item properties see:
+# https://felixkratz.github.io/SketchyBar/config/items
+
+defaults=(
+icon.font="Hack Nerd Font:Bold:14.0"
+icon.color=0xffffffff
+label.font="Hack Nerd Font:Bold:14.0"
+label.color=0xffffffff
+padding_left=4
+padding_right=4
+label.padding_left=4
+label.padding_right=4
+icon.padding_left=4
+icon.padding_right=4
+)
+sketchybar --default "${defaults[@]}"
+
+##### Adding Mission Control Space Indicators #####
+# Now we add some mission control spaces:
+# https://felixkratz.github.io/SketchyBar/config/components#space----associate-mission-control-spaces-with-an-item
+# to indicate active and available mission control spaces
+
+SPACE_ICONS=(
+"Work"
+"Slack"
+"Misc"
+"Browser"
+"SQL"
+"Misc"
+"Misc"
+"Misc"
+"Misc"
+"Misc"
+)
+# most likely have to add some special icons later
+for i in "${!SPACE_ICONS[@]}"
+do
+  sid=$(($i+1))
+  sketchybar --add space space.$sid left                                    \
+             --set space.$sid space=$sid                                    \
+                              icon=${SPACE_ICONS[i]}                        \
+                              background.corner_radius=5                    \
+                              background.height=20                          \
+                              background.drawing=on                         \
+                              background.color="${active_background_color}" \
+                              label.drawing=off                             \
+                              icon.padding_left=5                          \
+                              icon.padding_right=5                         \
+                              icon.font.size=12.0                           \
+                              script="$PLUGIN_DIR/space.sh"                 \
+                              click_script="yabai -m space --focus $sid"
+done
+
+##### Adding Left Items #####
+# We add some regular items to the left side of the bar
+# only the properties deviating from the current defaults need to be set
+
+sketchybar --add item front_app center                                   \
+           --set front_app       script="$PLUGIN_DIR/front_app.sh"       \
+                                 icon.drawing=off                        \
+                                 background.color="${transparent_color}" \
+           --subscribe front_app front_app_switched                      \
+
+##### Adding Right Items #####
+# In the same way as the left items we can add items to the right side.
+# Additional position (e.g. center) are available, see:
+# https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar
+
+# Some items refresh on a fixed cycle, e.g. the clock runs its script once
+# every 10s. Other items respond to events they subscribe to, e.g. the
+# volume.sh script is only executed once an actual change in system audio
+# volume is registered. More info about the event system can be found here:
+# https://felixkratz.github.io/SketchyBar/config/events
+
+
+sketchybar -m --add item battery right                         \
+           --set battery script="$PLUGIN_DIR/battery.sh"       \
+                         update_freq=120                       \
+                         background.corner_radius=8            \
+                         background.height=20                  \
+                         background.padding_right=5            \
+           --subscribe battery system_woke power_source_change
+
+sketchybar  --add   item slack right \
+            --set   slack \
+                    update_freq=10 \
+                    script="$PLUGIN_DIR/slack.sh" \
+                    click_script="$PLUGIN_DIR/slack_click.sh" \
+                    background.padding_left=5  \
+                    icon.font.size=18 \
+                    background.corner_radius=8 \
+                    background.height=20 \
+           --subscribe slack system_woke
+
+sketchybar --add item clock right                                      \
+           --set clock   update_freq=1                                 \
+                         icon=                                        \
+                         script="$PLUGIN_DIR/clock.sh"                 \
+                         background.height=20                          \
+                                                                       \
+           --add item mic right                                        \
+           --set mic     update_freq=3                                 \
+                         script="$PLUGIN_DIR/mic.sh"                   \
+                         click_script="$PLUGIN_DIR/mic_click.sh"       \
+                                                                       \
+           --add item volume right                                     \
+           --set volume  script="$PLUGIN_DIR/volume.sh"                \
+                         background.color="${volume_background_color}" \
+                         background.corner_radius=8 \
+                         background.height=20 \
+                         background.padding_left=5 \
+           --subscribe volume volume_change                            \
+
+POPUP_SCRIPT="sketchybar -m --set media_ctrl.anchor popup.drawing=toggle"
+
+media_ctrl_anchor=(
+script="$PLUGIN_DIR/media_ctrl.sh"
+click_script="$POPUP_SCRIPT"
+popup.horizontal=on
+popup.align=center
+popup.height=150
+popup.background.color=$black_color
+icon.font.size=12
+background.height=20
+background.color=$black_color
+)
+
+media_ctrl_cover=(
+script="$PLUGIN_DIR/media_ctrl.sh"
+click_script="open -a 'Arc'; $POPUP_SCRIPT"
+label.drawing=off
+icon.drawing=off
+padding_left=12
+padding_right=10
+background.image.scale=0.6
+background.image.drawing=on
+background.drawing=on
+)
+
+media_ctrl_title=(
+icon.drawing=off
+padding_left=0
+padding_right=0
+width=0
+label.font="$FONT:Heavy:15.0"
+label.max_chars=25
+y_offset=55
+)
+
+media_ctrl_artist=(
+icon.drawing=off
+y_offset=30
+padding_left=0
+padding_right=0
+width=0
+label.max_chars=20
+)
+
+media_ctrl_album=(
+icon.drawing=off
+padding_left=0
+padding_right=0
+y_offset=15
+label.max_chars=30
+)
+
+media_ctrl_back=(
+icon=󰒮
+icon.font.size=20
+color=$white_color
+icon.padding_left=5
+icon.padding_right=5
+icon.color="${white_color}"
+script="$PLUGIN_DIR/media_ctrl.sh"
+label.drawing=off
+y_offset=-45
+)
+
+media_ctrl_play=(
+icon=󰐊
+icon.font.size=20
+background.height=40
+background.corner_radius=20
+width=100
+align=center
+background.color=$background_color
+background.border_color=$white_color
+background.border_width=0
+background.drawing=on
+icon.padding_left=4
+icon.padding_right=5
+updates=on
+label.drawing=off
+script="$PLUGIN_DIR/media_ctrl.sh"
+y_offset=-45
+)
+
+media_ctrl_next=(
+icon=󰒭
+icon.font.size=20
+icon.padding_left=5
+icon.padding_right=5
+icon.color="${white_color}"
+label.drawing=off
+script="$PLUGIN_DIR/media_ctrl.sh"
+y_offset=-45
+)
+
+media_ctrl_controls=(
+background.color=$GREEN
+background.corner_radius=11
+background.drawing=on
+y_offset=-45
+)
+
+sketchybar --add item media_ctrl.anchor center                      \
+         --set media_ctrl.anchor "${media_ctrl_anchor[@]}"           \
+         --subscribe media_ctrl.anchor mouse.entered mouse.exited \
+                                    mouse.exited.global media_change \
+                                                               \
+         --add item media_ctrl.cover popup.media_ctrl.anchor         \
+         --set media_ctrl.cover "${media_ctrl_cover[@]}"             \
+                                                               \
+         --add item media_ctrl.title popup.media_ctrl.anchor         \
+         --set media_ctrl.title "${media_ctrl_title[@]}"             \
+                                                               \
+         --add item media_ctrl.artist popup.media_ctrl.anchor        \
+         --set media_ctrl.artist "${media_ctrl_artist[@]}"           \
+                                                               \
+         --add item media_ctrl.album popup.media_ctrl.anchor         \
+         --set media_ctrl.album "${media_ctrl_album[@]}"             \
+                                                               \
+         --add item media_ctrl.back popup.media_ctrl.anchor          \
+         --set media_ctrl.back "${media_ctrl_back[@]}"               \
+         --subscribe media_ctrl.back mouse.clicked                \
+                                                               \
+         --add item media_ctrl.play popup.media_ctrl.anchor          \
+         --set media_ctrl.play "${media_ctrl_play[@]}"               \
+         --subscribe media_ctrl.play mouse.clicked media_change   \
+                                                               \
+         --add item media_ctrl.next popup.media_ctrl.anchor          \
+         --set media_ctrl.next "${media_ctrl_next[@]}"               \
+         --subscribe media_ctrl.next mouse.clicked                \
+                                                               \
+         --add item media_ctrl.spacer popup.media_ctrl.anchor        \
+         --set media_ctrl.spacer width=5                          \
+                                                               \
+         --add bracket media_ctrl.controls media_ctrl.back           \
+                                        media_ctrl.play           \
+                                        media_ctrl.next           \
+         --set media_ctrl.controls "${media_ctrl_controls[@]}"
+
+
+sketchybar --add bracket spaces_bracket '/space\..*/' \
+           --set         spaces_bracket background.color="${background_color}" \
+                                        background.corner_radius=8  \
+                                        background.height=28
+
+# fix these later to have multiple brackets
+sketchybar --add bracket right_bracket mic slack clock volume battery \
+           --set         right_bracket background.color="${background_color}" \
+                         background.corner_radius=8 \
+                         background.height=32
+
+sketchybar --add bracket center_bracket front_app media_ctrl.anchor \
+           --set         center_bracket background.color="${background_color}" \
+                         background.corner_radius=8 \
+                         background.height=28 \
+                         background.border_color="${active_background_color}" \
+                         background.border_width=2
+
+
+##### Finalizing Setup #####
+# The below command is only needed at the end of the initial configuration to
+# force all scripts to run the first time, it should never be run in an item script.
+
+sketchybar --update
