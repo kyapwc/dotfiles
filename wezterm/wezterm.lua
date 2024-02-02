@@ -79,7 +79,7 @@ config.window_padding = {
   top = 1,
   bottom = 1,
 }
-config.window_background_opacity = 0.95
+config.window_background_opacity = 0.90
 config.window_close_confirmation = 'AlwaysPrompt'
 config.scrollback_lines = 3000
 config.default_workspace = 'HOME'

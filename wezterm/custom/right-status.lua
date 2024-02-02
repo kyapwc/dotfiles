@@ -49,17 +49,31 @@ wezterm.on('update-right-status', function(window, pane)
 
   -- An entry for each battery (typically 0 or 1 battery)
   for _, b in ipairs(wezterm.battery_info()) do
+    local charging_state = b.state
     local battery_state = b.state_of_charge * 100
     local batt_icon = wezterm.nerdfonts.fa_battery_empty
-    if battery_state <= 20 then
-      batt_icon = wezterm.nerdfonts.fa_battery_quarter
-    elseif battery_state > 20 and battery_state <= 50 then
-      batt_icon = wezterm.nerdfonts.fa_battery_half
-    elseif battery_state > 50 and battery_state <= 75 then
-      batt_icon = wezterm.nerdfonts.fa_battery_three_quarters
-    else
-      batt_icon = wezterm.nerdfonts.fa_battery_full
+    if (charging_state == 'Charging' or charging_state == 'Unknown') then
+      if battery_state <= 20 then
+        batt_icon = wezterm.nerdfonts.md_battery_charging_low
+      elseif battery_state > 20 and battery_state <= 50 then
+        batt_icon = wezterm.nerdfonts.md_battery_charging_medium
+      elseif battery_state > 50 and battery_state <= 80 then
+        batt_icon = wezterm.nerdfonts.md_battery_charging_medium
+      else
+        batt_icon = wezterm.nerdfonts.md_battery_charging_100
+      end
+    elseif charging_state == 'Discharging' then
+      if battery_state <= 20 then
+        batt_icon = wezterm.nerdfonts.fa_battery_quarter
+      elseif battery_state > 20 and battery_state <= 50 then
+        batt_icon = wezterm.nerdfonts.fa_battery_half
+      elseif battery_state > 50 and battery_state <= 75 then
+        batt_icon = wezterm.nerdfonts.fa_battery_three_quarters
+      else
+        batt_icon = wezterm.nerdfonts.fa_battery_full
+      end
     end
+
 
     table.insert(cells, batt_icon .. ' ' .. string.format('%.0f%%', battery_state))
   end
