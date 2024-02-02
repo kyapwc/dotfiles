@@ -12,6 +12,10 @@ volume_background_color="0xffdc61d2"
 date_time_background_color=""
 mic_background_color=""
 transparent_color="0x00000000"
+GREEN=0xff4daf2b
+red_color="0xffff0000"
+blue_color="0xff0056ff"
+grey_color="0xa8ddd8d3"
 
 # EVENT SUBSCRIBER
 sketchybar -m --add event window_focus \
@@ -166,6 +170,9 @@ popup.background.color=$black_color
 icon.font.size=12
 background.height=20
 background.color=$black_color
+label.max_chars=30
+scroll_texts=on
+label="Not Playing"
 )
 
 media_ctrl_cover=(
@@ -256,6 +263,29 @@ background.drawing=on
 y_offset=-45
 )
 
+media_ctrl_playback_slider=(
+icon.drawing=off
+label.drawing=off
+updates=on
+background.height=28
+slider.width=100
+slider.highlight_color=$white_color
+slider.background.height=3
+slider.background.color_radius=3
+slider.background.color=$grey_color
+script="$PLUGIN_DIR/media_ctrl.sh"
+)
+
+media_control_playback=(
+label="-"
+background.height=15
+icon.drawing=off
+y_offset=-20
+padding_left=-100
+update_freq=1
+script="$PLUGIN_DIR/media_ctrl.sh"
+)
+
 sketchybar --add item media_ctrl.anchor center                      \
          --set media_ctrl.anchor "${media_ctrl_anchor[@]}"           \
          --subscribe media_ctrl.anchor mouse.entered mouse.exited \
@@ -272,6 +302,12 @@ sketchybar --add item media_ctrl.anchor center                      \
                                                                \
          --add item media_ctrl.album popup.media_ctrl.anchor         \
          --set media_ctrl.album "${media_ctrl_album[@]}"             \
+                                                               \
+         --add slider media_ctrl.playback_slider popup.media_ctrl.anchor         \
+         --set media_ctrl.playback_slider "${media_ctrl_playback_slider[@]}"             \
+                                                               \
+         --add item media_ctrl.playback popup.media_ctrl.anchor         \
+         --set media_ctrl.playback "${media_control_playback[@]}"             \
                                                                \
          --add item media_ctrl.back popup.media_ctrl.anchor          \
          --set media_ctrl.back "${media_ctrl_back[@]}"               \
