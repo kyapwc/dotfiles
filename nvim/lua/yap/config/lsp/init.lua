@@ -258,7 +258,6 @@ local servers = {
   vuels = {},
   rust_analyzer = {},
   sqlls = {},
-  bufls = {},
 }
 
 
