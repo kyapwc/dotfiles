@@ -8,6 +8,11 @@ vim.g.mapleader = ' '
 -- vim.g.everforest_background = 'medium'
 -- vim.g.everforest_better_performance = 1
 
+-- =======================
+-- Making , as localleader key
+-- =======================
+vim.g.maplocalleader = ','
+
 local fn = vim.fn
 
 local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -383,8 +388,8 @@ require('yap/luasnip')
 require('yap/autocmds')
 require('yap/dressing')
 require('yap/oil')
-require('yap/rest')
 require('yap/smart-splits')
+-- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({
 --   debug = { logging = true }

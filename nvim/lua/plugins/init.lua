@@ -348,7 +348,7 @@ return {
   {
     "L3MON4D3/LuaSnip",
     -- follow latest release.
-    version = "2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
     -- install jsregexp (optional!).
     build = "make install_jsregexp"
   },
@@ -372,12 +372,36 @@ return {
     config = true,
   },
 
-  {
-    'rest-nvim/rest.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-  },
+  -- {
+  --   'rest-nvim/rest.nvim',
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --   },
+  -- },
 
-  { 'mrjones2014/smart-splits.nvim' }
+  { 'mrjones2014/smart-splits.nvim' },
+
+  {
+    "nvim-neorg/neorg",
+    build = ":Neorg sync-parsers",
+    lazy = false, -- specify lazy = false because some lazy.nvim distributions set lazy = true by default
+    -- tag = "*",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("neorg").setup {
+        load = {
+          ["core.defaults"] = {}, -- Loads default behaviour
+          ["core.concealer"] = {}, -- Adds pretty icons to your documents
+          ["core.dirman"] = { -- Manages Neorg workspaces
+            config = {
+              workspaces = {
+                notes = "~/notes",
+              },
+              default_workspace = "notes"
+            },
+          },
+        },
+      }
+    end,
+  }
 }
