@@ -2,5 +2,6 @@ tags
 tags/**
 dist/**
 env.pm2
+.DS_Store
 
 WorkspaceSettings.xcsettings
