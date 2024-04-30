@@ -137,7 +137,5 @@ export SPACESHIP_NODE_SHOW=false
 export SPACESHIP_PROMPT_ASYNC=false
 export NEOVIDE_FRAME=none
 alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
-# alias emacss="/Applications/Emacs.app/Contents/MacOS/Emacs -c -a 'emacs'"
-alias emacss="emacsclient -c -a 'emacs' -n"
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
