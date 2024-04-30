@@ -118,8 +118,6 @@ else
   compinit -C
 fi
 
-export BITBUCKET_APP_PASSWORD=Kv7ChvThwqQA3Z8wBdFT
-export BITBUCKET_USERNAME=kyapweichun
 export FZF_CTRL_R_OPTS='--border --info=inline'
 export FZF_COMPLETION_TRIGGER='~~'
 
