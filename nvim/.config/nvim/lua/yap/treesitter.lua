@@ -17,6 +17,7 @@ configs.setup {
     -- 'org',
     'javascript',
     'typescript',
+    'tsx',
     'go',
     'python',
     'gdscript',
