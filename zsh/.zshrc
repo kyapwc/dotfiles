@@ -10,7 +10,6 @@ export GOPATH=$HOME/go
 export GOROOT="/usr/local/opt/go@1.16/libexec"
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 export GOPRIVATE="bitbucket.org/pick-up"
-export TESSDATA_PREFIX="/usr/local/share/tessdata/"
 # export TERM="xterm-256color"
 export TERM="screen-256color"
 export GST_PLUGIN_PATH=/usr/local/lib/gstreamer-1.0
