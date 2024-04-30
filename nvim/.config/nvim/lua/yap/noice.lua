@@ -17,5 +17,6 @@ noice.setup({
       throttle = 1000 / 30,
       view = "mini",
     },
+    signature = { enabled = false },
   },
 })
