@@ -1,5 +1,5 @@
 # My Dotfiles 🚀
-This directory just contains the dotfiles for my entire system.
+This repository just contains the dotfiles for my entire macos system.
 
 It uses GNU Stow to setup the dotfiles symlinks
 
