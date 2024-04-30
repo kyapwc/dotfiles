@@ -32,6 +32,8 @@
   what = !git whatchanged --decorate -p
   forget = rm --cached
   cm = commit --verbose
+  modified = \
+    !nvim $(git ls-files --modified)
 [pretty]
   log = %C(240)%h%C(reset) -%C(auto)%d%Creset %s %C(242)(%an %ar)
   detailed = %C(cyan)%h %C(red)%ad %C(blue)[%an]%C(magenta)%d %C(white)%s
@@ -47,7 +49,16 @@
 [push]
 	default = current
 	followTags = true
+	autoSetupRemote = true
 [help]
 	autocorrect = 1
 [protocol]
 	version = 2
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[safe]
+	directory = *
