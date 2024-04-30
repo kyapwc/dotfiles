@@ -2,10 +2,7 @@ local noice = require('noice')
 
 noice.setup({
   messages = {
-    enabled = false,
-  },
-  notify = {
-    enabled = false,
+    enabled = true,
   },
   lsp = {
     override = {
