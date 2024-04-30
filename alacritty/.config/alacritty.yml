@@ -1,19 +1,51 @@
 font:
+  # normal:
+  #   family: Monaspace Radon
+  #   style: Bold
+  #
+  # bold:
+  #   family: Monaspace Radon
+  #   style: Bold
+  #
+  # italic:
+  #   family: Monaspace Radon
+  #   style: SemiBold
+  #
+  # bold_italic:
+  #   family: Monaspace Radon
+  #   style: Bold
+
   normal:
-    family: FiraCode Nerd Font Mono
+    family: Cousine Nerd Font Mono
     style: Bold
 
   bold:
-    family: FiraCode Nerd Font Mono
+    family: Cousine Nerd Font Mono
     style: Bold
 
   italic:
-    family: FiraCode Nerd Font Mono
+    family: Cousine Nerd Font Mono
     style: SemiBold
 
   bold_italic:
-    family: FiraCode Nerd Font Mono
+    family: Cousine Nerd Font Mono
     style: Bold
+
+  # normal:
+  #   family: Cousine Nerd Font Mono
+  #   style: Bold
+
+  # bold:
+  #   family: Cousine Nerd Font Mono
+  #   style: Bold
+
+  # italic:
+  #   family: Cousine Nerd Font Mono
+  #   style: SemiBold
+
+  # bold_italic:
+  #   family: Cousine Nerd Font Mono
+  #   style: Bold
 
   # normal:
   #   family: mononoki
@@ -97,9 +129,9 @@ key_bindings:
   - { key: Right,    mods: Command,  chars: "\x1b[F",   mode: ~AppCursor  }
   - { key: F11, mods: Command, action: ToggleFullScreen } # Open full screen
 
-shell:
-  program: /bin/zsh
-  args:
-    - -l
-    - -c
-    - "source ~/.zshrc; tmux attach 2> /dev/null || tmux"
+# shell:
+#  program: /bin/zsh
+#  args:
+#   - -l
+#   - -c
+#   - "source ~/.zshrc; tmux attach 2> /dev/null || tmux"
