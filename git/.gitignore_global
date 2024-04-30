@@ -1,4 +1,6 @@
 tags
 tags/**
+dist/**
+env.pm2
 
 WorkspaceSettings.xcsettings
