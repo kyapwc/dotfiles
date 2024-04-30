@@ -40,7 +40,6 @@ require('impatient')
 -- Local vim declaration
 -- =======================
 local vim = vim
-local nvim_treesitter = require('nvim-treesitter')
 
 -- =======================
 -- Misc vim autocmds
@@ -389,8 +388,9 @@ require('yap/autocmds')
 require('yap/dressing')
 require('yap/oil')
 require('yap/smart-splits')
-require('yap/noice')
+-- require('yap/noice')
 require('yap/peek')
+require('yap/autotag')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({
