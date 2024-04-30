@@ -324,10 +324,6 @@ return {
       require('fidget').setup({})
     end
   },
-  -- {
-  --   'folke/noice.nvim',
-  --   dependencies = { 'MunifTanjim/nui.nvim', 'rcarriga/nvim-notify' }
-  -- },
   { 'mhartington/formatter.nvim' },
 
   {
@@ -403,5 +399,32 @@ return {
         },
       }
     end,
-  }
+  },
+
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    }
+  },
+
+  {
+    "toppair/peek.nvim",
+    event = { "VeryLazy" },
+    build = "deno task --quiet build:fast",
+    config = function()
+      require("peek").setup()
+      vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
+      vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
+    end,
+  },
 }

@@ -389,6 +389,8 @@ require('yap/autocmds')
 require('yap/dressing')
 require('yap/oil')
 require('yap/smart-splits')
+require('yap/noice')
+require('yap/peek')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({
