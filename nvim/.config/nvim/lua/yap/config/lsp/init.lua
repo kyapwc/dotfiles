@@ -251,7 +251,7 @@ local servers = {
   eslint = {
     on_attach = on_attach_eslint,
   },
-  bashls = {},
+  bashls = { on_attach = on_attach },
   svelte = {},
   -- tailwindcss = {},
   cssls = {},

@@ -264,7 +264,7 @@ return {
 
   { 'folke/twilight.nvim' },
 
-  { 'nathom/filetype.nvim' },
+  -- { 'nathom/filetype.nvim' },
 
   {
     "gnikdroy/projections.nvim",

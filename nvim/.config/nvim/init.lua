@@ -56,6 +56,16 @@ vim.cmd[[
 ]]
 
 -- =======================
+-- Setting sh filetype to bash
+-- =======================
+vim.cmd([[
+  augroup _astro
+  autocmd!
+  autocmd BufRead,BufEnter *.sh set filetype=bash
+  augroup end
+]])
+
+-- =======================
 -- Personal text objects
 -- =======================
 vim.cmd[[
