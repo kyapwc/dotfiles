@@ -307,9 +307,9 @@ return {
   { 'rafcamlet/nvim-luapad' },
 
   -- { 'kyapwc/gojira.nvim' },
-  {
-    dir = '/Users/kenyap/workspace/gojira.nvim',
-  },
+  -- {
+  --   dir = '/Users/kenyap/workspace/gojira.nvim',
+  -- },
 
   { 'folke/neodev.nvim' },
 
