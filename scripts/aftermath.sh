@@ -6,3 +6,8 @@ yabai --start-service
 
 # SKHD
 skhd --start-service
+
+# ASDF (node)
+asdf install nodejs latest
+asdf global nodejs latest
+asdf reshim nodejs
