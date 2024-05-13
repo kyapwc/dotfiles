@@ -20,7 +20,7 @@ export PATH="/usr/local/bin/lua:$PATH"
 export PATH="/usr/local/bin/luarocks:$PATH"
 
 # Re-enable this later
-export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
+# export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
 export POSTGRES_USER='pickupp'
 export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
 
@@ -111,13 +111,6 @@ export LC_ALL=en_US.UTF-8
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 
-autoload -Uz compinit
-if [ $(date +'%j') != $(stat -f '%Sm' -t '%j' ~/.zcompdump) ]; then
-  compinit
-else
-  compinit -C
-fi
-
 export FZF_CTRL_R_OPTS='--border --info=inline'
 export FZF_COMPLETION_TRIGGER='~~'
 
@@ -137,5 +130,42 @@ export SPACESHIP_NODE_SHOW=false
 export SPACESHIP_PROMPT_ASYNC=false
 export NEOVIDE_FRAME=none
 alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
+
+typeset -U path cdpath fpath manpath
+
+for profile in ${(z)NIX_PROFILES}; do
+  fpath+=($profile/share/zsh/site-functions $profile/share/zsh/$ZSH_VERSION/functions $profile/share/zsh/vendor-completions)
+done
+
+HELPDIR="/nix/store/mcx7knakrqgqr2hp7ipzxf2h27i366xz-zsh-5.9/share/zsh/$ZSH_VERSION/help"
+
+source /nix/store/16x0hq8j2hd74fv2hi9xa3dx80whk31h-zsh-autosuggestions-0.7.0/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+HISTFILE="$HOME/.zsh_history"
+mkdir -p "$(dirname "$HISTFILE")"
+
+setopt HIST_FCNTL_LOCK
+setopt HIST_IGNORE_DUPS
+unsetopt HIST_IGNORE_ALL_DUPS
+setopt HIST_IGNORE_SPACE
+unsetopt HIST_EXPIRE_DUPS_FIRST
+setopt SHARE_HISTORY
+unsetopt EXTENDED_HISTORY
+
+if [[ $options[zle] = on ]]; then
+  eval "$(/nix/store/mzpbqw9lqf61bspay0xhx0k5f98yir2i-fzf-0.51.0/bin/fzf --zsh)"
+fi
+
+source "/nix/store/219mzxbi0pf4mh1ys4fkll7cwsdv5igj-wezterm-20240203-110809-5046fc22/etc/profile.d/wezterm.sh"
+
+if [[ $TERM != "dumb" ]]; then
+  eval "$(/Users/kenyap/.nix-profile/bin/starship init zsh)"
+fi
+
+alias -- 'nixswitch'='darwin-rebuild switch --flake ~/nixos-config/.#'
+alias -- 'nixup'='pushd ~/nixos-config; nix flake update; nixswitch; popd'
+
+source /nix/store/ax4fnrnml30khcnmhv3cx410iqyfdsll-zsh-syntax-highlighting-0.8.0/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+ZSH_HIGHLIGHT_HIGHLIGHTERS+=()
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
