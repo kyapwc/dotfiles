@@ -144,6 +144,14 @@ unsetopt EXTENDED_HISTORY
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 
+# Expand aliases with space key
+function expand-alias() {
+	zle _expand_alias
+	zle self-insert
+}
+zle -N expand-alias
+bindkey -M main ' ' expand-alias
+
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

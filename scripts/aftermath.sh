@@ -24,6 +24,9 @@ brew services start sketchybar
 # Monaspace font
 brew install font-monaspace
 
+# Youtube Music
+brew install th-ch/youtube-music/youtube-music
+
 # Janky borders setup to plist
 echo "Setting up Janky Borders..."
 cp $HOME/dotfiles/borders/.config/borders/janky_borders.plist ~/Library/LaunchAgents/com.user.janky_borders.plist
