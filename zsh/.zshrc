@@ -91,6 +91,7 @@ rm -rf ~/Library/Caches/com.apple.dt.Xcode/ \
 
 alias ydiffs='f() { ydiff -s -w 0 --wrap };f'
 alias evicclear='f() { kubectl get pod -n $1 | grep Evicted | awk "{print \$1}" | xargs kubectl delete pod -n $1 };f'
+alias ls="eza -la"
 
 function kill-node-port() {
   if [ -n "$1" ]; then
@@ -106,8 +107,8 @@ alias pmkill='kill-node-port'
 # tre() { command tre "$@" -e && source "/tmp/tre_aliases_$USER" 2>/dev/null;  }
 
 export LC_ALL=en_US.UTF-8
-zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
-fpath=(~/.zsh $fpath)
+# zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+# fpath=(~/.zsh $fpath)
 
 export FZF_CTRL_R_OPTS='--border --info=inline'
 export FZF_COMPLETION_TRIGGER='~~'
@@ -151,6 +152,12 @@ function expand-alias() {
 }
 zle -N expand-alias
 bindkey -M main ' ' expand-alias
+
+# Tab completion highlight
+zstyle ':completion:*:*:git:*' menu select script ~/.zsh/git-completion.bash
+fpath=(~/.zsh $fpath)
+autoload -U compinit && compinit
+zmodload -i zsh/complist
 
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
