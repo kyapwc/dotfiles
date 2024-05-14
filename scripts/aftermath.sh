@@ -15,5 +15,5 @@ asdf reshim nodejs
 
 # zsh-syntax-highligting & zsh-autosuggestions
 
-# oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# oh-my-zsh (can disable, not using it at all anymore)
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
