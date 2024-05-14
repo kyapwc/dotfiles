@@ -17,3 +17,9 @@ asdf reshim nodejs
 
 # oh-my-zsh (can disable, not using it at all anymore)
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# Sketchybar
+brew services start sketchybar
+
+# Monaspace font
+brew install font-monaspace

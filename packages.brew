@@ -6,7 +6,6 @@ tap "int128/kubelogin"
 cask "raycast"
 cask "arc"
 cask "wezterm"
-cask "font-monaspace-nerd-font"
 
 brew "asdf"
 brew "git"
