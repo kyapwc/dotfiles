@@ -52,6 +52,9 @@ config.font = wezterm.font_with_fallback({
 config.font_size = 10.5
 config.audible_bell = 'Disabled'
 config.adjust_window_size_when_changing_font_size = false
+-- config below only for virtual machines settings
+-- config.front_end = 'WebGpu'
+-- config.prefer_egl = true
 
 -- config.font = wezterm.font_with_fallback({
 --   {
