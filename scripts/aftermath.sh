@@ -23,3 +23,6 @@ brew services start sketchybar
 
 # Monaspace font
 brew install font-monaspace
+
+# Borders
+brew services start borders
