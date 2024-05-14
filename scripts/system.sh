@@ -20,7 +20,7 @@ defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 # Faster repeat rate
-defaults write NSGlobalDomain KeyRepeat -int 2
+defaults write NSGlobalDomain KeyRepeat -int 5
 defaults write NSGlobalDomain InitialKeyRepeat -int 5
 
 # Remap caps lock to CTRL
