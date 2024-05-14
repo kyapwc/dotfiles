@@ -29,6 +29,7 @@ export INTEL_HAXM_HOME=/usr/local/Caskroom/intel-haxm
 # Setting aliases for dev
 alias gs='git status'
 alias glog='git log --oneline --decorate --color --graph --all'
+alias gl='git pull'
 alias dk="docker-compose"
 alias dkl='docker-compose logs --tail=1000 -f'
 alias gco="git checkout"
