@@ -29,6 +29,9 @@ brew install th-ch/youtube-music/youtube-music
 
 # Janky borders setup to plist
 echo "Setting up Janky Borders..."
+# unload janky_borders first
+launchctl unload ~/Library/LaunchAgents/com.user.janky_borders.plist
+
 cp $HOME/dotfiles/borders/.config/borders/janky_borders.plist ~/Library/LaunchAgents/com.user.janky_borders.plist
 
 launchctl load ~/Library/LaunchAgents/com.user.janky_borders.plist
@@ -56,5 +59,5 @@ launchctl load ~/Library/LaunchAgents/com.user.janky_borders.plist
 # Youtube Windowed Fullscreen (https://chromewebstore.google.com/detail/youtube-windowed-fullscre/gkkmiofalnjagdcjheckamobghglpdpm?hl=en)
 
 # Lastly, it is just setting up raycast
-open $HOME/dotfiles/raycast/.config/raycast/Raycast 2024-05-14 20.47.11.rayconfig
+open $HOME/dotfiles/raycast/.config/raycast/Raycast\ 2024-05-14\ 20.47.11.rayconfig
 # above will spawn raycast and prompt for password on this config for import
