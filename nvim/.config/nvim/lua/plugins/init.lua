@@ -356,7 +356,6 @@ return {
 
   {
     'stevearc/oil.nvim',
-    version = '1.0.0',
     opts = {},
     -- Optional dependencies
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -377,29 +376,29 @@ return {
 
   { 'mrjones2014/smart-splits.nvim' },
 
-  {
-    "nvim-neorg/neorg",
-    build = ":Neorg sync-parsers",
-    lazy = false, -- specify lazy = false because some lazy.nvim distributions set lazy = true by default
-    -- tag = "*",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("neorg").setup {
-        load = {
-          ["core.defaults"] = {}, -- Loads default behaviour
-          ["core.concealer"] = {}, -- Adds pretty icons to your documents
-          ["core.dirman"] = { -- Manages Neorg workspaces
-            config = {
-              workspaces = {
-                notes = "~/notes",
-              },
-              default_workspace = "notes"
-            },
-          },
-        },
-      }
-    end,
-  },
+  -- {
+  --   "nvim-neorg/neorg",
+  --   build = ":Neorg sync-parsers",
+  --   lazy = false, -- specify lazy = false because some lazy.nvim distributions set lazy = true by default
+  --   -- tag = "*",
+  --   dependencies = { "nvim-lua/plenary.nvim" },
+  --   config = function()
+  --     require("neorg").setup {
+  --       load = {
+  --         ["core.defaults"] = {}, -- Loads default behaviour
+  --         ["core.concealer"] = {}, -- Adds pretty icons to your documents
+  --         ["core.dirman"] = { -- Manages Neorg workspaces
+  --           config = {
+  --             workspaces = {
+  --               notes = "~/notes",
+  --             },
+  --             default_workspace = "notes"
+  --           },
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
 
   {
     "folke/noice.nvim",

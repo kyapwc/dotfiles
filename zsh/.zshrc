@@ -7,7 +7,7 @@ export ZSH_CUSTOM="$HOME/dotfiles/zsh/.oh-my-zsh/custom"
 
 export GO111MODULE=on
 export GOPATH=$HOME/go
-export GOROOT="/usr/local/opt/go@1.16/libexec"
+export GOROOT="/opt/homebrew/opt/go/libexec"
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 export GOPRIVATE="bitbucket.org/pick-up"
 # export TERM="xterm-256color"
@@ -65,8 +65,6 @@ DISABLE_AUTO_TITLE="true"
 
 plugins=(
   git
-  zsh-autosuggestions
-  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -147,6 +145,6 @@ unsetopt EXTENDED_HISTORY
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highligting.zsh
-source /opt/homebrew/share/zsh-syntax-highligting/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /opt/homebrew/opt/spaceship/spaceship.zsh
