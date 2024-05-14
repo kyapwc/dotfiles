@@ -24,12 +24,17 @@ brew services start sketchybar
 # Monaspace font
 brew install font-monaspace
 
-# Janky borders
-if ps aux | grep -v grep | grep "janky_borders" > /dev/null; then
-  pkill "janky_borders"
-  echo "Janky borders killed."
-else
-  echo "Janky borders not spawned."
-fi
+# Janky borders setup to plist
+echo "Setting up Janky Borders..."
+cp $HOME/dotfiles/borders/.config/borders/janky_borders.plist ~/Library/LaunchAgents/com.user.janky_borders.plist
 
-./janky_borders >/dev/null 2>/dev/null &
+launchctl load ~/Library/LaunchAgents/com.user.janky_borders.plist
+
+# if ps aux | grep -v grep | grep "janky_borders" > /dev/null; then
+#   pkill "janky_borders"
+#   echo "Janky borders killed."
+# else
+#   echo "Janky borders not spawned."
+# fi
+#
+# ./janky_borders >/dev/null 2>/dev/null &
