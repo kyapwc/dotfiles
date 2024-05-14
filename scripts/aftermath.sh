@@ -38,3 +38,16 @@ launchctl load ~/Library/LaunchAgents/com.user.janky_borders.plist
 # fi
 #
 # ./janky_borders >/dev/null 2>/dev/null &
+
+
+# Right now Arc browser can sync my tabs but not the extensions and so on
+# below is just a note on the different extensions i have available to install later on manually
+# Bypass Paywalls (https://github.com/iamadamdev/bypass-paywalls-chrome)
+# Bitwarden Password Manager
+# Mardown Here (for emails mostly)
+# React Developer Tools
+# Tag Assistant Companion
+# uBlock Origin
+# Vimium
+# Wappalyzer
+# Youtube Windowed Fullscreen (https://chromewebstore.google.com/detail/youtube-windowed-fullscre/gkkmiofalnjagdcjheckamobghglpdpm?hl=en)
