@@ -43,7 +43,7 @@ config.status_update_interval = 500
 config.color_scheme = 'Tokyo Night'
 config.font = wezterm.font_with_fallback({
   {
-    family = 'Monaspace Radon',
+    family = 'MonaspiceXe Nerd Font Mono',
     weight = 'ExtraBold',
     harfbuzz_features = { 'liga=1' },
     scale = 1,

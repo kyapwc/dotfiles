@@ -12,7 +12,7 @@ echo "Starting stow process..."
 
 # Below is just setting up GNU Stow
 # List all directories in dotfiles
-directories=$(find .. -maxdepth 1 -type d ! -name . | sed 's/^\.\.\///' | sed '1s/^\.\.//')
+directories=$(find . -maxdepth 1 -type d ! -name . | sed 's/^\.\.\///' | sed '1s/^\.\.//')
 ignored_directories=(".git" "scripts")
 
 # Loop through the list of directories

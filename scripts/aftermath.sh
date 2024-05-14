@@ -8,6 +8,12 @@ yabai --start-service
 skhd --start-service
 
 # ASDF (node)
+asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf install nodejs latest
 asdf global nodejs latest
 asdf reshim nodejs
+
+# zsh-syntax-highligting & zsh-autosuggestions
+
+# oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"

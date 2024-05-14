@@ -20,5 +20,5 @@ rm -rf "$HOME/.tmux.conf"
 rm -rf "$HOME/.yabairc"
 rm -rf "$HOME/.skhdrc"
 
-sh ./setup_symlinks.sh
+sh ./scripts/setup_symlinks.sh
 echo "Removed symlinks & linked dotfiles."

@@ -49,7 +49,7 @@ alias cl="clear"
 alias pick="cd ~/go/src/bitbucket.org/pick-up/pickupp"
 
 # Set name of the theme to load --- if set to "random"
-ZSH_THEME="spaceship"
+# ZSH_THEME="spaceship"
 
 HISTFILE=~/.zsh_history
 HISTSIZE=5000
@@ -145,3 +145,8 @@ setopt SHARE_HISTORY
 unsetopt EXTENDED_HISTORY
 
 . /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+# zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highligting.zsh
+source /opt/homebrew/share/zsh-syntax-highligting/zsh-autosuggestions.zsh
+source /opt/homebrew/opt/spaceship/spaceship.zsh
