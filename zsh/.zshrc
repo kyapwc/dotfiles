@@ -67,8 +67,7 @@ plugins=(
   git
 )
 
-source $ZSH/oh-my-zsh.sh
-
+# source $ZSH/oh-my-zsh.sh
 alias :q="exit"
 
 alias portcheck="lsof -i"
