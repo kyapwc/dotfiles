@@ -154,7 +154,7 @@ zle -N expand-alias
 bindkey -M main ' ' expand-alias
 
 # Tab completion highlight
-zstyle ':completion:*:*:git:*' menu select script ~/.zsh/git-completion.bash
+zstyle ':completion:*:*:git:*' menu select list-colors ''
 fpath=(~/.zsh $fpath)
 autoload -U compinit && compinit
 zmodload -i zsh/complist
