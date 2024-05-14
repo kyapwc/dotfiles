@@ -51,3 +51,7 @@ launchctl load ~/Library/LaunchAgents/com.user.janky_borders.plist
 # Vimium
 # Wappalyzer
 # Youtube Windowed Fullscreen (https://chromewebstore.google.com/detail/youtube-windowed-fullscre/gkkmiofalnjagdcjheckamobghglpdpm?hl=en)
+
+# Lastly, it is just setting up raycast
+open $HOME/dotfiles/raycast/.config/raycast/Raycast 2024-05-14 20.47.11.rayconfig
+# above will spawn raycast and prompt for password on this config for import
