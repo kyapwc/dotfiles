@@ -5,7 +5,7 @@ It uses GNU Stow to setup the dotfiles symlinks and various shell scripts.
 
 ## Details
 - Terminal: [WezTerm](https://wezfurlong.org/wezterm/index.html) + zsh
-- WM: [yabai]((https://github.com/koekeishiya/yabai)) + [skhd](https://github.com/koekeishiya/skhd)
+- WM: [yabai](https://github.com/koekeishiya/yabai) + [skhd](https://github.com/koekeishiya/skhd)
 - Bar: [Sketchybar](https://github.com/FelixKratz/SketchyBar)
 - Browser: [Arc](https://arc.net/)
 - Borders: [JankyBorders](https://github.com/FelixKratz/JankyBorders)
