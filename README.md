@@ -11,6 +11,9 @@ It uses GNU Stow to setup the dotfiles symlinks and various shell scripts.
 - Borders: [JankyBorders](https://github.com/FelixKratz/JankyBorders)
 - Main Editor: [Neovim](https://neovim.io/)
 
+## Screenshot
+![Desktop Screenshot in UTM VM](https://raw.githubusercontent.com/kyapwc/dotfiles/master/.assets/setup.png)
+
 ## Disclaimer
 
 > [!CAUTION]
