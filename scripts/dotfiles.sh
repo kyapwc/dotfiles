@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Remove all current configs before stow
-CONFIG_DIR="$HOME/dotfiles"
+CONFIG_DIR="$HOME/.config"
 
 # Clean directories
 rm -rf "$HOME/.vimrc"
