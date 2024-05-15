@@ -136,6 +136,8 @@ yabai -m rule --add app="^TablePlus$" title="Window" manage=off sub-layer=above
 yabai -m rule --add app="^TablePlus$" title="tableplus plugins" manage=off sub-layer=above
 yabai -m rule --add app="^TablePlus$" title="^$" manage=off sub-layer=above
 
+yabai -m rule --apply
+
 # Refresh item
 # yabai -m signal --add event=window_focused \
 #   action="osascript -e 'display notification \"Testing\" with title \"Yabai\"'"
@@ -144,4 +146,4 @@ yabai -m rule --add app="^TablePlus$" title="^$" manage=off sub-layer=above
 yabai -m signal --add event=window_focused action="sketchybar -m --trigger window_focus &> /dev/null"
 yabai -m signal --add event=window_title_changed action="sketchybar -m --trigger title_change &> /dev/null"
 
-yabai -m config menubar_opacity 0.0
+# yabai -m config menubar_opacity 0.0
