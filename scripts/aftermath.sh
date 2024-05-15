@@ -27,6 +27,9 @@ brew install font-monaspace
 # Youtube Music
 brew install th-ch/youtube-music/youtube-music
 
+# Nowplaying-cli
+brew install nowplaying-cli
+
 # Janky borders setup to plist
 echo "Setting up Janky Borders..."
 # unload janky_borders first
