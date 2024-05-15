@@ -31,8 +31,8 @@ hidutil property --set '{"UserKeyMapping":{"HIDKeyboardModifierMappingSrc":30064
 # Energy saving                                                               #
 ###############################################################################
 
-# Sleep the display after 15 minutes
-sudo pmset -a displaysleep 15
+# Never sleep the display
+sudo pmset -a displaysleep 0
 
 # Disable machine sleep while charging
 sudo pmset -c sleep 0
