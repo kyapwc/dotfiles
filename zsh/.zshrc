@@ -62,6 +62,10 @@ setopt appendhistory
 # Set word movement
 bindkey "[D" backward-word
 bindkey "[C" forward-word
+bindkey "^[OH" beginning-of-line
+bindkey "^[OF" end-of-line
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
@@ -163,5 +167,6 @@ zmodload -i zsh/complist
 
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /opt/homebrew/opt/spaceship/spaceship.zsh
