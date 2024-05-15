@@ -30,10 +30,12 @@ export INTEL_HAXM_HOME=/usr/local/Caskroom/intel-haxm
 alias gs='git status'
 alias glog='git log --oneline --decorate --color --graph --all'
 alias gl='git pull'
-alias dk="docker-compose"
-alias dkl='docker-compose logs --tail=1000 -f'
+alias gp='git push'
 alias gco="git checkout"
 alias gb="git branch"
+
+alias dk="docker-compose"
+alias dkl='docker-compose logs --tail=1000 -f'
 # alias gdiff="git log -m | ydiff -s -w 0 --wrap"
 alias ref="source ~/.zshrc && echo refresh zshrc done"
 # alias conflicts="nvim $(git diff --name-only --diff-filter=U)"
