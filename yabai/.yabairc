@@ -59,12 +59,12 @@ yabai -m config mouse_follows_focus on
 # yabai -m config window_border off
 
 # Yabai borders
-yabai -m config window_border on
-yabai -m config window_border_width 2
+# yabai -m config window_border on
+# yabai -m config window_border_width 2
 # yabai -m config active_window_border_color 0xff00b3f4
-yabai -m config active_window_border_color 0xbdff93f9
-yabai -m config normal_window_border_color 0xff555555
-yabai -m config window_border_blur off
+# yabai -m config active_window_border_color 0xbdff93f9
+# yabai -m config normal_window_border_color 0xff555555
+# yabai -m config window_border_blur off
 
 # Settings for window opacity
 # yabai -m config window_opacity on
@@ -72,20 +72,20 @@ yabai -m config window_border_blur off
 # yabai -m config normal_window_opacity 0.9
 
 # https://github.com/koekeishiya/yabai/issues/1156#issuecomment-1072417210
-yabai -m config window_topmost off
+# yabai -m config window_topmost off
 
-yabai -m rule --add app="^System Preferences$" manage=off layer=above
-yabai -m rule --add app="^System Information$" manage=off layer=above
-yabai -m rule --add app="^Accessibility Inspector$" manage=off layer=above
-yabai -m rule --add app="^Activity Monitor$" manage=off layer=above
-yabai -m rule --add app="^Calendar$" manage=off layer=above
-yabai -m rule --add app="^Disk Utility$" manage=off layer=above
-yabai -m rule --add app="^FaceTime$" manage=off layer=above
-yabai -m rule --add app="^Finder$" manage=off layer=above
+yabai -m rule --add app="^System Preferences$" manage=off sub-layer=above
+yabai -m rule --add app="^System Information$" manage=off sub-layer=above
+yabai -m rule --add app="^Accessibility Inspector$" manage=off sub-layer=above
+yabai -m rule --add app="^Activity Monitor$" manage=off sub-layer=above
+yabai -m rule --add app="^Calendar$" manage=off sub-layer=above
+yabai -m rule --add app="^Disk Utility$" manage=off sub-layer=above
+yabai -m rule --add app="^FaceTime$" manage=off sub-layer=above
+yabai -m rule --add app="^Finder$" manage=off sub-layer=above
 yabai -m rule --add app="^Firefox$" title="^Opening " manage=off
 yabai -m rule --add app="^Firefox$" title="^Picture-in-Picture$" manage=off
 yabai -m rule --add app="^Font Book$" manage=off
-yabai -m rule --add app="^Keychain Access$" manage=off layer=above
+yabai -m rule --add app="^Keychain Access$" manage=off sub-layer=above
 yabai -m rule --add app="^Mail$" manage=off
 yabai -m rule --add app="^Photos$" manage=off
 yabai -m rule --add app="^Postgres$" manage=off
@@ -94,47 +94,47 @@ yabai -m rule --add app="^System Preferences$" manage=off
 yabai -m rule --add app="^The Unarchiver$" manage=off
 yabai -m rule --add app="^Security & Privacy$" manage=off
 yabai -m rule --add app="^Network$" manage=off
-yabai -m rule --add app="^Digital Colour Meter$" manage=off layer=above
-yabai -m rule --add app="^Simulator$" manage=off border=off layer=above
-yabai -m rule --add app="^Reactotron$" manage=off border=off sticky=off layer=above
-yabai -m rule --add app="^emulator64-crash-service" manage=off border=off layer=above
-yabai -m rule --add app="^emulator" manage=off border=off layer=above
-yabai -m rule --add app="^QuickTime Player$" manage=off layer=above
-yabai -m rule --add app="^Movie Recording$" manage=off layer=above
-yabai -m rule --add app="^Firefox$" title="^Opening .*$" manage=off layer=above
-yabai -m rule --add app="^Monosnap$" manage=off layer=above
-yabai -m rule --add app="^Slack \| Slack call.*" manage=off layer=above
-yabai -m rule --add app="^Postico$" title="^Find$" manage=off layer=above
-yabai -m rule --add app="^qutebrowser$" layer=above
-yabai -m rule --add app="^Expressions$" manage=off layer=above
-yabai -m rule --add app="^Notes$" manage=off layer=above
-yabai -m rule --add app="^emulator$" manage=off layer=above
-# yabai -m rule --add app="^Slack$" manage=off layer=above
-yabai -m rule --add app="^TeamViewer$" manage=off layer=above
-yabai -m rule --add app="^Godot$" manage=off layer=above
-yabai -m rule --add app="^Bear$" manage=off layer=above
-yabai -m rule --add app="^Panda$" manage=off layer=above
-yabai -m rule --add app="^KeyCastr$" manage=off layer=above
-yabai -m rule --add app="^Firefox$" title="Print" manage=off layer=above
-# yabai -m rule --add app="^Alacritty$" manage=off layer=above border=off
-yabai -m rule --add app="^Notational Velocity$" manage=off layer=above
-yabai -m rule --add app="^Craft$" manage=off layer=above
-yabai -m rule --add app="^Typora$" manage=off layer=above
-yabai -m rule --add app="^Notable$" manage=off layer=above
-yabai -m rule --add app="^Obsidian$" manage=off layer=above
-# yabai -m rule --add app="^Python$" title="^pygame window$" manage=off layer=above
-# yabai -m rule --add app="^Python$" manage=off layer=above
-# yabai -m rule --add app="^Archive Utility$" manage=off layer=above
+yabai -m rule --add app="^Digital Colour Meter$" manage=off sub-layer=above
+yabai -m rule --add app="^Simulator$" manage=off sub-layer=above
+yabai -m rule --add app="^Reactotron$" manage=off sticky=off sub-layer=above
+yabai -m rule --add app="^emulator64-crash-service" manage=off sub-layer=above
+yabai -m rule --add app="^emulator" manage=off sub-layer=above
+yabai -m rule --add app="^QuickTime Player$" manage=off sub-layer=above
+yabai -m rule --add app="^Movie Recording$" manage=off sub-layer=above
+yabai -m rule --add app="^Firefox$" title="^Opening .*$" manage=off sub-layer=above
+yabai -m rule --add app="^Monosnap$" manage=off sub-layer=above
+yabai -m rule --add app="^Slack \| Slack call.*" manage=off sub-layer=above
+yabai -m rule --add app="^Postico$" title="^Find$" manage=off sub-layer=above
+yabai -m rule --add app="^qutebrowser$" sub-layer=above
+yabai -m rule --add app="^Expressions$" manage=off sub-layer=above
+yabai -m rule --add app="^Notes$" manage=off sub-layer=above
+yabai -m rule --add app="^emulator$" manage=off sub-layer=above
+# yabai -m rule --add app="^Slack$" manage=off sub-layer=above
+yabai -m rule --add app="^TeamViewer$" manage=off sub-layer=above
+yabai -m rule --add app="^Godot$" manage=off sub-layer=above
+yabai -m rule --add app="^Bear$" manage=off sub-layer=above
+yabai -m rule --add app="^Panda$" manage=off sub-layer=above
+yabai -m rule --add app="^KeyCastr$" manage=off sub-layer=above
+yabai -m rule --add app="^Firefox$" title="Print" manage=off sub-layer=above
+# yabai -m rule --add app="^Alacritty$" manage=off sub-layer=above border=off
+yabai -m rule --add app="^Notational Velocity$" manage=off sub-layer=above
+yabai -m rule --add app="^Craft$" manage=off sub-layer=above
+yabai -m rule --add app="^Typora$" manage=off sub-layer=above
+yabai -m rule --add app="^Notable$" manage=off sub-layer=above
+yabai -m rule --add app="^Obsidian$" manage=off sub-layer=above
+# yabai -m rule --add app="^Python$" title="^pygame window$" manage=off sub-layer=above
+# yabai -m rule --add app="^Python$" manage=off sub-layer=above
+# yabai -m rule --add app="^Archive Utility$" manage=off sub-layer=above
 # yabai -m rule --add app="^Alacritty$" opacity=0.8 manage=on
 yabai -m rule --add app="^Alacritty$" manage=on
 yabai -m rule --add app="^Steam$" manage=off
 yabai -m rule --add app="^Archive Utility$" manage=off
 yabai -m rule --add app="^Arc$" subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off
 yabai -m rule --add app="^Arc$" title="^Shortcuts$" manage=off
-yabai -m rule --add app="^Arc$" title="^Space [0-9]+" subrole="^AXSystemDialog$" manage=off layer=above
-yabai -m rule --add app="^TablePlus$" title="Window" manage=off layer=above
-yabai -m rule --add app="^TablePlus$" title="tableplus plugins" manage=off layer=above
-yabai -m rule --add app="^TablePlus$" title="^$" manage=off layer=above
+yabai -m rule --add app="^Arc$" title="^Space [0-9]+" subrole="^AXSystemDialog$" manage=off sub-layer=above
+yabai -m rule --add app="^TablePlus$" title="Window" manage=off sub-layer=above
+yabai -m rule --add app="^TablePlus$" title="tableplus plugins" manage=off sub-layer=above
+yabai -m rule --add app="^TablePlus$" title="^$" manage=off sub-layer=above
 
 # Refresh item
 # yabai -m signal --add event=window_focused \
@@ -143,3 +143,5 @@ yabai -m rule --add app="^TablePlus$" title="^$" manage=off layer=above
 # borders active_color=0xff00b3f4 inactive_color=0xff555555 width=5.0 &
 yabai -m signal --add event=window_focused action="sketchybar -m --trigger window_focus &> /dev/null"
 yabai -m signal --add event=window_title_changed action="sketchybar -m --trigger title_change &> /dev/null"
+
+yabai -m config menubar_opacity 0.0
