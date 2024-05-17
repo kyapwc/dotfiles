@@ -163,6 +163,9 @@ function expand-alias() {
 zle -N expand-alias
 bindkey -M main ' ' expand-alias
 
+autoload -U select-word-style
+select-word-style bash
+
 # Tab completion highlight
 autoload -U compinit
 zstyle ':completion:*:*:*:*:*' menu select
