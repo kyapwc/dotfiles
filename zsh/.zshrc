@@ -58,6 +58,8 @@ HISTFILE=~/.zsh_history
 HISTSIZE=5000
 SAVEHIST=5000
 setopt appendhistory
+# Setting up auto cd
+set -o AUTO_CD
 
 # Set word movement
 bindkey "[D" backward-word
