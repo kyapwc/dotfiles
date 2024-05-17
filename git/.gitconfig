@@ -1,9 +1,23 @@
 [core]
   editor = nvim
 	excludesfile = /Users/kenyap/.gitignore_global
+  pager = delta
+
+[delta]
+  navigate = true
+  syntax-theme = Dracula
+  side-by-side = true
+
+[interactive]
+  diffFilter = delta --color-only
+
+[merge]
+  conflictstyle = diff3
+
 [user]
 	name = Ken Yap Wei Chun
 	email = wei.chun@pickupp.io
+
 [alias]
   lg = !git log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
   churn = \
@@ -34,31 +48,41 @@
   cm = commit --verbose
   modified = \
     !nvim $(git ls-files --modified)
+
 [pretty]
   log = %C(240)%h%C(reset) -%C(auto)%d%Creset %s %C(242)(%an %ar)
   detailed = %C(cyan)%h %C(red)%ad %C(blue)[%an]%C(magenta)%d %C(white)%s
   shorter = %C(auto)%D %C(240)--%C(242)%gD%N %ad by %C(white)%cn%C(reset)
+
 [mergetool "nvim"]
   cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
-# set "nvim" as tool for merging
+
 [merge]
+  # set "nvim" as tool for merging
   tool = nvim
+
 # automatically launch merge tool without displaying a prompt
 [mergetool]
   prompt = false
+
 [push]
 	default = current
 	followTags = true
 	autoSetupRemote = true
+
 [help]
 	autocorrect = 1
+
 [protocol]
 	version = 2
+
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path =
+
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
+
 [safe]
 	directory = *
