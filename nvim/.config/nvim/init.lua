@@ -16,7 +16,7 @@ vim.g.maplocalleader = ','
 local fn = vim.fn
 
 local lazypath = fn.stdpath("data") .. "/lazy/lazy.nvim"
-P(lazypath)
+-- P(lazypath) -- disable printing of lazy path
 if not vim.loop.fs_stat(lazypath) then
   fn.system({
     "git",
