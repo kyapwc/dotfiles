@@ -17,6 +17,17 @@ local function keymappings(client, bufNo)
   keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
   keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
   keymap.set('n', '<space>a', vim.lsp.buf.code_action, bufopts)
+  -- keymap.set('n', '<space>a', function()
+  --   require('fzf-lua').lsp_code_actions({
+  --     winopts = {
+  --       relative = 'cursor',
+  --       width = 0.6,
+  --       height = 0.6,
+  --       row = 1,
+  --       preview = { vertical = 'up:70%' },
+  --     },
+  --   })
+  -- end, bufopts)
   keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   keymap.set('n', '<space>ff', vim.lsp.buf.format, bufopts)
   keymap.set('n', '<C-]>', vim.lsp.buf.definition, bufopts)

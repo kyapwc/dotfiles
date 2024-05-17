@@ -122,8 +122,8 @@ return {
         -- level = vim.log.levels.INFO,
         -- timeout = 2000,
         -- max_width = 100,
-        -- max_height = 5,
-        -- stages = 'fade_in_slide_out',
+        max_height = 5,
+        stages = 'static',
         background_colour = '#FFFFFF',
       })
     end,
@@ -447,12 +447,4 @@ return {
   {
     'windwp/nvim-ts-autotag',
   },
-
-  {
-    'aznhe21/actions-preview.nvim',
-    config = function()
-      vim.keymap.set({ 'v', 'n' }, "gf", require('actions-preview').code_actions)
-      require('actions-preview').setup()
-    end,
-  }
 }

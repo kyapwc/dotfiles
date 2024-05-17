@@ -1,6 +1,12 @@
 local actions = require('fzf-lua.actions')
 
 require('fzf-lua').setup({
+  lsp = {
+    code_actions = {
+      previewer = 'codeaction_native',
+      preview_pager = "delta --side-by-side --width=$FZF_PREVIEW_COLUMNS --hunk-header-style='omit' --file-style='omit'",
+    },
+  },
   file_ignore_patterns = { "undodir$", "dist" },
   previewers = {
     builtin = {
