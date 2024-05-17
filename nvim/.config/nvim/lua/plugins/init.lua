@@ -4,7 +4,12 @@ return {
   { 'nvim-treesitter/playground' },
   -- { 'junegunn/seoul256.vim' },
   -- { 'sainnhe/everforest' },
-  { 'folke/tokyonight.nvim' },
+  {
+    'folke/tokyonight.nvim',
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
   -- { 'tiagovla/tokyodark.nvim' },
   -- { 'Rigellute/shades-of-purple.vim' },
   {
@@ -56,7 +61,11 @@ return {
   },
 
   -- Bufferline
-  { 'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons' },
+  {
+    'akinsho/bufferline.nvim',
+    -- version = "*", -- disable version for v0.10.0 nvim
+    dependencies = 'nvim-tree/nvim-web-devicons',
+  },
 
   -- AUTOPAIRING
   {
@@ -93,7 +102,7 @@ return {
   },
 
   -- MISC
-  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl' },
+  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl', opts= {} },
 
   -- Native LSP setup
   {
@@ -109,6 +118,14 @@ return {
     event = "VimEnter",
     config = function()
       vim.notify = require "notify"
+      require('notify').setup({
+        -- level = vim.log.levels.INFO,
+        -- timeout = 2000,
+        -- max_width = 100,
+        -- max_height = 5,
+        -- stages = 'fade_in_slide_out',
+        background_colour = '#FFFFFF',
+      })
     end,
   },
 
@@ -430,4 +447,12 @@ return {
   {
     'windwp/nvim-ts-autotag',
   },
+
+  {
+    'aznhe21/actions-preview.nvim',
+    config = function()
+      vim.keymap.set({ 'v', 'n' }, "gf", require('actions-preview').code_actions)
+      require('actions-preview').setup()
+    end,
+  }
 }

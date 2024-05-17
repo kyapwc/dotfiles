@@ -91,6 +91,9 @@ vim.cmd[[
 -- Tokyonight config
 -- ======================
 require('yap/tokyonight')
+vim.cmd[[
+colorscheme tokyonight
+]]
 vim.g.colors_name = 'tokyonight-moon'
 vim.g.tokyonight_style = 'night' -- storm / night / day / moon
 vim.g.tokyonight_italic_functions = true
@@ -376,6 +379,7 @@ local function switch_case()
 end
 
 vim.keymap.set('n', '<Space>ss', switch_case, {noremap = true, silent = true})
+-- vim.opt.termguicolors = true
 
 require('yap/telescope')
 require('yap/retrail')
