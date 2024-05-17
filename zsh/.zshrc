@@ -99,7 +99,9 @@ rm -rf ~/Library/Caches/com.apple.dt.Xcode/ \
 
 alias ydiffs='f() { ydiff -s -w 0 --wrap };f'
 alias evicclear='f() { kubectl get pod -n $1 | grep Evicted | awk "{print \$1}" | xargs kubectl delete pod -n $1 };f'
-alias ls="eza -la"
+alias ls="gls --color"
+# Export LS_COLORS according to tokyonight_moon theme
+export LS_COLORS="$(vivid generate $HOME/dotfiles/vivid/tokyonight_moon.yml)"
 
 function kill-node-port() {
   if [ -n "$1" ]; then
@@ -162,10 +164,13 @@ zle -N expand-alias
 bindkey -M main ' ' expand-alias
 
 # Tab completion highlight
-zstyle ':completion:*:*:git:*' menu select list-colors ''
+autoload -U compinit
+zstyle ':completion:*:*:*:*:*' menu select
+# zstyle ':completion:*:*:git:*' menu select list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fpath=(~/.zsh $fpath)
-autoload -U compinit && compinit
 zmodload -i zsh/complist
+compinit
 
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh

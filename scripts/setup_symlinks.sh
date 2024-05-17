@@ -16,7 +16,7 @@ cp ./.stow-global-ignore $HOME/.stow-global-ignore
 # Below is just setting up GNU Stow
 # List all directories in dotfiles
 directories=$(find . -maxdepth 1 -type d ! -name . | sed 's/^\.\.\///' | sed '1s/^\.\.//')
-ignored_directories=(".git" "scripts")
+ignored_directories=(".git" "scripts" "vivid")
 
 # Loop through the list of directories
 for dir in $directories; do
