@@ -12,7 +12,7 @@ configs.setup {
   },
   -- incremental_selection = { enable = true },
   textobjects = { enable = true },
-  autotag = { enable = true },
+  -- autotag = { enable = true },
   ensure_installed = {
     -- 'org',
     'javascript',
