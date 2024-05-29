@@ -12,6 +12,9 @@ vim.g.coq_settings = {
     bigger_preview = '<C-b>',
     recommended = false,
   },
+  match = {
+    max_results = 10,
+  },
   clients = {
     snippets = {
       warn = {},
