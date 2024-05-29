@@ -119,7 +119,7 @@ return {
     config = function()
       vim.notify = require "notify"
       require('notify').setup({
-        -- level = vim.log.levels.INFO,
+        level = vim.log.levels.WARN,
         -- timeout = 2000,
         -- max_width = 100,
         max_height = 5,
