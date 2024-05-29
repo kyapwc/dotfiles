@@ -117,9 +117,9 @@ return {
     "rcarriga/nvim-notify",
     event = "VimEnter",
     config = function()
-      vim.notify = require "notify"
+      -- vim.notify = require "notify"
       require('notify').setup({
-        level = vim.log.levels.WARN,
+        -- level = vim.log.levels.WARN,
         -- timeout = 2000,
         -- max_width = 100,
         max_height = 5,
@@ -366,10 +366,10 @@ return {
     build = "make install_jsregexp"
   },
 
-  {
-    'stevearc/dressing.nvim',
-    opts = {},
-  },
+  -- {
+  --   'stevearc/dressing.nvim',
+  --   opts = {},
+  -- },
 
   {
     'stevearc/oil.nvim',
@@ -417,21 +417,21 @@ return {
   --   end,
   -- },
 
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    opts = {
-      -- add any options here
-    },
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
-    }
-  },
+  -- {
+  --   "folke/noice.nvim",
+  --   event = "VeryLazy",
+  --   opts = {
+  --     -- add any options here
+  --   },
+  --   dependencies = {
+  --     -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+  --     "MunifTanjim/nui.nvim",
+  --     -- OPTIONAL:
+  --     --   `nvim-notify` is only needed, if you want to use the notification view.
+  --     --   If not available, we use `mini` as the fallback
+  --     -- "rcarriga/nvim-notify",
+  --   }
+  -- },
 
   {
     "toppair/peek.nvim",
@@ -442,9 +442,5 @@ return {
       vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
       vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
     end,
-  },
-
-  {
-    'windwp/nvim-ts-autotag',
   },
 }
