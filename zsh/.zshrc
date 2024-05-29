@@ -138,6 +138,8 @@ export SDKMAN_DIR="$HOME/.sdkman"
 export SPACESHIP_NODE_SHOW=false
 export SPACESHIP_PROMPT_ASYNC=false
 export NEOVIDE_FRAME=none
+# Disable homebrew auto update
+export HOMEBREW_NO_AUTO_UPDATE=1
 alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
 
 typeset -U path cdpath fpath manpath
