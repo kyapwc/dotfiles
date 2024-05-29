@@ -2,7 +2,6 @@ local M = {}
 local api = vim.api
 local neodev = require('neodev')
 local mason = require('mason')
-local notify = require('notify')
 local navbuddy = require('nvim-navbuddy')
 
 mason.setup({
@@ -253,7 +252,16 @@ local servers = {
   },
   bashls = { on_attach = on_attach },
   svelte = {},
-  -- tailwindcss = {},
+  tailwindcss = {
+    root_dir = function(fname)
+      local root_pattern = require("lspconfig").util.root_pattern(
+        "tailwind.config.cjs",
+        "tailwind.config.js",
+        "postcss.config.js"
+      )
+      return root_pattern(fname)
+    end
+  },
   cssls = {},
   vuels = {},
   rust_analyzer = {},

@@ -1,5 +1,4 @@
 local ls = require('luasnip')
-local notify = require('notify')
 local fmt = require('luasnip.extras.fmt').fmt
 local rep = require('luasnip.extras').rep
 
