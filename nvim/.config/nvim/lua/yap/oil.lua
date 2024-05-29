@@ -17,6 +17,9 @@ oil.setup({
     padding = 10,
     border = 'rounded',
   },
+  view_options = {
+    show_hidden = true,
+  },
 })
 
 -- vim.keymap.set('n', '-', oil.open, { desc = 'Open Parent Directory' })
