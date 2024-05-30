@@ -18,6 +18,8 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="/usr/local/bin/lua:$PATH"
 export PATH="/usr/local/bin/luarocks:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export GPG_TTY=$(tty)
 
 # Re-enable this later
 # export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)

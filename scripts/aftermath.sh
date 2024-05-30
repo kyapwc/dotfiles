@@ -7,9 +7,6 @@ yabai --start-service
 # SKHD
 skhd --start-service
 
-# Cabal
-cabal update
-
 # ASDF (node)
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf install nodejs latest
