@@ -7,6 +7,9 @@ yabai --start-service
 # SKHD
 skhd --start-service
 
+# Cabal
+cabal update
+
 # ASDF (node)
 asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
 asdf install nodejs latest
@@ -38,16 +41,6 @@ launchctl unload ~/Library/LaunchAgents/com.user.janky_borders.plist
 cp $HOME/dotfiles/borders/.config/borders/janky_borders.plist ~/Library/LaunchAgents/com.user.janky_borders.plist
 
 launchctl load ~/Library/LaunchAgents/com.user.janky_borders.plist
-
-# if ps aux | grep -v grep | grep "janky_borders" > /dev/null; then
-#   pkill "janky_borders"
-#   echo "Janky borders killed."
-# else
-#   echo "Janky borders not spawned."
-# fi
-#
-# ./janky_borders >/dev/null 2>/dev/null &
-
 
 # Right now Arc browser can sync my tabs but not the extensions and so on
 # below is just a note on the different extensions i have available to install later on manually
