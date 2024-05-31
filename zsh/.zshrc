@@ -130,7 +130,7 @@ export FZF_DEFAULT_COMMAND='ag -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export EDITOR="/usr/local/bin/nvim"
+export EDITOR="/opt/homebrew/bin/nvim"
 export DISABLE_AUTO_TITLE='true'
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
@@ -143,6 +143,7 @@ export NEOVIDE_FRAME=none
 # Disable homebrew auto update
 export HOMEBREW_NO_AUTO_UPDATE=1
 alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
+alias aerc="aerc --aerc-conf $HOME/.config/aerc/aerc.conf --accounts-conf $HOME/.config/aerc/accounts.conf --binds-conf $HOME/.config/aerc/binds.conf -a Personal"
 
 typeset -U path cdpath fpath manpath
 
