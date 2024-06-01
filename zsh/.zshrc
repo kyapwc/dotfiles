@@ -205,6 +205,9 @@ bindkey '^I' expand-dots-then-expand-or-complete
 bindkey '^M' expand-dots-then-accept-line
 bindkey '^[[Z' reverse-menu-complete
 
+# MOAR config
+export MOAR='--statusbar=bold --no-linenumbers'
+
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
