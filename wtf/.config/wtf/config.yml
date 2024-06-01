@@ -1,0 +1,88 @@
+wtf:
+  colors:
+    border:
+      focusable: darkslateblue
+      focused: orange
+      normal: gray
+  grid:
+    columns: [32, 32, 32, 32, 90]
+    rows: [10, 10, 10, 4, 4, 90]
+  refreshInterval: 1
+  mods:
+    digitalclock:
+      color: purple
+      enabled: true
+      font: bigfont
+      hourFormat: 12
+      position:
+        top: 0
+        left: 0
+        height: 1
+        width: 1
+      title: 'Current Time'
+      type: "digitalclock"
+      refreshInterval: 1s
+    devto:
+      enabled: true
+      numberOfArticles: 20
+      position:
+        top: 1
+        left: 0
+        height: 1
+        width: 4
+    feedreader:
+      enabled: true
+      feeds:
+      - https://news.ycombinator.com/rss
+      feedLimit: 20
+      position:
+        top: 0
+        left: 1
+        width: 3
+        height: 1
+      refreshInterval: 14400
+    ipinfo:
+      colors:
+        name: "lightblue"
+        value: "white"
+      enabled: true
+      position:
+        top: 2
+        left: 0
+        height: 1
+        width: 1
+      refreshInterval: 150
+    power:
+      enabled: true
+      position:
+        top: 2
+        left: 1
+        height: 1
+        width: 1
+      refreshInterval: 15
+      title: "⚡️"
+    uptime:
+      args: [""]
+      cmd: "uptime"
+      enabled: true
+      position:
+        top: 2
+        left: 2
+        height: 1
+        width: 2
+      refreshInterval: 30
+      type: cmdrunner
+    git:
+      commitCount: 5
+      commitFormat: "[forestgreen]%h [grey]%cd [white]%s [grey]%an[white]"
+      dateFormat: "%H:%M %d %b %y"
+      enabled: true
+      position:
+        top: 3
+        left: 0
+        height: 4
+        width: 4
+      refreshInterval: 8s
+      branchInTitle: true
+      repositories:
+        - "/Users/kenyap/dotfiles"
