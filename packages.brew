@@ -9,6 +9,7 @@ cask "arc"
 cask "wezterm"
 cask "font-hack-nerd-font"
 cask "slack"
+cask "neovide"
 
 brew "asdf"
 brew "git"
