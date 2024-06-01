@@ -300,10 +300,17 @@ key_mapper('i', ';;', "&nbsp;")
 vim.cmd[[
   if exists("g:neovide")
     " set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h10
-    set guifont=FiraCode\ Nerd\ Font\ Mono:h10
-    let g:neovide_transparency = 0.9
+    " set guifont=FiraCode\ Nerd\ Font\ Mono:h10
+    set guifont=Monaspace\ Radon:h10
+    let g:neovide_theme = 'tokyonight-moon'
+    let g:neovide_transparency = 0.6
     let g:transparency = 0.9
-    let g:neovide_cursor_animation_length = 0.01
+    let g:neovide_cursor_animation_length = 0.05
+    let g:neovide_window_blurred = v:true
+    let g:neovide_padding_top = 10
+    let g:neovide_padding_bottom = 10
+    let g:neovide_padding_right = 10
+    let g:neovide_padding_left = 10
   endif
 ]]
 
