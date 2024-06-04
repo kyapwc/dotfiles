@@ -1,7 +1,11 @@
 
 
+<div style="font-size: 10px; color:grey;">
 Thanks and Best Regards,
 
 Yap Wei Chun
+<br />
 FullStack Software Engineer
+<br />
 +60108954294
+</div>
