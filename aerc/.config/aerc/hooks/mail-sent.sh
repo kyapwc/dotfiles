@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# AERC_ACCOUNT
+# AERC_FROM_NAME
+# AERC_FROM_ADDRESS
+# AERC_SUBJECT
+# AERC_TO
+# AERC_CC
+
+osascript -e "display notification \"[$AERC_ACCOUNT] SENT EMAIL WITH SUBJECT: $AERC_SUBJECT\" with title \"[$AERC_ACCOUNT] SENT EMAIL TO <$AERC_TO>\""
