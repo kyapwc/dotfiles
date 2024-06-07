@@ -443,4 +443,14 @@ return {
       vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
     end,
   },
+
+  {
+    "HakonHarnes/img-clip.nvim",
+    event = "VeryLazy",
+    opts = {},
+    keys = {
+      -- suggested keymap
+      { "<M-p>", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+    },
+  },
 }
