@@ -447,7 +447,13 @@ return {
   {
     "HakonHarnes/img-clip.nvim",
     event = "VeryLazy",
-    opts = {},
+    opts = {
+      default = {
+        dir_path = function()
+          return vim.fn.expand('$HOME/tmp')
+        end,
+      }
+    },
     keys = {
       -- suggested keymap
       { "<M-p>", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
