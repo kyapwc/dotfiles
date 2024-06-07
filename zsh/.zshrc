@@ -175,6 +175,11 @@ select-word-style bash
 # Tab completion highlight
 autoload -U compinit
 zstyle ':completion:*:*:*:*:*' menu select
+# zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' matcher-list '' \
+  'm:{a-z\-}={A-Z\_}' \
+  'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-}={A-Z\_}' \
+  'r:|?=** m:{a-z\-}={A-Z\_}'
 # zstyle ':completion:*:*:git:*' menu select list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fpath=(~/.zsh $fpath)
