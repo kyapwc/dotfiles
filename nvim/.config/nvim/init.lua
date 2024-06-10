@@ -416,6 +416,7 @@ require('yap/autotag')
 require('yap/navic')
 require('yap/quicknote')
 require('yap/global-note')
+require('yap/whichkey')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({

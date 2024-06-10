@@ -107,9 +107,10 @@ return {
   -- Native LSP setup
   {
     "folke/which-key.nvim",
-    event = "VimEnter",
-    config = function()
-      require('yap.whichkey').setup()
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
     end,
   },
 
