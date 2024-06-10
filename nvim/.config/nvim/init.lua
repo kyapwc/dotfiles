@@ -415,6 +415,7 @@ require('yap/peek')
 require('yap/autotag')
 require('yap/navic')
 require('yap/quicknote')
+require('yap/global-note')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({

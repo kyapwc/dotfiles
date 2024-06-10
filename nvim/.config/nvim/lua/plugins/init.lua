@@ -479,6 +479,8 @@ return {
 
   {
     "RutaTang/quicknote.nvim",
-    dependencies = { "nvim-lua/plenary.nvim"} },
-    config = true,
+    dependencies = { "nvim-lua/plenary.nvim"}
+  },
+
+  { "backdround/global-note.nvim" },
 }
