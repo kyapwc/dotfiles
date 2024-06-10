@@ -459,4 +459,9 @@ return {
       { "<M-p>", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
     },
   },
+
+  {
+    "SmiteshP/nvim-navic",
+    requires = "neovim/nvim-lspconfig"
+  },
 }

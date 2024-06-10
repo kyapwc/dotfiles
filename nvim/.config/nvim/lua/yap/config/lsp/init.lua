@@ -3,6 +3,7 @@ local api = vim.api
 local neodev = require('neodev')
 local mason = require('mason')
 local navbuddy = require('nvim-navbuddy')
+local navic = require('nvim-navic')
 
 mason.setup({
   ui = { border = 'rounded' }
@@ -136,6 +137,10 @@ local function on_attach(client, bufNo)
   client.server_capabilities.document_formatting = true;
 
   navbuddy.attach(client, bufNo)
+
+  if client.server_capabilities.documentSymbolProvider then
+    navic.attach(client, bufNo)
+  end
 
   api.nvim_buf_set_option(bufNo, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 

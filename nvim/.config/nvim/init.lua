@@ -296,6 +296,7 @@ key_mapper('i', ';;', "&nbsp;")
 --   -- command = 'EslintFixAll',
 --   group = vim.api.nvim_create_augroup('MyAutocmdsJavaScripFormatting', {}),
 -- })
+vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 
 vim.cmd[[
   if exists("g:neovide")
@@ -412,6 +413,7 @@ require('yap/oil')
 require('yap/smart-splits')
 require('yap/peek')
 require('yap/autotag')
+require('yap/navic')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({
