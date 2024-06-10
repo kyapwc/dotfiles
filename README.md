@@ -25,7 +25,7 @@ It uses GNU Stow to setup the dotfiles symlinks and various shell scripts.
 ## Pre-requisite
 Generally, as a developer starting on a new MacOS system `git` is definitely required and for that `xcode-select` **MUST** be installed. Therefore, I usually spawn a terminal and run:
 ```sh
-$ xcode-select --install
+xcode-select --install
 ```
 
 After that, just simple commands:
