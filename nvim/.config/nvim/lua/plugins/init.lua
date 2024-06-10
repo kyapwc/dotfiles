@@ -464,4 +464,21 @@ return {
     "SmiteshP/nvim-navic",
     requires = "neovim/nvim-lspconfig"
   },
+
+  {
+    "roobert/hoversplit.nvim",
+    config = function()
+      require("hoversplit").setup({
+        key_bindings = {
+          split = "<leader>hs",
+          vsplit = "<leader>hv",
+        },
+      })
+    end,
+  },
+
+  {
+    "RutaTang/quicknote.nvim",
+    dependencies = { "nvim-lua/plenary.nvim"} },
+    config = true,
 }

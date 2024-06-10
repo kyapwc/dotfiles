@@ -414,6 +414,7 @@ require('yap/smart-splits')
 require('yap/peek')
 require('yap/autotag')
 require('yap/navic')
+require('yap/quicknote')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({

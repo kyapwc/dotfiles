@@ -1,3 +1,5 @@
+local vim = vim
+
 P = function(value)
   print(vim.inspect(value))
   return value
@@ -26,4 +28,8 @@ GenUUID = function()
 
   handle:close()
   return result
+end
+
+SLEEP = function(seconds)
+  os.execute('sleep ' .. tonumber(seconds))
 end
