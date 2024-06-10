@@ -484,4 +484,17 @@ return {
   },
 
   { "backdround/global-note.nvim" },
+
+  {
+    "michaelb/sniprun",
+    branch = "master",
+    build = "sh install.sh",
+    config = function()
+      require('sniprun').setup({
+        display = {
+          "TerminalWithCode",
+        },
+      })
+    end
+  },
 }
