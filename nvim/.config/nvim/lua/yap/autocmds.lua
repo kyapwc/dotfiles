@@ -112,8 +112,7 @@ vim.api.nvim_create_autocmd("UIEnter", {
 -- =======================
 vim.api.nvim_create_autocmd("BufRead", {
   callback = function()
-    -- local isNoNeckPainOn =
-    vim.cmd("lua require('no-neck-pain').enable()")
+    -- vim.cmd("lua require('no-neck-pain').enable()")
     vim.cmd("lua require('quicknote').ToggleNoteSigns()")
   end,
 })
