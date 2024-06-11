@@ -204,7 +204,7 @@ return {
 
   { 'fatih/vim-go' },
 
-  { 'liuchengxu/vista.vim' },
+  -- { 'liuchengxu/vista.vim' },
 
   { 'numToStr/FTerm.nvim' },
 

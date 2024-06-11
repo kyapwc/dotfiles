@@ -64,6 +64,5 @@
   "vim-hexokinase": { "branch": "master", "commit": "62324b43ea858e268fb70665f7d012ae67690f43" },
   "vim-matchit": { "branch": "master", "commit": "f52e59b05a937fe3102d431dd23f8ae4d8752ba3" },
   "vim-ripgrep": { "branch": "master", "commit": "2bb2425387b449a0cd65a54ceb85e123d7a320b8" },
-  "vista.vim": { "branch": "master", "commit": "04fa99afe865b16324af94fd8a8391121117d8f7" },
   "which-key.nvim": { "branch": "main", "commit": "4433e5ec9a507e5097571ed55c02ea9658fb268a" }
 }
