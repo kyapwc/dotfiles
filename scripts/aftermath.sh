@@ -54,3 +54,8 @@ launchctl load ~/Library/LaunchAgents/com.user.janky_borders.plist
 # Lastly, it is just setting up raycast
 open $HOME/dotfiles/raycast/.config/raycast/Raycast\ 2024-05-14\ 20.47.11.rayconfig
 # above will spawn raycast and prompt for password on this config for import
+
+echo "Launching neovim in headless mode and syncing plugins (to ensure first neovim launch is fast)..."
+# Install all nvim plugins so the first launch will be faster
+nvim --headless "+Lazy! sync" +qa
+echo "Aftermath is finished.."
