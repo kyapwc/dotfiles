@@ -4,6 +4,7 @@ quicknote.setup({
   sign = "󱝽",
   filetype = "md",
   git_branch_recognizable = false,
+  mode = 'resident',
 })
 quicknote.ShowNoteSigns()
 
@@ -42,6 +43,24 @@ vim.keymap.set(
   '<LEADER>ns',
   function()
     quicknote.ToggleNoteSigns()
+  end,
+  { noremap = true, silent = true, desc = "Toggle Note Signs" }
+)
+
+vim.keymap.set(
+  'n',
+  '<LEADER>lsc',
+  function()
+    quicknote.ListNotesForCurrentBuffer()
+  end,
+  { noremap = true, silent = true, desc = "Toggle Note Signs" }
+)
+
+vim.keymap.set(
+  'n',
+  '<LEADER>lsg',
+  function()
+    quicknote.ListNotesForGlobal()
   end,
   { noremap = true, silent = true, desc = "Toggle Note Signs" }
 )

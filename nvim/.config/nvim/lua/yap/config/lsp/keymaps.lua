@@ -11,12 +11,13 @@ local function keymappings(client, bufNo)
   keymap.set('n', '<space>l', vim.diagnostic.setloclist, opts)
 
   local bufopts = { noremap = true, silent = true, buffer = bufNo }
+  local renameOpts = vim.tbl_extend('force', bufopts, { desc = 'Rename word under cursor?' } )
   keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
   keymap.set('n', 'gD', vim.lsp.buf.implementation, bufopts)
   keymap.set('n', '<c-m>', vim.lsp.buf.signature_help, bufopts)
-  keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-  keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  keymap.set('n', '<space>a', vim.lsp.buf.code_action, bufopts)
+  keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
+  keymap.set('n', '<leader>rn', vim.lsp.buf.rename, renameOpts)
+  keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts)
   -- keymap.set('n', '<space>a', function()
   --   require('fzf-lua').lsp_code_actions({
   --     winopts = {
