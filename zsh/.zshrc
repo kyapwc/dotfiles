@@ -184,6 +184,7 @@ zstyle ':completion:*' matcher-list '' \
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fpath=(~/.zsh $fpath)
 zmodload -i zsh/complist
+setopt globdots
 compinit
 
 # .. expansion
