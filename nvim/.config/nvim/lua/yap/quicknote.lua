@@ -51,7 +51,9 @@ vim.keymap.set(
   'n',
   '<LEADER>nn',
   function()
+    quicknote.ToggleNoteSigns()
     quicknote.JumpToNextNote()
+    quicknote.ToggleNoteSigns()
   end,
   { noremap = true, silent = true, desc = "Toggle Note Signs" }
 )
