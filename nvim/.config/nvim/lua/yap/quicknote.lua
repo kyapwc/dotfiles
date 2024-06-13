@@ -49,6 +49,15 @@ vim.keymap.set(
 
 vim.keymap.set(
   'n',
+  '<LEADER>nn',
+  function()
+    quicknote.JumpToNextNote()
+  end,
+  { noremap = true, silent = true, desc = "Toggle Note Signs" }
+)
+
+vim.keymap.set(
+  'n',
   '<LEADER>lsc',
   function()
     quicknote.ListNotesForCurrentBuffer()
