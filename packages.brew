@@ -3,6 +3,7 @@ tap "homebrew/cask-fonts"
 tap "homebrew/services"
 tap "int128/kubelogin"
 tap "raszi/tap"
+tap "koekeishiya/formulae"
 
 cask "raycast"
 cask "arc"
