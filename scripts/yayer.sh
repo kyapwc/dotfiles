@@ -48,7 +48,7 @@ packages=(
   "aws-cli-v2"
   "htop"
   "sddm-git"
-  "deno"
+  "deno-git"
 
   # Below is meant for sddm theme, later can setup in aftermath
   "qt6-5compat"
