@@ -2,6 +2,14 @@ local wezterm = require 'wezterm'
 local act = wezterm.action
 local custom_keys = require('custom/keys')
 local session_manager = require('custom/wezterm-session-manager')
+local uname_command = io.popen('uname')
+local OS = nil
+
+if uname_command ~= nil then
+  OS = uname_command:read('*a')
+  OS = OS:gsub("%s+", "")
+  uname_command:close()
+end
 
 local config = {}
 
@@ -50,6 +58,11 @@ config.font = wezterm.font_with_fallback({
   },
 })
 config.font_size = 10.5
+if OS == "Linux" then
+  config.warn_about_missing_glyphs=false
+  config.font_size = 9.5
+end
+
 config.audible_bell = 'Disabled'
 config.adjust_window_size_when_changing_font_size = false
 -- config below only for virtual machines settings
