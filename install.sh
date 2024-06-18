@@ -10,6 +10,7 @@ if [[ $answer =~ ^[Yy]$ ]]; then
     # Time to do linux stuff
     sh ./scripts/yayer.sh
     sh ./scripts/dotfiles.sh
+    sh ./scripts/arch_aftermath.sh
   else
     echo "Start on installation..."
 
