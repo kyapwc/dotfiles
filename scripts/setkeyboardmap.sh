@@ -8,5 +8,6 @@ case $1/$2 in
   post/*)
     echo "Waking up from $2..."
     setxkbmap -layout us -option ctrl:nocaps
+    xset r rate 300 25
     ;;
 esac
