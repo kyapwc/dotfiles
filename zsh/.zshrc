@@ -1,5 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+OS=$(uname)
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/dotfiles/zsh/.oh-my-zsh"
@@ -7,7 +8,12 @@ export ZSH_CUSTOM="$HOME/dotfiles/zsh/.oh-my-zsh/custom"
 
 export GO111MODULE=on
 export GOPATH=$HOME/go
-export GOROOT="/opt/homebrew/opt/go/libexec"
+if [[ $OS == "Linux" ]]; then
+  export GOROOT="/bin/go"
+else
+  export GOROOT="/opt/homebrew/opt/go/libexec"
+fi
+
 export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
 export GOPRIVATE="bitbucket.org/pick-up"
 # export TERM="xterm-256color"
@@ -102,7 +108,8 @@ rm -rf ~/Library/Caches/com.apple.dt.Xcode/ \
 
 alias ydiffs='f() { ydiff -s -w 0 --wrap };f'
 alias evicclear='f() { kubectl get pod -n $1 | grep Evicted | awk "{print \$1}" | xargs kubectl delete pod -n $1 };f'
-alias ls="gls --color"
+# alias ls="gls --color"
+alias ls="ls --color=auto"
 # Export LS_COLORS according to tokyonight_moon theme
 export LS_COLORS="$(vivid generate $HOME/dotfiles/vivid/tokyonight_moon.yml)"
 
@@ -129,9 +136,18 @@ export FZF_COMPLETION_TRIGGER='~~'
 export FZF_DEFAULT_COMMAND='ag -g ""'
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if [[ $OS == "Linux" ]]; then
+  source <(fzf --zsh)
+  . /opt/asdf-vm/asdf.sh
+  export EDITOR="/usr/bin/nvim"
+else
+  echo "MACOS"
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
+  . /opt/homebrew/opt/asdf/libexec/asdf.sh
+  export EDITOR="/opt/homebrew/bin/nvim"
+fi
 
-export EDITOR="/opt/homebrew/bin/nvim"
 export DISABLE_AUTO_TITLE='true'
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
@@ -143,7 +159,6 @@ export SPACESHIP_PROMPT_ASYNC=false
 export NEOVIDE_FRAME=none
 # Disable homebrew auto update
 export HOMEBREW_NO_AUTO_UPDATE=1
-alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
 alias aerc="aerc --aerc-conf $HOME/.config/aerc/aerc.conf --accounts-conf $HOME/.config/aerc/accounts.conf --binds-conf $HOME/.config/aerc/binds.conf -a Personal"
 
 typeset -U path cdpath fpath manpath
@@ -158,8 +173,6 @@ setopt HIST_IGNORE_SPACE
 unsetopt HIST_EXPIRE_DUPS_FIRST
 setopt SHARE_HISTORY
 unsetopt EXTENDED_HISTORY
-
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 # Expand aliases with space key
 function expand-alias() {
@@ -215,8 +228,20 @@ bindkey '^[[Z' reverse-menu-complete
 # MOAR config
 export MOAR='--statusbar=bold --no-linenumbers'
 
+if [[ $OS == "Linux" ]]; then
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /usr/lib/spaceship-prompt/spaceship.zsh
+else
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /opt/homebrew/opt/spaceship/spaceship.zsh
+fi
+
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /opt/homebrew/opt/spaceship/spaceship.zsh
+# source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+# source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source /usr/lib/spaceship-prompt/spaceship.zsh
