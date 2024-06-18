@@ -275,7 +275,20 @@ ins_right {
 ins_right {
   function()
     local result = ''
-    local command = io.popen('pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1')
+    local OS_NAME = vim.loop.os_uname().sysname
+    local command = nil
+
+    if OS_NAME == "Linux" then
+      command = io.popen('cat /sys/class/power_supply/BAT0/capacity')
+      else
+      command = io.popen('pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1')
+    end
+
+    if command == nil then
+      return result
+    end
+
+    -- local command = io.popen('pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1')
     if command ~= nil then
       result = command:read('*a')
       result = "BAT: " .. result:sub(1, -2) .. "%%"
