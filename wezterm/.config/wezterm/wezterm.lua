@@ -58,9 +58,11 @@ config.font = wezterm.font_with_fallback({
   },
 })
 config.font_size = 10.5
+config.window_decorations = 'RESIZE'
 if OS == "Linux" then
   config.warn_about_missing_glyphs=false
   config.font_size = 9.5
+  config.window_decorations = 'NONE'
 end
 
 config.audible_bell = 'Disabled'
@@ -86,8 +88,6 @@ config.adjust_window_size_when_changing_font_size = false
 --   },
 -- })
 
--- Settings
-config.window_decorations = 'RESIZE'
 -- config.hide_tab_bar_if_only_one_tab = true
 config.window_padding = {
   left = 5,
