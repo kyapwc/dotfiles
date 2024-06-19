@@ -55,6 +55,8 @@ packages=(
   "cmake"
   "meson"
   "hyprlock-git"
+  "hypridle-git"
+  "brightnessctl"
 
   # Below is meant for sddm theme, later can setup in aftermath
   "qt6-5compat"
