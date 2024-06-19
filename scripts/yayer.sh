@@ -49,6 +49,12 @@ packages=(
   "htop"
   "sddm-git"
   "ruby"
+  "cpio"
+  "wlroots"
+  "ninja-git"
+  "cmake"
+  "meson"
+  "hyprlock-git"
 
   # Below is meant for sddm theme, later can setup in aftermath
   "qt6-5compat"

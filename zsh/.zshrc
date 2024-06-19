@@ -147,6 +147,7 @@ else
   . /opt/homebrew/opt/asdf/libexec/asdf.sh
   export EDITOR="/opt/homebrew/bin/nvim"
 fi
+export MOZ_ENABLE_WAYLAND=1
 
 export DISABLE_AUTO_TITLE='true'
 
