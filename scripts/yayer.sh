@@ -61,6 +61,8 @@ packages=(
   "otf-font-awesome"
   "hyprpicker-git"
   "network-manager-applet-git"
+  "wl-clipboard"
+  "cliphist"
 
   # Below is meant for sddm theme, later can setup in aftermath
   "qt6-5compat"
