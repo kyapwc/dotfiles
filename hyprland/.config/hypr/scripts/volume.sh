@@ -1,6 +1,7 @@
 #!/bin/bash
 volume_step=5
 max_volume=100
+bar_color="#f993ff"
 
 function get_volume {
   pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '[0-9]{1,3}(?=%)' | head -1
@@ -28,6 +29,16 @@ function show_volume_notif {
   dunstify -i audio-volume-muted-blocking -t 1000 -r 2593 -u normal "$volume_icon $volume%" -h int:value:$volume -h string:hlcolor:$bar_color
 }
 
+function show_mute_volume_notif {
+  volume=$(get_mute)
+  get_volume_icon
+  if [ "$mute" == "yes" ]; then
+    dunstify -i audio-volume-muted-blocking -t 1000 -r 2593 -u normal "Volume OFF"
+  else
+    dunstify -i audio-volume-muted-blocking -t 1000 -r 2593 -u normal "$volume_icon $volume%" -h int:value:$volume -h string:hlcolor:$bar_color
+  fi
+}
+
 case $1 in
   up)
     pactl set-sink-mute @DEFAULT_SINK@ 0
@@ -42,5 +53,9 @@ case $1 in
   down)
     pactl set-sink-volume @DEFAULT_SINK@ -$volume_step%
     show_volume_notif
+  ;;
+  mute)
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+    show_mute_volume_notif
   ;;
 esac

@@ -1,4 +1,5 @@
 #!/bin/bash
+bar_color="#f993ff"
 
 function get_brightness {
   brightnessctl info | grep -oP '\(\K[0-9]+%'
