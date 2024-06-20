@@ -194,7 +194,9 @@
             "car": "",
             "default": ["", "", ""]
         },
-        "on-click": "pavucontrol"
+        "on-click": "pavucontrol",
+        "on-scroll-up": "pactl -- set-sink-volume 0 +5%",
+        "on-scroll-down": "pactl -- set-sink-volume 0 -5%"
     },
     "custom/media": {
         "format": "{icon} {}",
