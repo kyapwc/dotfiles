@@ -56,7 +56,11 @@ packages=(
   "meson"
   "hyprlock-git"
   "hypridle-git"
+  "waybar-git"
   "brightnessctl"
+  "otf-font-awesome"
+  "hyprpicker-git"
+  "network-manager-applet-git"
 
   # Below is meant for sddm theme, later can setup in aftermath
   "qt6-5compat"
