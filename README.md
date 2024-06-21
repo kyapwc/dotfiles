@@ -3,9 +3,6 @@ This repository just contains the dotfiles for my entire macos system.
 
 It uses GNU Stow to setup the dotfiles symlinks and various shell scripts.
 
-> [!WARNING]
-> THE REPO IS CURRENTLY UNSAFE TO USE, PLEASE DO NOT RUN ANY SCRIPT AT THE MOMENT... WILL FIX IN DUE TIME
-
 ## Details
 - Terminal: [WezTerm](https://wezfurlong.org/wezterm/index.html) + zsh
 - WM: [yabai](https://github.com/koekeishiya/yabai) + [skhd](https://github.com/koekeishiya/skhd)
