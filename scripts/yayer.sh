@@ -19,7 +19,6 @@ packages=(
   "fzf"
   "vivid"
   "go"
-  "vivid"
   "asdf-vm"
   "the_silver_searcher"
   "ripgrep"
