@@ -18,6 +18,13 @@ cp ./.stow-global-ignore $HOME/.stow-global-ignore
 directories=$(find . -maxdepth 1 -type d ! -name . | sed 's/^\.\.\///' | sed '1s/^\.\.//')
 ignored_directories=(".git" "scripts" "vivid")
 
+# Remove specific directories depending on OSTYPE
+if [[ $OSTYPE != 'linux-gnu' ]]; then
+  ignored_directories+=("rofi" "hyprland" "khard")
+else
+  ignored_directories+=("sketchybar borders raycast")
+fi
+
 # Loop through the list of directories
 for dir in $directories; do
   # Check if dir is a valid directory
