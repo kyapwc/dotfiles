@@ -12,7 +12,12 @@ It uses GNU Stow to setup the dotfiles symlinks and various shell scripts.
 - Main Editor: [Neovim](https://neovim.io/)
 
 ## Screenshot
+
+### MacOS
 ![Desktop Screenshot in UTM VM](https://raw.githubusercontent.com/kyapwc/dotfiles/master/.assets/setup.png)
+
+### EndeavorOS
+![Desktop Screenshot of Endeavor + Hyprland](https://raw.githubusercontent.com/kyapwc/dotfiles/master/.assets/linux-setup.png)
 
 ## Disclaimer
 
