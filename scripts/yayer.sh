@@ -62,6 +62,8 @@ packages=(
   "network-manager-applet-git"
   "wl-clipboard"
   "cliphist"
+  "swaybg-git"
+  "hyprshot"
 
   # Below is meant for sddm theme, later can setup in aftermath
   "qt6-5compat"
