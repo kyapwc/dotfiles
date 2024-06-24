@@ -35,6 +35,12 @@
         "clock",
         "tray"
     ],
+    "hyprland/window": {
+      "rewrite": {
+        "": "-"
+      },
+      "max-length": 50
+    },
     // Modules configuration
     "hyprland/workspaces": {
         "disable-scroll": true,
