@@ -194,11 +194,16 @@ key_mapper('n', '<leader>q', ':bd<CR>')
 key_mapper('n', '<C-\\>', ':CHADopen<CR>')
 key_mapper('n', '<leader>ms', ':mksession! ~/.config/nvim/vim-session.vim<CR>')
 key_mapper('n', '<leader>l', ':FocusSplitNicely<CR>')
-key_mapper('v', '<C-c>', '"+y')
 key_mapper('n', '<space>dd', ':lua vim.diagnostic.disable()<CR>')
 key_mapper('n', '<space>de', ':lua vim.diagnostic.enable()<CR>')
 key_mapper('n', '<space>ss', ':lua vim.lsp.buf.signature_help()<CR>')
 key_mapper('n', '<space>p', ':lua require("player").toggle_player()<CR>')
+
+if IS_LINUX() then
+  key_mapper('v', '<C-c>', '"*y')
+else
+  key_mapper('v', '<C-c>', '"+y')
+end
 
 -- =======================
 -- Easier scrolling

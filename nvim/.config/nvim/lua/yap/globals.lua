@@ -33,3 +33,14 @@ end
 SLEEP = function(seconds)
   os.execute('sleep ' .. tonumber(seconds))
 end
+
+OS_NAME = function()
+  local OS_NAME = vim.loop.os_uname().sysname
+
+  return OS_NAME
+end
+
+IS_LINUX = function()
+  local osName = OS_NAME()
+  return osName == 'Linux'
+end
