@@ -201,6 +201,7 @@ key_mapper('n', '<space>p', ':lua require("player").toggle_player()<CR>')
 
 if IS_LINUX() then
   key_mapper('v', '<C-c>', '"*y')
+  key_mapper('v', '<C-c>', '"+y')
 else
   key_mapper('v', '<C-c>', '"+y')
 end

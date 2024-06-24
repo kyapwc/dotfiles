@@ -115,6 +115,8 @@ local keys = {
   { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection('Up') },
   { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection('Right') },
 
+  { key = 'v', mods = 'CTRL', action = act.PasteFrom('PrimarySelection') },
+
   smart_splits.split_nav('move', 'h'),
   smart_splits.split_nav('move', 'j'),
   smart_splits.split_nav('move', 'k'),
