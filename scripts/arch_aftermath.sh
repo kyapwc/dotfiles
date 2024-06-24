@@ -10,6 +10,9 @@ asdf plugin add deno https://github.com/asdf-community/asdf-deno.git
 asdf install deno latest
 asdf global deno latest
 
+# Install rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
 echo "Launching neovim in headless mode and syncing plugins (to ensure first neovim launch is fast)..."
 # Install all nvim plugins so the first launch will be faster
 nvim --headless "+Lazy! sync" +qa
