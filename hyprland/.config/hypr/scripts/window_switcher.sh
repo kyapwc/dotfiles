@@ -19,7 +19,7 @@ done
 
 rofi_input=$(printf "%s\n" "${inputs[@]}")
 
-selected=$(echo "$rofi_input" | rofi -dmenu -config ~/dotfiles/rofi/.config/rofi/rofidmenu.rasi)
+selected=$(echo "$rofi_input" | rofi -dmenu -config ~/dotfiles/rofi/.config/rofi/launchers/type-4/style-2.rasi)
 echo $selected
 
 if [ -n "$selected" ]; then

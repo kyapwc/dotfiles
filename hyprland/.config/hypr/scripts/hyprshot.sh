@@ -11,7 +11,7 @@ actions=(
   "Region (Clipboard + Save)"
 )
 
-selected_index=$(printf "%s\n" "${actions[@]}" | rofi -dmenu -config ~/dotfiles/rofi/.config/rofi/rofidmenu.rasi -p "Select Capture Action:")
+selected_index=$(printf "%s\n" "${actions[@]}" | rofi -dmenu -config ~/dotfiles/rofi/.config/rofi/launchers/type-4/style-2.rasi -p "Select Capture Action:")
 
 case $selected_index in
   "Window (Clipboard)")
