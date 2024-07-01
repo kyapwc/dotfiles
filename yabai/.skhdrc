@@ -1,13 +1,20 @@
 # alt-space : open /Applications/iTerm.app
+ctrl+alt-s : yabai -m space --layout stack
+ctrl+alt-b : yabai -m space --layout bsp
 
 # Settings to choose monitor to focus on
 fn-1 : /opt/homebrew/bin/yabai -m display --focus 1
 fn-2 : /opt/homebrew/bin/yabai -m display --focus 2
 
-alt-h : /opt/homebrew/bin/yabai -m window --focus west
-alt-j : /opt/homebrew/bin/yabai -m window --focus south
-alt-k : /opt/homebrew/bin/yabai -m window --focus north
-alt-l : /opt/homebrew/bin/yabai -m window --focus east
+# alt-h : /opt/homebrew/bin/yabai -m window --focus west
+# alt-j : /opt/homebrew/bin/yabai -m window --focus south
+# alt-k : /opt/homebrew/bin/yabai -m window --focus north
+# alt-l : /opt/homebrew/bin/yabai -m window --focus east
+
+alt-h : $HOME/dotfiles/scripts/yabai_navigate.sh left
+alt-j : $HOME/dotfiles/scripts/yabai_navigate.sh down
+alt-k : $HOME/dotfiles/scripts/yabai_navigate.sh up
+alt-l : $HOME/dotfiles/scripts/yabai_navigate.sh right
 
 # Settings to choose space to focus on
 alt-1 : /opt/homebrew/bin/yabai -m space --focus 1
