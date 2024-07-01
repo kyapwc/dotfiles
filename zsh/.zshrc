@@ -141,7 +141,6 @@ if [[ $OS == "Linux" ]]; then
   . /opt/asdf-vm/asdf.sh
   export EDITOR="/usr/bin/nvim"
 else
-  echo "MACOS"
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
   alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
   . /opt/homebrew/opt/asdf/libexec/asdf.sh
