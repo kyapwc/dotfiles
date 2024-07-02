@@ -8,7 +8,6 @@ else
   IS_BSP=false
 fi
 
-
 case $1 in
   up)
     if $IS_BSP; then
