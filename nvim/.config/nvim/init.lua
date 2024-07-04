@@ -183,6 +183,7 @@ key_mapper('n', '<space>gC', ':Git commit<CR>')
 key_mapper('n', '<C-p>', ':lua require("fzf-lua").files()<CR>')
 key_mapper('n', '<C-f>', ':lua require("fzf-lua").live_grep_native()<CR>')
 key_mapper('n', '<C-a>', ':lua require("fzf-lua").lsp_code_actions()<CR>')
+key_mapper('n', '<space>lr', ':lua require("fzf-lua").lsp_references()<CR>')
 
 -- =======================
 -- Misc Mappings
