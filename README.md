@@ -4,20 +4,20 @@ This repository just contains the dotfiles for my entire macos system.
 It uses GNU Stow to setup the dotfiles symlinks and various shell scripts.
 
 ## Details
-- Terminal: [WezTerm](https://wezfurlong.org/wezterm/index.html) + zsh
-- WM: [yabai](https://github.com/koekeishiya/yabai) + [skhd](https://github.com/koekeishiya/skhd)
-- Bar: [Sketchybar](https://github.com/FelixKratz/SketchyBar)
-- Browser: [Arc](https://arc.net/)
-- Borders: [JankyBorders](https://github.com/FelixKratz/JankyBorders)
-- Main Editor: [Neovim](https://neovim.io/)
+- Terminal: [WezTerm][Wezterm Link] + zsh
+- WM: [yabai][Yabai Link] + [skhd][SKHD Link]
+- Bar: [Sketchybar][SketchyBar Link]
+- Browser: [Arc][Browser Link]
+- Borders: [JankyBorders][Borders Link]
+- Main Editor: [Neovim][Editor LInk]
 
 ## Screenshot
 
 ### MacOS
-![Desktop Screenshot in UTM VM](https://raw.githubusercontent.com/kyapwc/dotfiles/master/.assets/setup.png)
+![Desktop Screenshot in UTM VM][MacOS Screenshot]
 
 ### EndeavorOS
-![Desktop Screenshot of Endeavor + Hyprland](https://raw.githubusercontent.com/kyapwc/dotfiles/master/.assets/linux-setup.png)
+![Desktop Screenshot of Endeavor + Hyprland][EndeavorOS Screenshot]
 
 ## Disclaimer
 
@@ -53,3 +53,13 @@ cd dotfiles
 Inspiration was taken from this repo: [Carbone13's Dotfiles](https://github.com/Carbone13/dotfiles) for the install.sh.
 
 Was previously fully using GNU Stow only but found it lacking
+
+[Wezterm Link]: https://wezfurlong.org/wezterm/index.html
+[Yabai Link]: https://github.com/koekeishiya/yabai
+[SKHD Link]: https://github.com/koekeishiya/skhd
+[SketchyBar Link]: https://github.com/FelixKratz/SketchyBar
+[Browser Link]: https://arc.net/
+[Borders Link]: https://github.com/FelixKratz/JankyBorders
+[Editor Link]: https://neovim.io/
+[MacOS Screenshot]: https://raw.githubusercontent.com/kyapwc/dotfiles/master/.assets/setup.png
+[EndeavorOS Screenshot]: https://raw.githubusercontent.com/kyapwc/dotfiles/master/.assets/linux-setup.png
