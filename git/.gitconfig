@@ -1,6 +1,6 @@
 [core]
   editor = nvim
-	excludesfile = /Users/kenyap/.gitignore_global
+	excludesfile = ~/.gitignore_global
   pager = delta
 
 [delta]
@@ -16,7 +16,7 @@
 
 [user]
 	name = Ken Yap Wei Chun
-	email = wei.chun@pickupp.io
+	email = wei.c@rocketbots.io
 
 [alias]
   lg = !git log --graph --simplify-by-decoration --pretty=shorter --all --notes --date-order --relative-date
