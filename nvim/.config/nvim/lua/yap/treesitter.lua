@@ -36,7 +36,7 @@ configs.setup {
     'http',
     'json',
     'markdown',
-    'markdiown_inline',
+    'markdown_inline',
     'vimdoc',
     'luadoc',
     'lua',
