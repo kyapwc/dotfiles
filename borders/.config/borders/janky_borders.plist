@@ -5,7 +5,11 @@
    <key>Label</key>
    <string>com.user.loginscript</string>
    <key>ProgramArguments</key>
-   <array><string>/Users/kenyap/dotfiles/janky_borders</string></array>
+   <array>
+     <string>/bin/zsh</string>
+     <string>-c</string>
+     <string>echo "$HOME/dotfiles/janky_borders"</string>
+   </array>
    <key>RunAtLoad</key>
    <true/>
 </dict>
