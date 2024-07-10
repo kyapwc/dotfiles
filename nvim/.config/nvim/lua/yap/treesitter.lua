@@ -35,6 +35,11 @@ configs.setup {
     'embedded_template',
     'http',
     'json',
+    'markdown',
+    'markdiown_inline',
+    'vimdoc',
+    'luadoc',
+    'lua',
   },
   playground = {
     enable = true,
