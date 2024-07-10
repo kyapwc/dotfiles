@@ -137,7 +137,7 @@ wo.scrolloff = 8
 -- =======================
 -- Window options
 -- =======================
--- opt.cursorline = true
+opt.cursorline = true
 opt.guicursor = "n-v-c-i:block"
 opt.termguicolors = true
 opt.mouse = ""
@@ -322,7 +322,6 @@ require('yap/navic')
 require('yap/quicknote')
 require('yap/global-note')
 require('yap/whichkey')
-require('yap/no-neck-pain')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({

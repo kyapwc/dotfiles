@@ -469,18 +469,6 @@ return {
   },
 
   {
-    "roobert/hoversplit.nvim",
-    config = function()
-      require("hoversplit").setup({
-        key_bindings = {
-          split = "<leader>hs",
-          vsplit = "<leader>hv",
-        },
-      })
-    end,
-  },
-
-  {
     "RutaTang/quicknote.nvim",
     dependencies = { "nvim-lua/plenary.nvim"}
   },
@@ -499,9 +487,4 @@ return {
       })
     end
   },
-
-  {
-    "shortcuts/no-neck-pain.nvim",
-    version = "*"
-  }
 }
