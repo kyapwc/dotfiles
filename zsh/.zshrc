@@ -109,7 +109,7 @@ rm -rf ~/Library/Caches/com.apple.dt.Xcode/ \
 alias ydiffs='f() { ydiff -s -w 0 --wrap };f'
 alias evicclear='f() { kubectl get pod -n $1 | grep Evicted | awk "{print \$1}" | xargs kubectl delete pod -n $1 };f'
 # alias ls="gls --color"
-alias ls="ls --color=auto"
+alias ls="eza"
 # Export LS_COLORS according to tokyonight_moon theme
 export LS_COLORS="$(vivid generate $HOME/dotfiles/vivid/tokyonight_moon.yml)"
 
