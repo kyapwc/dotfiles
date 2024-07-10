@@ -115,3 +115,9 @@ vim.api.nvim_create_autocmd("BufRead", {
     vim.cmd("lua require('quicknote').ToggleNoteSigns()")
   end,
 })
+
+vim.api.nvim_create_autocmd("BufRead", {
+  callback = function()
+    vim.cmd("lua require('illuminate').resume()")
+  end,
+})
