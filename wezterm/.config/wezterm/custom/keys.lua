@@ -1,5 +1,6 @@
 local wezterm = require('wezterm')
 local smart_splits = require('custom/smart-splits')
+local utils = require('custom/utils')
 
 local act = wezterm.action
 
@@ -115,8 +116,6 @@ local keys = {
   { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection('Up') },
   { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection('Right') },
 
-  { key = 'v', mods = 'CTRL', action = act.PasteFrom('PrimarySelection') },
-
   smart_splits.split_nav('move', 'h'),
   smart_splits.split_nav('move', 'j'),
   smart_splits.split_nav('move', 'k'),
@@ -190,6 +189,8 @@ local keys = {
   { key = 'r', mods = "LEADER|SHIFT", action = wezterm.action{ EmitEvent = 'restore_session' } },
 }
 
-wezterm.log_info(wezterm.target_triple)
+if utils.OS == 'Linux' then
+  table.insert(keys, { key = 'v', mods = 'CTRL', action = act.PasteFrom('PrimarySelection') })
+end
 
 return keys
