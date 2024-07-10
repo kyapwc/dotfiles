@@ -200,26 +200,26 @@ setopt globdots
 compinit
 
 # .. expansion
-function expand-dots() {
-  local MATCH
-  if [[ $LBUFFER =~ '(^| )\.\.\.+' ]]; then
-    LBUFFER=$LBUFFER:fs%\.\.\.%../..%
+function replace_multiple_dots() {
+  local dots=$LBUFFER[-3,-1]
+  if [[ $dots =~ "^[ //\"']?\.\.$" ]]; then
+    LBUFFER=$LBUFFER[1,-3]'../.'
   fi
+  zle self-insert
 }
 
 function expand-dots-then-expand-or-complete() {
-  zle expand-dots
   zle expand-or-complete
 }
 
 function expand-dots-then-accept-line() {
-  zle expand-dots
   zle accept-line
 }
 
-zle -N expand-dots
+zle -N replace_multiple_dots
 zle -N expand-dots-then-expand-or-complete
 zle -N expand-dots-then-accept-line
+bindkey '.' replace_multiple_dots
 bindkey '^I' expand-dots-then-expand-or-complete
 bindkey '^M' expand-dots-then-accept-line
 bindkey '^[[Z' reverse-menu-complete
