@@ -317,6 +317,7 @@ require('yap/navic')
 require('yap/quicknote')
 require('yap/global-note')
 require('yap/whichkey')
+require('yap/goto-preview')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({

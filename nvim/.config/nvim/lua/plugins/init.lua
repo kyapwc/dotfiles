@@ -276,12 +276,8 @@ return {
 
   {
     'rmagatti/goto-preview',
-    config = function()
-      require('goto-preview').setup({
-        width = 120,
-        height = 50,
-      })
-    end
+    event = "BufEnter",
+    config = true,
   },
 
   {
