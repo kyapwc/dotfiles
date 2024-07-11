@@ -192,7 +192,6 @@ key_mapper('n', '<leader>z', ':qa<CR>')
 key_mapper('n', '<C-c>', ':bd<CR>')
 key_mapper('n', '<leader>w', ':w<CR>')
 key_mapper('n', '<leader>q', ':bd<CR>')
-key_mapper('n', '<C-\\>', ':CHADopen<CR>')
 key_mapper('n', '<leader>ms', ':mksession! ~/.config/nvim/vim-session.vim<CR>')
 key_mapper('n', '<leader>l', ':FocusSplitNicely<CR>')
 key_mapper('n', '<space>dd', ':lua vim.diagnostic.disable()<CR>')
@@ -241,6 +240,11 @@ key_mapper('n', '<leader>0', ':lua require("bufferline").go_to_buffer(10, true)<
 key_mapper('n', '<leader>gt', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>")
 key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<CR>")
 
+
+-- =======================
+-- Close all buffer except current
+-- =======================
+key_mapper('n', '<leader>bx', '::%bd|e#<CR>')
 
 -- =======================
 -- Extras
@@ -318,6 +322,7 @@ require('yap/quicknote')
 require('yap/global-note')
 require('yap/whichkey')
 require('yap/goto-preview')
+require('yap/aerial')
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({

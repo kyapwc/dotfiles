@@ -12,6 +12,7 @@ local function keymappings(client, bufNo)
 
   local bufopts = { noremap = true, silent = true, buffer = bufNo }
   local renameOpts = vim.tbl_extend('force', bufopts, { desc = 'Rename word under cursor?' } )
+  local usageOpts = vim.tbl_extend('force', bufopts, { desc = 'Find usages?' } )
   keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
   keymap.set('n', 'gD', vim.lsp.buf.implementation, bufopts)
   keymap.set('n', '<c-m>', vim.lsp.buf.signature_help, bufopts)
@@ -29,7 +30,7 @@ local function keymappings(client, bufNo)
   --     },
   --   })
   -- end, bufopts)
-  keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  keymap.set('n', '<space>rf', vim.lsp.buf.references, usageOpts)
   keymap.set('n', '<space>ff', vim.lsp.buf.format, bufopts)
   keymap.set('n', '<C-]>', vim.lsp.buf.definition, bufopts)
   -- keymap.set('n', '<space>h', require('yap/config/lsp/hover').hover, bufopts)
