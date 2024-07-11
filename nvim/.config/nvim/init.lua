@@ -145,12 +145,12 @@ opt.mouse = ""
 -- =======================
 -- Custom Functions
 -- =======================
-local key_mapper = function(mode, key, result)
+local key_mapper = function(mode, key, result, desc)
   vim.api.nvim_set_keymap(
     mode,
     key,
     result,
-    { noremap = true, silent = true }
+    { noremap = true, silent = true, desc = desc }
   )
 end
 
@@ -162,55 +162,53 @@ end
 -- =======================
 -- Unmap arrow keys
 -- =======================
-key_mapper('', '<up>', '<nop>')
-key_mapper('', '<down>', '<nop>')
-key_mapper('', '<left>', '<nop>')
-key_mapper('', '<right>', '<nop>')
+key_mapper('', '<up>', '<nop>', 'Disable up arrow key')
+key_mapper('', '<down>', '<nop>', 'Disable down arrow key')
+key_mapper('', '<left>', '<nop>', 'Disable left arrow key')
+key_mapper('', '<right>', '<nop>', 'Disable right arrow key')
 
 -- =======================
 -- Git-related mappings
 -- =======================
-key_mapper('n', '<space>gs', ':Git<CR>')
-key_mapper('n', '<space>gp', ':Git push<CR>')
-key_mapper('n', '<space>gb', ':Git blame<CR>')
-key_mapper('n', '<space>gC', ':Git commit<CR>')
+key_mapper('n', '<space>gs', ':Git<CR>', 'Git Status')
+key_mapper('n', '<space>gp', ':Git push<CR>', 'Git push')
+key_mapper('n', '<space>gb', ':Git blame<CR>', 'Git blame')
+key_mapper('n', '<space>gC', ':Git commit<CR>', 'Git commit')
 
 -- =======================
 -- FZF / Treesitter mappings
 -- =======================
 -- key_mapper('n', '<C-p>', ':lua require("telescope.builtin").find_files()<CR>')
 -- key_mapper('n', '<leader>fs', ':lua require("telescope.builtin").live_grep()<CR>')
-key_mapper('n', '<C-p>', ':lua require("fzf-lua").files()<CR>')
-key_mapper('n', '<C-f>', ':lua require("fzf-lua").live_grep_native()<CR>')
-key_mapper('n', '<C-a>', ':lua require("fzf-lua").lsp_code_actions()<CR>')
-key_mapper('n', '<space>lr', ':lua require("fzf-lua").lsp_references()<CR>')
+key_mapper('n', '<C-p>', ':lua require("fzf-lua").files()<CR>', 'FZF lua files')
+key_mapper('n', '<C-f>', ':lua require("fzf-lua").live_grep_native()<CR>', 'FZF Live Grep')
+key_mapper('n', '<C-a>', ':lua require("fzf-lua").lsp_code_actions()<CR>', 'FZF LSP Code Actions')
+key_mapper('n', '<space>lr', ':lua require("fzf-lua").lsp_references()<CR>', 'LSP Code references')
 
 -- =======================
 -- Misc Mappings
 -- =======================
-key_mapper('n', '<leader>z', ':qa<CR>')
-key_mapper('n', '<C-c>', ':bd<CR>')
-key_mapper('n', '<leader>w', ':w<CR>')
-key_mapper('n', '<leader>q', ':bd<CR>')
+key_mapper('n', '<leader>z', ':qa<CR>', 'Quit all')
+key_mapper('n', '<C-c>', ':bd<CR>', 'Close buffer')
+key_mapper('n', '<leader>w', ':w<CR>', 'Save file')
+key_mapper('n', '<leader>q', ':bd<CR>', 'Close window')
 key_mapper('n', '<leader>ms', ':mksession! ~/.config/nvim/vim-session.vim<CR>')
-key_mapper('n', '<leader>l', ':FocusSplitNicely<CR>')
-key_mapper('n', '<space>dd', ':lua vim.diagnostic.disable()<CR>')
-key_mapper('n', '<space>de', ':lua vim.diagnostic.enable()<CR>')
-key_mapper('n', '<space>ss', ':lua vim.lsp.buf.signature_help()<CR>')
-key_mapper('n', '<space>p', ':lua require("player").toggle_player()<CR>')
+key_mapper('n', '<leader>dd', ':lua vim.diagnostic.disable()<CR>', 'Disable diagnostics')
+key_mapper('n', '<leader>de', ':lua vim.diagnostic.enable()<CR>', 'enable diagnostics')
+key_mapper('n', '<space>rl', ':LspRestart<CR>', 'Restart LSP')
 
 if IS_LINUX() then
-  key_mapper('v', '<C-c>', '"*y')
-  key_mapper('v', '<C-c>', '"+y')
+  key_mapper('v', '<C-c>', '"*y', 'Linux copy to clipboard')
+  key_mapper('v', '<C-c>', '"+y', 'Linux copy to clipboard')
 else
-  key_mapper('v', '<C-c>', '"+y')
+  key_mapper('v', '<C-c>', '"+y', 'Macos copy to clipboard')
 end
 
 -- =======================
 -- Easier scrolling
 -- =======================
-key_mapper('', '<leader>j', '20j')
-key_mapper('', '<leader>k', '20k')
+key_mapper('', '<leader>j', '20j', 'Lazy-man scrolling')
+key_mapper('', '<leader>k', '20k', 'Lazy-man scrolling')
 
 -- =======================
 -- Vim -> TMUX Navigation
@@ -223,28 +221,28 @@ key_mapper('', '<leader>k', '20k')
 -- =======================
 -- Bufferline
 -- =======================
-key_mapper('n', '<leader>1', ':lua require("bufferline").go_to_buffer(1, true)<CR>')
-key_mapper('n', '<leader>2', ':lua require("bufferline").go_to_buffer(2, true)<CR>')
-key_mapper('n', '<leader>3', ':lua require("bufferline").go_to_buffer(3, true)<CR>')
-key_mapper('n', '<leader>4', ':lua require("bufferline").go_to_buffer(4, true)<CR>')
-key_mapper('n', '<leader>5', ':lua require("bufferline").go_to_buffer(5, true)<CR>')
-key_mapper('n', '<leader>6', ':lua require("bufferline").go_to_buffer(6, true)<CR>')
-key_mapper('n', '<leader>7', ':lua require("bufferline").go_to_buffer(7, true)<CR>')
-key_mapper('n', '<leader>8', ':lua require("bufferline").go_to_buffer(8, true)<CR>')
-key_mapper('n', '<leader>9', ':lua require("bufferline").go_to_buffer(9, true)<CR>')
-key_mapper('n', '<leader>0', ':lua require("bufferline").go_to_buffer(10, true)<CR>')
+key_mapper('n', '<leader>1', ':lua require("bufferline").go_to_buffer(1, true)<CR>', 'Go to Buffer 1')
+key_mapper('n', '<leader>2', ':lua require("bufferline").go_to_buffer(2, true)<CR>', 'Go to Buffer 2')
+key_mapper('n', '<leader>3', ':lua require("bufferline").go_to_buffer(3, true)<CR>', 'Go to Buffer 3')
+key_mapper('n', '<leader>4', ':lua require("bufferline").go_to_buffer(4, true)<CR>', 'Go to Buffer 4')
+key_mapper('n', '<leader>5', ':lua require("bufferline").go_to_buffer(5, true)<CR>', 'Go to Buffer 5')
+key_mapper('n', '<leader>6', ':lua require("bufferline").go_to_buffer(6, true)<CR>', 'Go to Buffer 6')
+key_mapper('n', '<leader>7', ':lua require("bufferline").go_to_buffer(7, true)<CR>', 'Go to Buffer 7')
+key_mapper('n', '<leader>8', ':lua require("bufferline").go_to_buffer(8, true)<CR>', 'Go to Buffer 8')
+key_mapper('n', '<leader>9', ':lua require("bufferline").go_to_buffer(9, true)<CR>', 'Go to Buffer 9')
+key_mapper('n', '<leader>0', ':lua require("bufferline").go_to_buffer(10, true)<CR>', 'Go to Buffer 10')
 
 -- =======================
 -- Goto Preview
 -- =======================
-key_mapper('n', '<leader>gt', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>")
-key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<CR>")
+key_mapper('n', '<leader>gt', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", 'Preview function definition')
+key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<CR>", 'Close all preview windows')
 
 
 -- =======================
 -- Close all buffer except current
 -- =======================
-key_mapper('n', '<leader>bx', '::%bd|e#<CR>')
+key_mapper('n', '<leader>bx', '::%bd|e#<CR>', 'Close all buffer except for current')
 
 -- =======================
 -- Extras
