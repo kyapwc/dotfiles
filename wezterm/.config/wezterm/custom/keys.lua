@@ -107,7 +107,6 @@ local keys = {
   { key = ']', mods = 'LEADER', action = act.SendString(']') },
 
   -- Pane configs
-  { key = '\\', mods = 'LEADER', action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
   { key = '|', mods = 'LEADER', action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
   { key = '-', mods = 'LEADER', action = act.SplitVertical({ domain = 'CurrentPaneDomain' }) },
   { key = 'x', mods = 'LEADER', action = act.CloseCurrentPane({ confirm = true }) },
@@ -191,6 +190,7 @@ local keys = {
 
 if utils.OS == 'Linux' then
   table.insert(keys, { key = 'v', mods = 'CTRL', action = act.PasteFrom('PrimarySelection') })
+  table.insert(keys, { key = '\\', mods = 'LEADER', action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) })
 end
 
 return keys
