@@ -236,11 +236,6 @@ key_mapper('n', '<leader>9', ':lua require("bufferline").go_to_buffer(9, true)<C
 key_mapper('n', '<leader>0', ':lua require("bufferline").go_to_buffer(10, true)<CR>')
 
 -- =======================
--- Trouble
--- =======================
-key_mapper('n', '<leader>tt', '<cmd>TroubleToggle<cr>')
-
--- =======================
 -- Goto Preview
 -- =======================
 key_mapper('n', '<leader>gt', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>")

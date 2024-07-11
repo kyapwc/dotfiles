@@ -238,14 +238,40 @@ return {
 
   {
     'folke/trouble.nvim',
-    config = function()
-      require('trouble').setup({
-        position = 'bottom',
-        height = 20,
-        icons = true,
-        use_diagnostic_signs = true,
-      })
-    end,
+    opts = {},
+    cmd = "Trouble",
+    keys = {
+      {
+        "<leader>tt",
+        "<cmd>Trouble diagnostics toggle<cr>",
+        desc = "Diagnostics (Trouble)",
+      },
+      {
+        "<leader>tT",
+        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+        desc = "Buffer Diagnostics (Trouble)",
+      },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false<cr>",
+        desc = "Symbols (Trouble)",
+      },
+      {
+        "<leader>cl",
+        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+        desc = "LSP Definitions / references / ... (Trouble)",
+      },
+      {
+        "<leader>xL",
+        "<cmd>Trouble loclist toggle<cr>",
+        desc = "Location List (Trouble)",
+      },
+      {
+        "<leader>xQ",
+        "<cmd>Trouble qflist toggle<cr>",
+        desc = "Quickfix List (Trouble)",
+      },
+    },
   },
 
   {
@@ -292,10 +318,11 @@ return {
     config = function()
       require("projections").setup({
         workspaces = {
-          { "~/go/src/bitbucket.org/pick-up/pickupp/packages", {} },
-          { "~/go/src/bitbucket.org/pick-up/pickupp/apps", {} },
-          { "~/go/src/bitbucket.org/pick-up/pickupp/shared", {} },
+          -- { "~/go/src/bitbucket.org/pick-up/pickupp/packages", {} },
+          -- { "~/go/src/bitbucket.org/pick-up/pickupp/apps", {} },
+          -- { "~/go/src/bitbucket.org/pick-up/pickupp/shared", {} },
           -- { "~/go/src/bitbucket.org/pick-up/pickupp", { ".git" } },
+          { "~/respond.io/respond-io/service", {} },
           patterns = { ".git" },
         }
       })
