@@ -121,3 +121,21 @@ vim.api.nvim_create_autocmd("BufRead", {
     vim.cmd("lua require('illuminate').resume()")
   end,
 })
+
+-- =======================
+-- Prettier for ts and js files
+-- =======================
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = {'*.js', '*.ts'},
+  callback = function()
+    local filepath = vim.fn.expand("%:p")
+    -- Temporarily disable event processing to avoid recursive calls
+    vim.cmd("let &eventignore = 'BufWritePre'")
+    -- Run prettier
+    vim.fn.system("prettier --write " .. vim.fn.shellescape(filepath))
+    -- Reload the buffer to reflect changes
+    vim.cmd("edit!")
+    -- Re-enable event processing
+    vim.cmd("let &eventignore = ''")
+  end,
+})
