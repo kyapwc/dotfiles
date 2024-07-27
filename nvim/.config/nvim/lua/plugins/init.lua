@@ -528,4 +528,48 @@ return {
   },
 
   { "github/copilot.vim" },
+  {
+    "mhartington/formatter.nvim",
+    config = function()
+      require('formatter').setup({
+        logging = true,
+        filetype = {
+          javascript = {
+            function()
+              return {
+                exe = "prettier",
+                args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+                stdin = true
+              }
+            end
+          },
+          typescript = {
+            function()
+              return {
+                exe = "prettier",
+                args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
+                stdin = true
+              }
+            end
+          },
+        }
+      })
+    end,
+  },
+
+
+  {
+    "ldelossa/gh.nvim",
+    dependencies = {
+      {
+        "ldelossa/litee.nvim",
+        config = function()
+          require("litee.lib").setup()
+        end,
+      },
+    },
+    config = function()
+      require("litee.gh").setup()
+    end,
+  }
 }
