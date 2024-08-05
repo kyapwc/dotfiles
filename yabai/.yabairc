@@ -137,6 +137,7 @@ yabai -m rule --add app="^Arc$" title="^Space [0-9]+" subrole="^AXSystemDialog$"
 yabai -m rule --add app="^TablePlus$" title="Window" manage=off sub-layer=above
 yabai -m rule --add app="^TablePlus$" title="tableplus plugins" manage=off sub-layer=above
 yabai -m rule --add app="^TablePlus$" title="^$" manage=off sub-layer=above
+yabai -m rule --add app="^Arc$" title="^$" subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off sub-layer=above
 
 yabai -m rule --apply
 
