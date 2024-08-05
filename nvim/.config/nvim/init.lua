@@ -255,6 +255,8 @@ key_mapper('i', ';;', "&nbsp;")
 -- })
 vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 
+vim.cmd('FzfLua register_ui_select')
+
 vim.cmd[[
   if exists("g:neovide")
     " set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h10
