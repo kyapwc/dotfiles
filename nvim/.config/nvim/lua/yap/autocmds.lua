@@ -142,6 +142,6 @@ vim.api.nvim_create_autocmd("BufRead", {
 vim.cmd[[
 augroup FormatAutogroup
   autocmd!
-  autocmd BufWritePost *.js,*.ts FormatWrite
+  autocmd BufWritePost *.js,*.ts if expand('%:p:h') !~# '~/respond.io/respond-io' | FormatWrite | endif
 augroup END
 ]]
