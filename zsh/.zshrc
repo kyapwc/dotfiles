@@ -216,6 +216,10 @@ function expand-dots-then-accept-line() {
   zle accept-line
 }
 
+function find_and_upgrade_package() {
+	find ./* -name "package.json" | xargs grep -l "\"$1\": \"*\"" | xargs -I {} bash -c "npm --prefix \$(dirname {}) install --no-audit --save-exact $1@$2 &" | >/dev/null
+}
+
 zle -N replace_multiple_dots
 zle -N expand-dots-then-expand-or-complete
 zle -N expand-dots-then-accept-line
@@ -224,6 +228,15 @@ bindkey '^I' expand-dots-then-expand-or-complete
 bindkey '^M' expand-dots-then-accept-line
 bindkey '^[[Z' reverse-menu-complete
 
+zstyle ':autocomplete:*' widget-style menu-select
+zstyle ':autocomplete:*' list-lines 7
+zstyle ':completion:*' menu select=long
+bindkey              '^I'         menu-complete
+bindkey "$terminfo[kcbt]" reverse-menu-complete
+bindkey              '^I' menu-select
+bindkey "$terminfo[kcbt]" menu-select
+bindkey -M menuselect '\r' accept-line
+
 # MOAR config
 export MOAR='--statusbar=bold --no-linenumbers'
 
@@ -231,11 +244,13 @@ if [[ $OS == "Linux" ]]; then
   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
   source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
   source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
   source /usr/lib/spaceship-prompt/spaceship.zsh
 else
   source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
   source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
   source /opt/homebrew/opt/spaceship/spaceship.zsh
 fi
 
