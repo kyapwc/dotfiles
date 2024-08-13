@@ -229,14 +229,18 @@ bindkey '^M' expand-dots-then-accept-line
 bindkey '^[[Z' reverse-menu-complete
 
 zstyle ':autocomplete:*' widget-style menu-select
-zstyle ':autocomplete:*' list-lines 7
-zstyle ':completion:*' menu select=long
 bindkey              '^I'         menu-complete
 bindkey "$terminfo[kcbt]" reverse-menu-complete
 bindkey              '^I' menu-select
 bindkey "$terminfo[kcbt]" menu-select
 bindkey -M menuselect '\r' accept-line
-
+zstyle -e ':autocomplete:*:*' list-lines 'reply=( $(( LINES / 3 )) )'
+# Override for recent path search only
+zstyle ':autocomplete:recent-paths:*' list-lines 10
+# Override for history search only
+zstyle ':autocomplete:history-incremental-search-backward:*' list-lines 8
+# Override for history menu only
+zstyle ':autocomplete:history-search-backward:*' list-lines 2000
 # MOAR config
 export MOAR='--statusbar=bold --no-linenumbers'
 
@@ -253,6 +257,14 @@ else
   source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
   source /opt/homebrew/opt/spaceship/spaceship.zsh
 fi
+
+
+bindkey '\e[A' history-beginning-search-backward
+bindkey '\eOA' history-beginning-search-backward
+bindkey '\e[B' history-beginning-search-forward
+bindkey '\eOB' history-beginning-search-forward
+zle -A {.,}history-incremental-search-forward
+zle -A {.,}history-incremental-search-backward
 
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
 # source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
