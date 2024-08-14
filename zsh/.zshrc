@@ -240,7 +240,10 @@ else
   source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
   source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   source /opt/homebrew/opt/spaceship/spaceship.zsh
+  fpath=(/opt/homebrew/share/zsh-completions $fpath)
 fi
+
+source $HOME/dotfiles/zsh/completion.zsh
 
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
 # source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
