@@ -230,17 +230,15 @@ bindkey '^I' expand-dots-then-expand-or-complete
 bindkey '^M' expand-dots-then-accept-line
 bindkey '^[[Z' reverse-menu-complete
 
-source ~/zsh-defer/zsh-defer.plugin.zsh
-
 if [[ $OS == "Linux" ]]; then
-  zsh-defer source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-  zsh-defer source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-  zsh-defer source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   source /usr/lib/spaceship-prompt/spaceship.zsh
 else
-  zsh-defer source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-  zsh-defer source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-  zsh-defer source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /opt/homebrew/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+  source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   source /opt/homebrew/opt/spaceship/spaceship.zsh
 fi
 
