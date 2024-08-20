@@ -12,30 +12,30 @@ return {
   },
   -- { 'tiagovla/tokyodark.nvim' },
   -- { 'Rigellute/shades-of-purple.vim' },
-  {
-    'catppuccin/nvim',
-    as = 'catppuccin',
-    config = function()
-      require('catppuccin').setup({
-        flavour = 'macchiato',
-        background = {
-          light = 'macchiato',
-          dark = 'macchiato',
-        },
-        term_colors = true,
-        show_end_of_buffer = false,
-        dim_inactive = {
-          enabled = true,
-          shade = 'dark',
-          percentage = 0.15,
-        },
-        custom_highlight = {
-          Comment = { style = { "italic" } },
-          ['@comment'] = { style = { "italic" } },
-        },
-      })
-    end
-  },
+  -- {
+  --   'catppuccin/nvim',
+  --   as = 'catppuccin',
+  --   config = function()
+  --     require('catppuccin').setup({
+  --       flavour = 'macchiato',
+  --       background = {
+  --         light = 'macchiato',
+  --         dark = 'macchiato',
+  --       },
+  --       term_colors = true,
+  --       show_end_of_buffer = false,
+  --       dim_inactive = {
+  --         enabled = true,
+  --         shade = 'dark',
+  --         percentage = 0.15,
+  --       },
+  --       custom_highlight = {
+  --         Comment = { style = { "italic" } },
+  --         ['@comment'] = { style = { "italic" } },
+  --       },
+  --     })
+  --   end
+  -- },
 
   -- Git-related
   'tpope/vim-fugitive',
@@ -137,7 +137,6 @@ return {
   -- lspconfig - Language Server Protocol config
   {
     'neovim/nvim-lspconfig',
-    -- opt = true,
     event = 'BufEnter',
     wants = { 'coq_nvim', 'lsp_signature.nvim' },
     config = function()
@@ -145,14 +144,7 @@ return {
     end,
     dependencies = {
       'ray-x/lsp_signature.nvim',
-      {
-        "SmiteshP/nvim-navbuddy",
-        dependencies = {
-          "SmiteshP/nvim-navic",
-          "MunifTanjim/nui.nvim"
-        },
-        opts = { lsp = { auto_attach = true } }
-      }
+      'SmiteshP/nvim-navic',
     },
   },
 
@@ -202,13 +194,7 @@ return {
     end
   },
 
-  'sotte/presenting.vim',
-
   { 'fatih/vim-go' },
-
-  -- { 'liuchengxu/vista.vim' },
-
-  { 'numToStr/FTerm.nvim' },
 
   { 'lewis6991/impatient.nvim' },
 
@@ -291,22 +277,7 @@ return {
 
   { 'simrat39/rust-tools.nvim' },
 
-  {
-    'akinsho/flutter-tools.nvim',
-    dependencies = 'nvim-lua/plenary.nvim',
-    config = function()
-      require('flutter-tools').setup({})
-    end,
-  },
-
-  -- {
-  --   'glacambre/firenvim',
-  --   build = function() vim.fn['firenvim#install'](0) end
-  -- },
-
   { 'folke/twilight.nvim' },
-
-  -- { 'nathom/filetype.nvim' },
 
   {
     "gnikdroy/projections.nvim",
@@ -328,26 +299,23 @@ return {
       vim.keymap.set("n", "<leader>fp", function() vim.cmd("Telescope projections") end)
 
       -- Autostore session on DirChange and VimExit
-      -- local Session = require("projections.session")
-      -- vim.api.nvim_create_autocmd({ 'DirChangedPre', 'VimLeavePre' }, {
-      --   callback = function() Session.store(vim.loop.cwd()) end,
-      -- })
+      local Session = require("projections.session")
+      vim.api.nvim_create_autocmd({ 'VimLeavePre' }, {
+        callback = function() Session.store(vim.loop.cwd()) end,
+      })
+
+
+      local switcher = require("projections.switcher")
+      vim.api.nvim_create_autocmd({ "VimEnter" }, {
+        callback = function()
+          if vim.fn.argc() == 0 then switcher.switch(vim.loop.cwd()) end
+        end,
+      })
+      vim.opt.sessionoptions:append("localoptions")
     end
   },
 
-  -- { 'bennypowers/nvim-regexplainer',
-  --   config = function() require'regexplainer'.setup() end,
-  --   dependencies = {
-  --     'nvim-treesitter/nvim-treesitter',
-  --     'MunifTanjim/nui.nvim',
-  --   },
-  -- },
-
-  { 'tamton-aquib/stuff.nvim' },
-
   { 'adelarsq/vim-matchit' },
-
-  { 'rafcamlet/nvim-luapad' },
 
   -- { 'kyapwc/gojira.nvim' },
   -- {
@@ -386,9 +354,7 @@ return {
 
   {
     "L3MON4D3/LuaSnip",
-    -- follow latest release.
-    version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-    -- install jsregexp (optional!).
+    version = "v2.*",
     build = "make install_jsregexp"
   },
 
@@ -410,54 +376,7 @@ return {
     config = true,
   },
 
-  -- {
-  --   'rest-nvim/rest.nvim',
-  --   dependencies = {
-  --     'nvim-lua/plenary.nvim',
-  --   },
-  -- },
-
   { 'mrjones2014/smart-splits.nvim' },
-
-  -- {
-  --   "nvim-neorg/neorg",
-  --   build = ":Neorg sync-parsers",
-  --   lazy = false, -- specify lazy = false because some lazy.nvim distributions set lazy = true by default
-  --   -- tag = "*",
-  --   dependencies = { "nvim-lua/plenary.nvim" },
-  --   config = function()
-  --     require("neorg").setup {
-  --       load = {
-  --         ["core.defaults"] = {}, -- Loads default behaviour
-  --         ["core.concealer"] = {}, -- Adds pretty icons to your documents
-  --         ["core.dirman"] = { -- Manages Neorg workspaces
-  --           config = {
-  --             workspaces = {
-  --               notes = "~/notes",
-  --             },
-  --             default_workspace = "notes"
-  --           },
-  --         },
-  --       },
-  --     }
-  --   end,
-  -- },
-
-  -- {
-  --   "folke/noice.nvim",
-  --   event = "VeryLazy",
-  --   opts = {
-  --     -- add any options here
-  --   },
-  --   dependencies = {
-  --     -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-  --     "MunifTanjim/nui.nvim",
-  --     -- OPTIONAL:
-  --     --   `nvim-notify` is only needed, if you want to use the notification view.
-  --     --   If not available, we use `mini` as the fallback
-  --     -- "rcarriga/nvim-notify",
-  --   }
-  -- },
 
   {
     "toppair/peek.nvim",
@@ -484,11 +403,6 @@ return {
       -- suggested keymap
       { "<M-p>", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
     },
-  },
-
-  {
-    "SmiteshP/nvim-navic",
-    requires = "neovim/nvim-lspconfig"
   },
 
   {
@@ -528,6 +442,7 @@ return {
   },
 
   { "github/copilot.vim" },
+
   {
     "mhartington/formatter.nvim",
     config = function()
@@ -557,7 +472,6 @@ return {
     end,
   },
 
-
   {
     "ldelossa/gh.nvim",
     dependencies = {
@@ -571,5 +485,5 @@ return {
     config = function()
       require("litee.gh").setup()
     end,
-  }
+  },
 }
