@@ -2,7 +2,6 @@ local M = {}
 local api = vim.api
 local neodev = require('neodev')
 local mason = require('mason')
-local navbuddy = require('nvim-navbuddy')
 local navic = require('nvim-navic')
 
 mason.setup({
@@ -135,8 +134,6 @@ end
 
 local function on_attach(client, bufNo)
   client.server_capabilities.document_formatting = true;
-
-  navbuddy.attach(client, bufNo)
 
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufNo)
