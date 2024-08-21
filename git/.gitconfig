@@ -15,7 +15,7 @@
   conflictstyle = diff3
 
 [user]
-	name = Ken Yap Wei Chun
+	name = Yap Wei Chun
 	email = wei.c@rocketbots.io
 
 [alias]
@@ -48,6 +48,10 @@
   cm = commit --verbose
   modified = \
     !nvim $(git ls-files --modified)
+  fsb = \
+    !~/dotfiles/scripts/git/fsb.sh
+  fshow = \
+    !~/dotfiles/scripts/git/fsb.sh
 
 [pretty]
   log = %C(240)%h%C(reset) -%C(auto)%d%Creset %s %C(242)(%an %ar)
@@ -84,5 +88,16 @@
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 
+[diff]
+    tool = nvimdiff
+
+[difftool "nvimdiff"]
+    cmd = nvim -d \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+
 [safe]
 	directory = *
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
