@@ -1,6 +1,6 @@
 local M = {}
 local api = vim.api
-local neodev = require('neodev')
+-- local neodev = require('neodev')
 local mason = require('mason')
 local navic = require('nvim-navic')
 
@@ -8,7 +8,7 @@ mason.setup({
   ui = { border = 'rounded' }
 })
 
-neodev.setup({})
+-- neodev.setup({})
 
 local lsp_signature = require "lsp_signature"
 lsp_signature.setup {
@@ -23,7 +23,6 @@ lsp_signature.setup {
   max_width = 200,
   -- always_trigger = true,
 }
-
 
 local function validate_bufnr(bufnr)
   vim.validate {
@@ -88,9 +87,9 @@ local function on_attach_eslint(client, bufNo)
 
   local signs = {
     { name = 'DiagnosticSignError', text = 'E' },
-    { name = 'DiagnosticSignWarn', text = 'W' },
-    { name = 'DiagnosticSignHint', text = 'H' },
-    { name = 'DiagnosticSignInfo', text = 'I' },
+    { name = 'DiagnosticSignWarn',  text = 'W' },
+    { name = 'DiagnosticSignHint',  text = 'H' },
+    { name = 'DiagnosticSignInfo',  text = 'I' },
   }
 
   local config = {
@@ -132,6 +131,9 @@ local function on_attach_eslint(client, bufNo)
   require('yap.config.lsp.keymaps').setup(client, bufNo)
 end
 
+vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1f2335]]
+vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
+
 local function on_attach(client, bufNo)
   client.server_capabilities.document_formatting = true;
 
@@ -145,9 +147,9 @@ local function on_attach(client, bufNo)
 
   local signs = {
     { name = 'DiagnosticSignError', text = 'E' },
-    { name = 'DiagnosticSignWarn', text = 'W' },
-    { name = 'DiagnosticSignHint', text = 'H' },
-    { name = 'DiagnosticSignInfo', text = 'I' },
+    { name = 'DiagnosticSignWarn',  text = 'W' },
+    { name = 'DiagnosticSignHint',  text = 'H' },
+    { name = 'DiagnosticSignInfo',  text = 'I' },
   }
 
   local config = {
@@ -165,10 +167,20 @@ local function on_attach(client, bufNo)
       update_in_insert = false,
       focusable = false,
       style = 'minimal',
-      border = 'rounded',
+      -- border = 'rounded',
       source = 'always',
       header = '',
       prefix = '',
+      border = {
+        { '┌', 'FloatBorder' },
+        { '─', 'FloatBorder' },
+        { '┐', 'FloatBorder' },
+        { '│', 'FloatBorder' },
+        { '┘', 'FloatBorder' },
+        { '─', 'FloatBorder' },
+        { '└', 'FloatBorder' },
+        { '│', 'FloatBorder' },
+      }
     },
   }
 

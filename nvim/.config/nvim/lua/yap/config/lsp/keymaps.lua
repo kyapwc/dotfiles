@@ -11,8 +11,8 @@ local function keymappings(client, bufNo)
   keymap.set('n', '<space>l', vim.diagnostic.setloclist, opts)
 
   local bufopts = { noremap = true, silent = true, buffer = bufNo }
-  local renameOpts = vim.tbl_extend('force', bufopts, { desc = 'Rename word under cursor?' } )
-  local usageOpts = vim.tbl_extend('force', bufopts, { desc = 'Find usages?' } )
+  local renameOpts = vim.tbl_extend('force', bufopts, { desc = 'Rename word under cursor?' })
+  local usageOpts = vim.tbl_extend('force', bufopts, { desc = 'Find usages?' })
   keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
   keymap.set('n', 'gD', vim.lsp.buf.implementation, bufopts)
   keymap.set('n', '<c-m>', vim.lsp.buf.signature_help, bufopts)

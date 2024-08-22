@@ -48,10 +48,11 @@ return {
   },
 
   -- FZF-related
-  { 'ibhagwan/fzf-lua',
+  {
+    'ibhagwan/fzf-lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
-  { 'junegunn/fzf', build = './install --bin', },
+  { 'junegunn/fzf',                        build = './install --bin', },
   'jremmen/vim-ripgrep',
 
   -- LuaLine (status Line)
@@ -102,7 +103,7 @@ return {
   },
 
   -- MISC
-  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl', opts= {} },
+  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl',              opts = {} },
 
   -- Native LSP setup
   {
@@ -139,9 +140,9 @@ return {
     'neovim/nvim-lspconfig',
     event = 'BufEnter',
     wants = { 'coq_nvim', 'lsp_signature.nvim' },
-    config = function()
-      require('yap/config/lsp').setup()
-    end,
+    -- config = function()
+    --   require('yap/config/lsp').setup()
+    -- end,
     dependencies = {
       'ray-x/lsp_signature.nvim',
       'SmiteshP/nvim-navic',
@@ -203,7 +204,7 @@ return {
   {
     "ghillb/cybu.nvim",
     branch = "main",
-    dependencies = { "nvim-tree/nvim-web-devicons", "nvim-lua/plenary.nvim"},
+    dependencies = { "nvim-tree/nvim-web-devicons", "nvim-lua/plenary.nvim" },
     config = function()
       local ok, cybu = pcall(require, "cybu")
       if not ok then
@@ -212,8 +213,8 @@ return {
       cybu.setup()
       -- vim.keymap.set("n", "K", "<Plug>(CybuPrev)")
       -- vim.keymap.set("n", "J", "<Plug>(CybuNext)")
-      vim.keymap.set({"n", "v"}, "<s-Tab>", "<Plug>(CybuPrev)")
-      vim.keymap.set({"n", "v"}, "<Tab>", "<Plug>(CybuNext)")
+      vim.keymap.set({ "n", "v" }, "<s-Tab>", "<Plug>(CybuPrev)")
+      vim.keymap.set({ "n", "v" }, "<Tab>", "<Plug>(CybuNext)")
     end,
   },
 
@@ -268,8 +269,8 @@ return {
 
   {
     'goolord/alpha-nvim',
-    config = function ()
-      require'alpha'.setup(require'alpha.themes.startify'.config)
+    config = function()
+      require 'alpha'.setup(require 'alpha.themes.startify'.config)
     end
   },
 
@@ -322,8 +323,6 @@ return {
   --   dir = '/Users/kenyap/workspace/gojira.nvim',
   -- },
 
-  { 'folke/neodev.nvim' },
-
   {
     "j-hui/fidget.nvim",
     tag = "legacy",
@@ -335,11 +334,10 @@ return {
       require('fidget').setup({})
     end
   },
-  { 'mhartington/formatter.nvim' },
 
   {
     "ray-x/go.nvim",
-    dependencies = {  -- optional packages
+    dependencies = { -- optional packages
       "ray-x/guihua.lua",
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
@@ -347,8 +345,8 @@ return {
     config = function()
       require("go").setup()
     end,
-    event = {"CmdlineEnter"},
-    ft = {"go", 'gomod'},
+    event = { "CmdlineEnter" },
+    ft = { "go", 'gomod' },
     build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   },
 
@@ -407,7 +405,7 @@ return {
 
   {
     "RutaTang/quicknote.nvim",
-    dependencies = { "nvim-lua/plenary.nvim"}
+    dependencies = { "nvim-lua/plenary.nvim" }
   },
 
   { "backdround/global-note.nvim" },
@@ -436,41 +434,12 @@ return {
     "stevearc/aerial.nvim",
     opts = {},
     dependencies = {
-     "nvim-treesitter/nvim-treesitter",
-     "nvim-tree/nvim-web-devicons"
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons"
     },
   },
 
   { "github/copilot.vim" },
-
-  {
-    "mhartington/formatter.nvim",
-    config = function()
-      require('formatter').setup({
-        logging = true,
-        filetype = {
-          javascript = {
-            function()
-              return {
-                exe = "prettier",
-                args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
-                stdin = true
-              }
-            end
-          },
-          typescript = {
-            function()
-              return {
-                exe = "prettier",
-                args = {"--stdin-filepath", vim.api.nvim_buf_get_name(0)},
-                stdin = true
-              }
-            end
-          },
-        }
-      })
-    end,
-  },
 
   {
     "ldelossa/gh.nvim",
@@ -484,6 +453,115 @@ return {
     },
     config = function()
       require("litee.gh").setup()
+    end,
+  },
+
+  { "MunifTanjim/nui.nvim" },
+
+  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+
+  {
+    "hrsh7th/nvim-cmp",
+    event = { "InsertEnter", "CmdlineEnter" },
+    dependencies = {
+      'tzachar/cmp-fuzzy-buffer',
+      'tzachar/fuzzy.nvim',
+      "hrsh7th/cmp-omni",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-nvim-lsp",
+      "saadparwaiz1/cmp_luasnip",
+      "onsails/lspkind.nvim",
+    },
+    opts = function(_, opts)
+      opts.sources = opts.sources or {}
+      table.insert(opts.sources, {
+        name = "lazydev",
+        group_index = 0, -- set group index to 0 to skip loading LuaLS completions
+      })
+    end,
+  },
+
+  {
+    "David-Kunz/cmp-npm",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    ft = "json",
+    config = function()
+    end
+  },
+
+  {
+    "zbirenbaum/copilot-cmp",
+    config = function()
+      require("copilot_cmp").setup()
+    end
+  },
+
+  {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+
+  {
+    "mfussenegger/nvim-lint",
+    event = { "BufReadPre", "BufNewFile" }
+  },
+
+  {
+    'stevearc/conform.nvim',
+    opts = {},
+    event = { "BufReadPre", "BufNewFile" },
+  },
+
+  {
+    "williamboman/mason.nvim",
+    dependencies = {
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
+    },
+    config = function()
+      local mason = require("mason")
+      local mason_tool_installer = require("mason-tool-installer")
+
+      -- enable mason and configure icons
+      mason.setup({
+        ui = {
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗",
+          },
+        },
+      })
+
+      mason_tool_installer.setup({
+        ensure_installed = {
+          "prettier",
+          "prettierd",
+          "ktlint",
+          "eslint",
+          "eslint_d",
+          "google-java-format",
+          "htmlbeautifier",
+          "beautysh",
+          "buf",
+          "rustfmt",
+          "yamlfix",
+          "taplo",
+          "shellcheck",
+          { "gopls", version = "v0.14.2" },
+          "delve",
+          'lua-language-server',
+          'vim-language-server',
+          'luacheck',
+        },
+      })
     end,
   },
 }
