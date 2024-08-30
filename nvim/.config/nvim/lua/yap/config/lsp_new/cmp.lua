@@ -1,7 +1,10 @@
+local lspkind = require('lspkind')
+
+lspkind.init({})
+
 local cmp = require('cmp')
 local luasnip = require('luasnip')
 local signature = require('lsp_signature')
-local lspkind = require('lspkind')
 
 signature.setup({
   hint_enable = false,
@@ -10,23 +13,6 @@ signature.setup({
 })
 
 vim.o.pumheight = 15
-
--- gray
-vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
--- blue
-vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', { bg = 'NONE', fg = '#569CD6' })
-vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
--- light blue
-vim.api.nvim_set_hl(0, 'CmpItemKindVariable', { bg = 'NONE', fg = '#9CDCFE' })
-vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { link = 'CmpItemKindVariable' })
-vim.api.nvim_set_hl(0, 'CmpItemKindText', { link = 'CmpItemKindVariable' })
--- pink
-vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { bg = 'NONE', fg = '#C586C0' })
-vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { link = 'CmpItemKindFunction' })
--- front
-vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { bg = 'NONE', fg = '#D4D4D4' })
-vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { link = 'CmpItemKindKeyword' })
-vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { link = 'CmpItemKindKeyword' })
 
 local vim_notify = vim.notify
 vim.notify = function(msg, level, opts)
@@ -78,52 +64,35 @@ cmp.setup({
     ["<CR>"] = cmp.mapping.confirm({ select = false }),
   }),
   formatting = {
-    format = lspkind.cmp_format({
-      maxwidth = 50,
-      ellipsis_char = "...",
-    }),
+    fields = { "abbr", "kind", "menu" },
+    format = function(entry, vim_item)
+      local function commom_format(e, item)
+        local kind = require("lspkind").cmp_format({
+          mode = "symbol_text",
+          show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+        })(e, item)
+        kind.menu = ""
+        kind.concat = kind.abbr
+        return kind
+      end
+      return commom_format(entry, vim_item)
+    end,
   }
 })
 
--- local format_is_enabled = false
--- local _augroups = {}
--- local get_augroup = function(client)
---   if not _augroups[client.id] then
---     local group_name = 'kickstart-lsp-format-' .. client.name
---     local id = vim.api.nvim_create_augroup(group_name, { clear = true })
---     _augroups[client.id] = id
---   end
---
---   return _augroups[client.id]
--- end
---
--- vim.api.nvim_create_autocmd('LspAttach', {
---   group = vim.api.nvim_create_augroup('lsp-attach-format', { clear = true }),
---   -- This is where we attach the autoformatting for reasonable clients
---   callback = function(args)
---     local client_id = args.data.client_id
---     local client = vim.lsp.get_client_by_id(client_id)
---     local bufnr = args.buf
---
---     if client ~= nil and not client.server_capabilities.documentFormattingProvider then
---       return
---     end
---
---
---     vim.api.nvim_create_autocmd('BufWritePre', {
---       group = get_augroup(client),
---       buffer = bufnr,
---       callback = function()
---         if not format_is_enabled then
---           return
---         end
---         vim.lsp.buf.format {
---           async = false,
---           filter = function(c)
---             return c.id == client.id
---           end,
---         }
---       end,
---     })
---   end,
--- })
+-- gray
+vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
+-- blue
+vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', { bg = 'NONE', fg = '#569CD6' })
+vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
+-- light blue
+vim.api.nvim_set_hl(0, 'CmpItemKindVariable', { bg = 'NONE', fg = '#9CDCFE' })
+vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { link = 'CmpItemKindVariable' })
+vim.api.nvim_set_hl(0, 'CmpItemKindText', { link = 'CmpItemKindVariable' })
+-- pink
+vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { bg = 'NONE', fg = '#C586C0' })
+vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { link = 'CmpItemKindFunction' })
+-- front
+vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { bg = 'NONE', fg = '#D4D4D4' })
+vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { link = 'CmpItemKindKeyword' })
+vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { link = 'CmpItemKindKeyword' })

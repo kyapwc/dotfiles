@@ -9,32 +9,6 @@ mason.setup({
   ui = { border = 'rounded' }
 })
 
-local signs = {
-  { name = 'DiagnosticSignError', text = 'E' },
-  { name = 'DiagnosticSignWarn',  text = 'W' },
-  { name = 'DiagnosticSignHint',  text = 'H' },
-  { name = 'DiagnosticSignInfo',  text = 'I' },
-}
-
-local vimDiagnosticConfig = {
-  virtual_text = false, -- disable virtual text
-  signs = {
-    active = signs,     -- show signs
-  },
-  update_in_insert = true,
-  underline = true,
-  severity_sort = true,
-  float = {
-    focusable = true,
-    style = "minimal",
-    border = "rounded",
-    source = "always",
-    header = "",
-    prefix = "",
-  },
-}
-vim.diagnostic.config(vimDiagnosticConfig)
-
 local signatureConfig = {
   bind = true,
   handler_opts = {
@@ -48,17 +22,17 @@ local signatureConfig = {
   toggle_key = '<C-x>',
 }
 
-local function on_attach_eslint(client, bufNo)
-  client.server_capabilities.document_formatting = true;
-
-  api.nvim_buf_set_option(bufNo, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
-  -- require('yap.config.lsp.keymaps').setup(client, bufNo)
-end
+-- local function on_attach_eslint(client, bufNo)
+--   client.server_capabilities.document_formatting = true;
+--
+--   api.nvim_buf_set_option(bufNo, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+--
+--   api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+--   -- require('yap.config.lsp.keymaps').setup(client, bufNo)
+-- end
 
 local function on_attach(client, bufNo)
-  client.server_capabilities.document_formatting = true;
+  -- client.server_capabilities.document_formatting = true;
 
   if client.server_capabilities.documentSymbolProvider then
     navic.attach(client, bufNo)
@@ -108,7 +82,11 @@ local servers = {
   --   on_attach = on_attach,
   -- },
   html = {},
-  jsonls = {},
+  jsonls = {
+    init_options = {
+      provideFormatter = false,
+    },
+  },
   pyright = {},
   lua_ls = {
     on_attach = on_attach,
@@ -156,9 +134,7 @@ local servers = {
     },
   },
   vimls = {},
-  eslint = {
-    on_attach = on_attach_eslint,
-  },
+  eslint = { on_attach = on_attach },
   bashls = { on_attach = on_attach },
   svelte = {},
   -- tailwindcss = {
@@ -174,7 +150,20 @@ local servers = {
   -- },
   cssls = {},
   vuels = {},
-  rust_analyzer = {},
+  rust_analyzer = {
+    cmd = {
+      "rustup",
+      "run",
+      "stable",
+      "rust-analyzer",
+    },
+    settings = {
+      ["rust-analyzer"] = {
+        cargo = { buildScripts = { enable = true } },
+        procMacro = { enable = true },
+      }
+    },
+  },
   sqlls = {},
 }
 
