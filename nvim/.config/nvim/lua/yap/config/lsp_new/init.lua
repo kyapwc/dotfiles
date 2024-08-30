@@ -160,7 +160,9 @@ local servers = {
     settings = {
       ["rust-analyzer"] = {
         cargo = { buildScripts = { enable = true } },
+        diagnostics = { enable = true },
         procMacro = { enable = true },
+        checkOnSave = { command = "clippy" },
       }
     },
   },
