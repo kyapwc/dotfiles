@@ -45,7 +45,7 @@ local vim = vim
 -- Tokyonight config
 -- ======================
 require('yap/tokyonight')
-vim.cmd[[
+vim.cmd [[
   colorscheme tokyonight
 ]]
 vim.g.colors_name = 'tokyonight-moon'
@@ -104,7 +104,7 @@ o.backup = false
 o.undofile = false
 o.incsearch = true
 o.hidden = true
-o.completeopt='menuone,noinsert,noselect'
+o.completeopt = 'menuone,noinsert,noselect'
 o.background = 'dark'
 o.splitbelow = true
 o.splitright = true
@@ -235,7 +235,8 @@ key_mapper('n', '<leader>0', ':lua require("bufferline").go_to_buffer(10, true)<
 -- =======================
 -- Goto Preview
 -- =======================
-key_mapper('n', '<leader>gt', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", 'Preview function definition')
+key_mapper('n', '<leader>gt', "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
+  'Preview function definition')
 key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<CR>", 'Close all preview windows')
 
 
@@ -247,7 +248,7 @@ key_mapper('n', '<leader>bx', '::%bd|e#<CR>', 'Close all buffer except for curre
 -- =======================
 -- Extras
 -- =======================
-key_mapper('i', ';;', "&nbsp;")
+-- key_mapper('i', ';;', "&nbsp;")
 -- vim.api.nvim_create_autocmd('BufWritePre', {
 --   command = 'silent! EslintFixAll',
 --   -- command = 'EslintFixAll',
@@ -257,7 +258,7 @@ vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 
 vim.cmd('FzfLua register_ui_select')
 
-vim.cmd[[
+vim.cmd [[
   if exists("g:neovide")
     " set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h10
     " set guifont=FiraCode\ Nerd\ Font\ Mono:h10
@@ -284,13 +285,13 @@ local function switch_case()
     vim.api.nvim_buf_set_text(0, line - 1, word_start, line - 1, word_start + #word, { snake_case_word })
   elseif word:find('_[a-z]') then
     local camel_case_word = word:gsub('(_)([a-z])', function(_, l) return l:upper() end)
-    vim.api.nvim_buf_set_text(0, line - 1, word_start, line - 1, word_start + #word, {camel_case_word})
+    vim.api.nvim_buf_set_text(0, line - 1, word_start, line - 1, word_start + #word, { camel_case_word })
   else
     print('Not a snake_case or camelCase word')
   end
 end
 
-vim.keymap.set('n', '<Space>ss', switch_case, {noremap = true, silent = true})
+vim.keymap.set('n', '<Space>ss', switch_case, { noremap = true, silent = true })
 -- vim.opt.termguicolors = true
 
 -- require('yap/noice')
@@ -325,6 +326,44 @@ require('yap/goto-preview')
 require('yap/aerial')
 require('yap/lint')
 require('yap/conform')
+
+vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPre", "BufNewFile" }, {
+  callback = function()
+    local signs = {
+      { name = 'DiagnosticSignError', text = 'E' },
+      { name = 'DiagnosticSignWarn',  text = 'W' },
+      { name = 'DiagnosticSignHint',  text = 'H' },
+      { name = 'DiagnosticSignInfo',  text = 'I' },
+    }
+
+    local vimDiagnosticConfig = {
+      virtual_text = false, -- disable virtual text
+      signs = {
+        active = signs,     -- show signs
+      },
+      update_in_insert = true,
+      underline = true,
+      severity_sort = true,
+      float = {
+        focusable = true,
+        style = "minimal",
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = "",
+      },
+    }
+
+    vim.diagnostic.config(vimDiagnosticConfig)
+
+    -- Set diagnostic signs
+    for _, sign in ipairs(signs) do
+      vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+    end
+  end,
+  group = vim.api.nvim_create_augroup("DiagnosticConfigOnSave", { clear = true }),
+  desc = "Set diagnostic configuration after file save",
+})
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({
