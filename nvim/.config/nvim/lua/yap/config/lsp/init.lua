@@ -71,6 +71,48 @@ local function fix_all(opts)
   })
 end
 
+local signs = {
+  { name = 'DiagnosticSignError', text = 'E' },
+  { name = 'DiagnosticSignWarn',  text = 'W' },
+  { name = 'DiagnosticSignHint',  text = 'H' },
+  { name = 'DiagnosticSignInfo',  text = 'I' },
+}
+
+local vimConfig = {
+  virtual_text = false, -- annoying virtual texts
+  -- virtual_text = {
+  --   severity = { min = vim.diagnostic.severity.WARN },
+  -- },
+  signs = {
+    active = signs,
+  },
+  update_in_insert = false,
+  underline = true,
+  severity_sort = true,
+  float = {
+    update_in_insert = false,
+    focusable = false,
+    style = 'minimal',
+    -- border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+    border = {
+      { '┌', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '┐', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+      { '┘', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '└', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+    }
+  },
+}
+
+
+vim.diagnostic.config(vimConfig)
+
 vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
   pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
   callback = function()
@@ -84,37 +126,6 @@ local function on_attach_eslint(client, bufNo)
   api.nvim_buf_set_option(bufNo, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
-
-  local signs = {
-    { name = 'DiagnosticSignError', text = 'E' },
-    { name = 'DiagnosticSignWarn',  text = 'W' },
-    { name = 'DiagnosticSignHint',  text = 'H' },
-    { name = 'DiagnosticSignInfo',  text = 'I' },
-  }
-
-  local config = {
-    virtual_text = false, -- annoying virtual texts
-    -- virtual_text = {
-    --   severity = { min = vim.diagnostic.severity.WARN },
-    -- },
-    signs = {
-      active = signs,
-    },
-    update_in_insert = false,
-    underline = true,
-    severity_sort = true,
-    float = {
-      update_in_insert = false,
-      focusable = false,
-      style = 'minimal',
-      border = 'rounded',
-      source = 'always',
-      header = '',
-      prefix = '',
-    },
-  }
-
-  vim.diagnostic.config(config)
 
   require('lsp_signature').on_attach({
     bind = true,
@@ -144,47 +155,6 @@ local function on_attach(client, bufNo)
   api.nvim_buf_set_option(bufNo, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
   api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
-
-  local signs = {
-    { name = 'DiagnosticSignError', text = 'E' },
-    { name = 'DiagnosticSignWarn',  text = 'W' },
-    { name = 'DiagnosticSignHint',  text = 'H' },
-    { name = 'DiagnosticSignInfo',  text = 'I' },
-  }
-
-  local config = {
-    virtual_text = false, -- annoying virtual texts
-    -- virtual_text = {
-    --   severity = { min = vim.diagnostic.severity.WARN },
-    -- },
-    signs = {
-      active = signs,
-    },
-    update_in_insert = false,
-    underline = true,
-    severity_sort = true,
-    float = {
-      update_in_insert = false,
-      focusable = false,
-      style = 'minimal',
-      -- border = 'rounded',
-      source = 'always',
-      header = '',
-      prefix = '',
-      border = {
-        { '┌', 'FloatBorder' },
-        { '─', 'FloatBorder' },
-        { '┐', 'FloatBorder' },
-        { '│', 'FloatBorder' },
-        { '┘', 'FloatBorder' },
-        { '─', 'FloatBorder' },
-        { '└', 'FloatBorder' },
-        { '│', 'FloatBorder' },
-      }
-    },
-  }
-
-  vim.diagnostic.config(config)
 
   require('lsp_signature').on_attach({
     bind = true,
