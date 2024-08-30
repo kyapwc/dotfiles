@@ -60,7 +60,6 @@
   "plenary.nvim": { "branch": "master", "commit": "a3e3bc82a3f95c5ed0d7201546d5d2c19b20d683" },
   "projections.nvim": { "branch": "pre_release", "commit": "889914169fa1f5c00fb8659653b5a8330fb223e6" },
   "quicknote.nvim": { "branch": "master", "commit": "2fc56f96ef1d983609c1c40b799d7ec32693362a" },
-  "rust-tools.nvim": { "branch": "master", "commit": "676187908a1ce35ffcd727c654ed68d851299d3e" },
   "rust.vim": { "branch": "master", "commit": "889b9a7515db477f4cb6808bef1769e53493c578" },
   "smart-splits.nvim": { "branch": "master", "commit": "e186518f9d7eb4b1e43fbbe0c52bf323637194d0" },
   "sniprun": { "branch": "master", "commit": "30991d81ecfb947a2c54f879b194d4ed23225d91" },
