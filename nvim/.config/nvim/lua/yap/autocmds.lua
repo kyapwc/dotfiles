@@ -1,7 +1,7 @@
 -- =======================
 -- Misc vim autocmds
 -- =======================
-vim.cmd[[
+vim.cmd [[
   tnoremap <Esc> <C-\><C-n>
   autocmd Filetype python setlocal ts=2 sw=2 expandtab
   nnoremap <expr> j v:count ? 'j' : 'gj'
@@ -25,7 +25,7 @@ vim.cmd([[
 -- =======================
 -- Personal text objects
 -- =======================
-vim.cmd[[
+vim.cmd [[
   onoremap iq i'
   onoremap iQ i"
   onoremap aq a'
@@ -40,14 +40,14 @@ vim.cmd[[
 -- =======================
 -- Splitjoin config
 -- =======================
-vim.cmd[[
+vim.cmd [[
   let g:splitjoin_trailing_comma = 1
 ]]
 
 -- ======================
 -- Tokyonight config
 -- ======================
-vim.cmd[[
+vim.cmd [[
   colorscheme tokyonight
 ]]
 
@@ -55,7 +55,7 @@ local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.go",
   callback = function()
-   require('go.format').goimport()
+    require('go.format').goimport()
   end,
   group = format_sync_grp,
 })
@@ -75,7 +75,7 @@ vim.cmd [[
 ]]
 
 vim.api.nvim_create_autocmd("UIEnter", {
-  callback = function ()
+  callback = function()
     local groups = {
       "Normal",
       "NormalNC",

@@ -435,7 +435,15 @@ return {
     },
   },
 
-  { "github/copilot.vim" },
+  -- { "github/copilot.vim" },
+  {
+    "supermaven-inc/supermaven-nvim",
+    config = function()
+      require("supermaven-nvim").setup({
+        log_level = "off",
+      })
+    end,
+  },
 
   {
     "ldelossa/gh.nvim",
@@ -556,8 +564,13 @@ return {
           'lua-language-server',
           'vim-language-server',
           'luacheck',
+          "codelldb",
         },
       })
     end,
   },
+
+  { 'mfussenegger/nvim-dap' },
+  { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap' } },
+  { 'nvim-neotest/nvim-nio' },
 }

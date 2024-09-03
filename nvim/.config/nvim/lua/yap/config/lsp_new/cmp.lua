@@ -1,6 +1,6 @@
 local lspkind = require('lspkind')
 
-lspkind.init({})
+lspkind.init({ symbol_map = { Supermaven = "" } })
 
 local cmp = require('cmp')
 local luasnip = require('luasnip')
@@ -44,6 +44,7 @@ cmp.setup({
     { name = 'nvim_lsp' },
     { name = "buffer" },
     { name = "path" },
+    { name = "supermaven" },
     -- { name = "nvim_lsp_signature_help" },
     {
       name = "omni",
@@ -64,14 +65,21 @@ cmp.setup({
     ["<CR>"] = cmp.mapping.confirm({ select = false }),
   }),
   formatting = {
-    fields = { "abbr", "kind", "menu" },
+    fields = { "abbr", "kind", "menu", "kind" },
     format = function(entry, vim_item)
+      local menu_icon = {
+        nvim_lsp = 'λ',
+        vsnip = '⋗',
+        buffer = 'Ω',
+        path = '~',
+        Supermaven = ""
+      }
       local function commom_format(e, item)
         local kind = require("lspkind").cmp_format({
           mode = "symbol_text",
           show_labelDetails = true, -- show labelDetails in menu. Disabled by default
         })(e, item)
-        kind.menu = ""
+        kind.menu = menu_icon[e.source.name] or ''
         kind.concat = kind.abbr
         return kind
       end
