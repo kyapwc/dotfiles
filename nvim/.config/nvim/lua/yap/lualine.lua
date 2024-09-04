@@ -179,7 +179,7 @@ ins_left {
   'filename',
   cond = conditions.buffer_not_empty,
   -- color = { fg = colors.magenta, gui = 'bold' },
-    -- auto change color according to neovims mode
+  -- auto change color according to neovims mode
   'filename',
   color = function()
     local mode_color = {
@@ -293,7 +293,8 @@ ins_right {
       result = "BAT: " .. result:sub(1, -2) .. "%%"
       -- make sure to close the command or it will orphan the process itself
       command:close()
-      else result = "No Battery Information"
+    else
+      result = "No Battery Information"
     end
     return result
   end,
