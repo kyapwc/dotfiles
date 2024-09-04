@@ -435,15 +435,19 @@ return {
     },
   },
 
-  -- { "github/copilot.vim" },
-  {
-    "supermaven-inc/supermaven-nvim",
-    config = function()
-      require("supermaven-nvim").setup({
-        log_level = "off",
-      })
-    end,
-  },
+  { "github/copilot.vim" },
+
+  -- {
+  --   "supermaven-inc/supermaven-nvim",
+  --   config = function()
+  --     require("supermaven-nvim").setup({
+  --       keymaps = {
+  --         accept_suggestion = "<Tab>",
+  --       },
+  --       log_level = "off",
+  --     })
+  --   end,
+  -- },
 
   {
     "ldelossa/gh.nvim",
@@ -570,7 +574,25 @@ return {
     end,
   },
 
-  { 'mfussenegger/nvim-dap' },
-  { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap' } },
-  { 'nvim-neotest/nvim-nio' },
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-telescope/telescope.nvim", -- Optional
+      {
+        "stevearc/dressing.nvim",      -- Optional: Improves the default Neovim UI
+        opts = {},
+      },
+    },
+    config = function()
+      require("codecompanion").setup({
+        strategies = {
+          chat   = { adapter = "copilot" },
+          inline = { adapter = "" },
+          agent  = { adapter = "copilot" },
+        }
+      })
+    end,
+  },
 }
