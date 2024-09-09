@@ -595,4 +595,13 @@ return {
       })
     end,
   },
+
+  -- {
+  --   'pieces-app/plugin_neo_vim',
+  --   config = function()
+  --     require('pieces.config').host = 'http://localhost:1000'
+  --   end,
+  -- },
+
+  { "akinsho/toggleterm.nvim" },
 }

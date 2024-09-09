@@ -1,4 +1,5 @@
 # zmodload zsh/zprof
+FPATH="$HOME/.zfunc:${FPATH}"
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -29,6 +30,7 @@ export PATH="/usr/local/bin/luarocks:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
 export GPG_TTY=$(tty)
+export TERMINFO=/usr/share/terminfo
 
 # Re-enable this later
 # export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
@@ -61,6 +63,7 @@ alias yabairc="nvim ~/.yabairc"
 alias skhdrc="nvim ~/.skhdrc"
 alias cl="clear"
 alias pick="cd ~/go/src/bitbucket.org/pick-up/pickupp"
+alias work="cd ~/respond.io/"
 
 # Set name of the theme to load --- if set to "random"
 # ZSH_THEME="spaceship"

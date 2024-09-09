@@ -6,8 +6,8 @@ vim.cmd [[
   autocmd Filetype python setlocal ts=2 sw=2 expandtab
   nnoremap <expr> j v:count ? 'j' : 'gj'
   nnoremap <expr> k v:count ? 'k' : 'gk'
-  autocmd FileType python map <buffer> <F9> :exec '!python3' shellescape(@%, 1)
-  let g:python3_host_prog = '/usr/local/bin/python3'
+  autocmd FileType python map <buffer> <F9> :exec '!python3.11' shellescape(@%, 1)
+  let g:python3_host_prog = '/opt/homebrew/bin/python3.11'
   nnoremap <silent> <C-6> <C-^>
   set noswapfile
 ]]
