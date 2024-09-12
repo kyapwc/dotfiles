@@ -46,6 +46,7 @@ alias gl='git pull'
 alias gp='git push'
 alias gco="git checkout"
 alias gb="git branch"
+alias lg="lazygit"
 
 alias dk="docker-compose"
 alias dkl='docker-compose logs --tail=1000 -f'
