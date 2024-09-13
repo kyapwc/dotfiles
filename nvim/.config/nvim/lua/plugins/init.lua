@@ -402,13 +402,6 @@ return {
   },
 
   {
-    "RutaTang/quicknote.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" }
-  },
-
-  { "backdround/global-note.nvim" },
-
-  {
     "michaelb/sniprun",
     branch = "master",
     build = "sh install.sh",
