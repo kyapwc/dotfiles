@@ -44,7 +44,10 @@ return {
   'nvim-lua/plenary.nvim',
   {
     'nvim-telescope/telescope.nvim',
-    dependencies = { { 'nvim-lua/plenary.nvim' } }
+    dependencies = {
+      { 'nvim-lua/plenary.nvim' },
+      { 'smartpde/telescope-recent-files' },
+    }
   },
 
   -- FZF-related
