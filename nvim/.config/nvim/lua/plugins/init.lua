@@ -474,8 +474,6 @@ return {
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
-      'tzachar/cmp-fuzzy-buffer',
-      'tzachar/fuzzy.nvim',
       "hrsh7th/cmp-omni",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
