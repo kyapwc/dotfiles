@@ -6,7 +6,8 @@ neotest.setup({
     neotest_jest({
       cwd = function(path)
         return vim.fn.getcwd()
-      end
+      end,
+      discovery = { enabled = false },
     })
   }
 })
