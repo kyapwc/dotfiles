@@ -35,6 +35,7 @@ local lazygit      = Terminal:new({
     vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
     -- set esc to <esc>
     vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<esc>", "<esc>", { noremap = true, silent = true })
+    vim.api.nvim_buf_set_keymap(term.bufnr, "t", "<C-w>", "<C-w>", { noremap = true, silent = true })
 
     -- set i to <nop>
     -- vim.api.nvim_buf_set_keymap(term.bufnr, "t", "i", "<nop>", { noremap = true, silent = true })
