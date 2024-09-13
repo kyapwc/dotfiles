@@ -44,4 +44,8 @@ require('fzf-lua').setup({
       ["<C-d>"] = 'preview-page-down',
     },
   },
+  oldfiles = {
+    prompt = "History❯ ",
+    cwd_only = true,
+  }
 })

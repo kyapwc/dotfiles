@@ -184,6 +184,7 @@ key_mapper('n', '<C-p>', ':lua require("fzf-lua").files()<CR>', 'FZF lua files')
 key_mapper('n', '<C-f>', ':lua require("fzf-lua").live_grep_native()<CR>', 'FZF Live Grep')
 key_mapper('n', '<space>a', ':lua require("fzf-lua").lsp_code_actions()<CR>', 'FZF LSP Code Actions')
 key_mapper('n', '<space>lr', ':lua require("fzf-lua").lsp_references()<CR>', 'LSP Code references')
+key_mapper('n', '<space>u', ':lua require("fzf-lua").oldfiles()<CR>', 'Recent files')
 
 -- =======================
 -- Misc Mappings

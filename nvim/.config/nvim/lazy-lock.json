@@ -69,7 +69,6 @@
   "smart-splits.nvim": { "branch": "master", "commit": "e186518f9d7eb4b1e43fbbe0c52bf323637194d0" },
   "sniprun": { "branch": "master", "commit": "30991d81ecfb947a2c54f879b194d4ed23225d91" },
   "splitjoin.vim": { "branch": "main", "commit": "9b0c30f61f13ba4800a11107648bdd748ad511ba" },
-  "telescope-recent-files": { "branch": "main", "commit": "6893cda11625254cc7dc2ea76e0a100c7deeb028" },
   "telescope.nvim": { "branch": "master", "commit": "7bd2f9b72f8449780b79bcf351534e2cd36ec43a" },
   "toggleterm.nvim": { "branch": "main", "commit": "137d06fb103952a0fb567882bb8527e2f92d327d" },
   "tokyonight.nvim": { "branch": "main", "commit": "30d7be361a7fbf187a881f17e574e9213d5108ea" },
