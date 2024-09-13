@@ -226,6 +226,24 @@ function find_and_upgrade_package() {
 	find ./* -name "package.json" | xargs grep -l "\"$1\": \"*\"" | xargs -I {} bash -c "npm --prefix \$(dirname {}) install --no-audit --save-exact $1@$2 &" | >/dev/null
 }
 
+function respond_reinstall_packages() {
+  git diff --name-only | xargs -I {} dirname {} | uniq | while read dir; do
+    echo "Checking directory: $dir"
+    if [ -d "$dir" ]; then
+      echo "Directory exists."
+      echo "$dir/package.json check..."
+      if [ -f "$dir/package.json" ]; then
+        echo "package.json exists. Running npm install."
+        (cd "$dir" && npm install)
+      else
+        echo "package.json does not exist."
+      fi
+    else
+      echo "Directory does not exist."
+    fi
+  done
+}
+
 zle -N replace_multiple_dots
 zle -N expand-dots-then-expand-or-complete
 zle -N expand-dots-then-accept-line
