@@ -297,6 +297,7 @@ vim.keymap.set('n', '<Space>ss', switch_case, { noremap = true, silent = true })
 
 -- require('yap/noice')
 require('yap/autocmds')
+require('yap/gitsigns')
 require('yap/telescope')
 require('yap/retrail')
 require('yap/treesitter')
