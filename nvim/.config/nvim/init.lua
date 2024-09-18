@@ -325,6 +325,7 @@ require('yap/lint')
 require('yap/conform')
 require('yap/toggle-term')
 require('yap/neotest')
+require('yap/dadbod')
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPre", "BufNewFile" }, {
   callback = function()
