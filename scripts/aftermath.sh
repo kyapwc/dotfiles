@@ -8,10 +8,9 @@ yabai --start-service
 skhd --start-service
 
 # ASDF (node)
-asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
-asdf install nodejs latest
-asdf global nodejs latest
-asdf reshim nodejs
+mise use --global node@18
+echo "Current node version, setup with mise:"
+node -v
 
 # zsh-syntax-highligting & zsh-autosuggestions
 
