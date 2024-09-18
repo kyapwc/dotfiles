@@ -29,6 +29,7 @@ export PATH="/usr/local/bin/lua:$PATH"
 export PATH="/usr/local/bin/luarocks:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
+export PATH="$HOME/.local/share/mise/shims:$PATH"
 export GPG_TTY=$(tty)
 export TERMINFO=/usr/share/terminfo
 
@@ -149,7 +150,6 @@ if [[ $OS == "Linux" ]]; then
 else
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
   alias vibe="/Applications/Neovide.app/Contents/MacOS/neovide"
-  . /opt/homebrew/opt/asdf/libexec/asdf.sh
   export EDITOR="/opt/homebrew/bin/nvim"
 fi
 
