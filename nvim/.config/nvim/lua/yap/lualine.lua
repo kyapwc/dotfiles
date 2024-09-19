@@ -274,29 +274,27 @@ ins_right {
 
 ins_right {
   function()
-    local result = ''
-    local command = nil
-
+    local commandString
     if IS_LINUX() then
-      command = io.popen('cat /sys/class/power_supply/BAT0/capacity')
+      commandString = 'cat /sys/class/power_supply/BAT0/capacity'
     else
-      command = io.popen('pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1')
+      commandString = 'pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1'
     end
 
-    if command == nil then
-      return result
+    local command, err = io.popen(commandString)
+    if not command then
+      print("Error: " .. (err or "Unknown error")) -- Optionally print the error message
+      return "No Battery Information"
     end
 
-    -- local command = io.popen('pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1')
-    if command ~= nil then
-      result = command:read('*a')
-      result = "BAT: " .. result:sub(1, -2) .. "%%"
-      -- make sure to close the command or it will orphan the process itself
-      command:close()
+    local result = command:read('*a')
+    command:close()
+
+    if result == '' then
+      return "No Battery Information"
     else
-      result = "No Battery Information"
+      return "BAT: " .. result:sub(1, -2) .. "%"
     end
-    return result
   end,
   icons_enabled = false,
   color = { fg = colors.violet, gui = 'bold' },
