@@ -227,6 +227,9 @@ function find_and_upgrade_package() {
 }
 
 function respond_reinstall_packages() {
+  echo "=================================================================="
+  echo "Reinstalling packages..."
+
   git diff --name-only | xargs -I {} dirname {} | uniq | while read dir; do
     echo "Checking directory: $dir"
     if [ -d "$dir" ]; then
@@ -242,6 +245,9 @@ function respond_reinstall_packages() {
       echo "Directory does not exist."
     fi
   done
+
+  echo "Done reinstalling packages..."
+  echo "=================================================================="
 }
 
 zle -N replace_multiple_dots
