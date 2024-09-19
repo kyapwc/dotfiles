@@ -115,3 +115,11 @@ vim.api.nvim_create_autocmd("BufRead", {
     vim.cmd("lua require('illuminate').resume()")
   end,
 })
+
+-- enable jsonc filetype for tsconfig.json and devcontainer.json
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  pattern = { "tsconfig.json", "devcontainer.json" },
+  callback = function()
+    vim.bo.filetype = "jsonc"
+  end,
+})
