@@ -93,7 +93,6 @@ local function handle_nats_redis_create(window)
       end
     end
   end
-
 end
 
 local keys = {
@@ -102,7 +101,7 @@ local keys = {
 
   -- Tab actions
   { key = 'c', mods = 'LEADER', action = act.SpawnTab('CurrentPaneDomain') },
-  { key = 'w', mods = 'CMD', action = act.CloseCurrentTab({ confirm = true }) },
+  { key = 'w', mods = 'CMD',    action = act.CloseCurrentTab({ confirm = true }) },
   { key = 't', mods = 'LEADER', action = act.ShowTabNavigator },
   { key = ']', mods = 'LEADER', action = act.SendString(']') },
 
@@ -150,7 +149,7 @@ local keys = {
     }),
   },
 
-  { key = ' ', mods = 'LEADER', action = act.QuickSelect },
+  { key = ' ',          mods = 'LEADER',       action = act.QuickSelect },
 
   {
     key = ',',
@@ -165,27 +164,29 @@ local keys = {
     }),
   },
 
-  { key = "LeftArrow", mods = "OPT", action = act.SendString('\x1bb') },
+  { key = "LeftArrow",  mods = "OPT",          action = act.SendString('\x1bb') },
 
-  { key = "RightArrow", mods = "OPT", action = act.SendString('\x1bf') },
+  { key = "RightArrow", mods = "OPT",          action = act.SendString('\x1bf') },
 
-  { key = 'Backspace', mods = 'CMD', action = act.SendString('\x15') },
+  { key = 'Backspace',  mods = 'CMD',          action = act.SendString('\x15') },
 
   -- below is keybinds for normal zsh or bash
   -- disable if shell is fish
-  { key = 'LeftArrow', mods = 'CMD', action = act.SendString('\x1bOH') },
-  { key = 'RightArrow', mods = 'CMD', action = act.SendString('\x1bOF') },
+  { key = 'LeftArrow',  mods = 'CMD',          action = act.SendString('\x1bOH') },
+  { key = 'RightArrow', mods = 'CMD',          action = act.SendString('\x1bOF') },
 
   -- below is keybinds for fish shell
   -- { key = 'LeftArrow', mods = 'CMD', action = act.SendString('\x1bD') },
   -- { key = 'RightArrow', mods = 'CMD', action = act.SendString('\x1bC') },
 
-  { key = 's', mods = 'LEADER|SHIFT', action = wezterm.action_callback(handle_nats_redis_create) },
+  { key = 's',          mods = 'LEADER|SHIFT', action = wezterm.action_callback(handle_nats_redis_create) },
 
   --- wezterm session-manager events
-  { key = 'h', mods = "LEADER|SHIFT", action = wezterm.action{ EmitEvent = 'save_session' } },
-  { key = 'l', mods = "LEADER|SHIFT", action = wezterm.action{ EmitEvent = 'load_session' } },
-  { key = 'r', mods = "LEADER|SHIFT", action = wezterm.action{ EmitEvent = 'restore_session' } },
+  { key = 'h',          mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = 'save_session' } },
+  { key = 'l',          mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = 'load_session' } },
+  { key = 'r',          mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = 'restore_session' } },
+
+  { key = '{',          mods = "LEADER|SHIFT", action = act.PaneSelect({ mode = 'SwapWithActiveKeepFocus' }) },
 }
 
 if utils.OS == 'Linux' then
