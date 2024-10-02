@@ -260,7 +260,6 @@ vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 vim.cmd('FzfLua register_ui_select')
 
 vim.cmd [[
-  if exists("g:neovide")
     " set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h10
     " set guifont=FiraCode\ Nerd\ Font\ Mono:h10
     set guifont=Monaspace\ Radon:h10
@@ -273,7 +272,6 @@ vim.cmd [[
     let g:neovide_padding_bottom = 10
     let g:neovide_padding_right = 10
     let g:neovide_padding_left = 10
-  endif
 ]]
 
 local function switch_case()
