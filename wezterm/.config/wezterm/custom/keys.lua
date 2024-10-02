@@ -1,6 +1,7 @@
 local wezterm = require('wezterm')
 local smart_splits = require('custom/smart-splits')
 local utils = require('custom/utils')
+local mux = wezterm.mux
 
 local act = wezterm.action
 
@@ -187,6 +188,9 @@ local keys = {
   { key = 'r',          mods = "LEADER|SHIFT", action = wezterm.action { EmitEvent = 'restore_session' } },
 
   { key = '{',          mods = "LEADER|SHIFT", action = act.PaneSelect({ mode = 'SwapWithActiveKeepFocus' }) },
+
+  { key = 'a',          mods = 'LEADER',       action = act.AttachDomain('unix') },
+  { key = 'd',          mods = 'LEADER',       action = act.DetachDomain({ DomainName = 'unix' }) },
 }
 
 if utils.OS == 'Linux' then
