@@ -53,14 +53,29 @@ config.font = wezterm.font_with_fallback({
   {
     family = 'Monaspace Radon',
     weight = 'ExtraBold',
-    harfbuzz_features = { 'liga=1' },
+    harfbuzz_features = {
+      'clig=1',
+      'calt=1',
+      'liga=1',
+      'ss01=1',
+      'ss02=1',
+      'ss03=1',
+      'ss04=1',
+      'ss05=1',
+      'ss06=1',
+      'ss07=1',
+      'ss08=1',
+      'ss09=1',
+      'cv30=1',
+      'cv60=1'
+    },
     scale = 1,
   },
 })
 config.font_size = 10.5
 config.window_decorations = 'RESIZE'
 if OS == "Linux" then
-  config.warn_about_missing_glyphs=false
+  config.warn_about_missing_glyphs = false
   config.font_size = 9.5
   config.window_decorations = 'NONE'
 end
@@ -128,10 +143,10 @@ config.keys = custom_keys
 
 config.key_tables = {
   resize_pane = {
-    { key = 'h', action = act.AdjustPaneSize({ 'Left', 5 }) },
-    { key = 'j', action = act.AdjustPaneSize({ 'Down', 2 }) },
-    { key = 'k', action = act.AdjustPaneSize({ 'Up', 2 }) },
-    { key = 'l', action = act.AdjustPaneSize({ 'Right', 5 }) },
+    { key = 'h',      action = act.AdjustPaneSize({ 'Left', 5 }) },
+    { key = 'j',      action = act.AdjustPaneSize({ 'Down', 2 }) },
+    { key = 'k',      action = act.AdjustPaneSize({ 'Up', 2 }) },
+    { key = 'l',      action = act.AdjustPaneSize({ 'Right', 5 }) },
     { key = 'Escape', action = 'PopKeyTable' },
   }
 }
