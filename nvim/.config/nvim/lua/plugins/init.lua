@@ -646,6 +646,14 @@ return {
           --   end,
           -- })
         end,
+        devpod = {
+          -- dotfiles = { },
+          container_list = "running_only",
+        },
+        offline_mode = {
+          enabled = true,
+          no_github = false,
+        }
       })
     end,
   },
