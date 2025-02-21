@@ -185,6 +185,7 @@ key_mapper('n', '<C-f>', ':lua require("fzf-lua").live_grep_native()<CR>', 'FZF 
 key_mapper('n', '<space>a', ':lua require("fzf-lua").lsp_code_actions()<CR>', 'FZF LSP Code Actions')
 key_mapper('n', '<space>lr', ':lua require("fzf-lua").lsp_references()<CR>', 'LSP Code references')
 key_mapper('n', '<space>u', ':lua require("fzf-lua").oldfiles()<CR>', 'Recent files')
+key_mapper('v', '<space>gb', '<cmd>FzfLua git_bcommits<CR>', 'Git Blame commits')
 
 -- =======================
 -- Misc Mappings
@@ -272,6 +273,7 @@ vim.cmd [[
     let g:neovide_padding_bottom = 10
     let g:neovide_padding_right = 10
     let g:neovide_padding_left = 10
+    let g:neovide_floating_corner_radius = 1.0
 ]]
 
 local function switch_case()
@@ -292,6 +294,33 @@ end
 
 vim.keymap.set('n', '<Space>ss', switch_case, { noremap = true, silent = true })
 -- vim.opt.termguicolors = true
+
+-- =======================
+-- Tips for plugin development
+-- =======================
+local function sum_first_column_and_paste()
+  -- Get the range of selected lines
+  local start_line, end_line = vim.fn.line("'<"), vim.fn.line("'>")
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+
+  -- Sum the first column
+  local sum = 0
+  for _, line in ipairs(lines) do
+    local first_col = line:match("^(%S+)")
+    if first_col then
+      sum = sum + tonumber(first_col)
+    end
+  end
+
+  -- Convert the sum to a string
+  local sum_str = 'Sum: ' .. tostring(sum)
+
+  -- Insert the sum at the top of the selection
+  vim.api.nvim_buf_set_lines(0, start_line - 1, start_line - 1, false, { sum_str })
+end
+
+-- Create a command to call the function
+vim.api.nvim_create_user_command("Sum", sum_first_column_and_paste, { range = true })
 
 -- require('yap/noice')
 require('yap/autocmds')
