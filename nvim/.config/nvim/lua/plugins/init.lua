@@ -568,28 +568,6 @@ return {
     end,
   },
 
-  {
-    "olimorris/codecompanion.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-telescope/telescope.nvim", -- Optional
-      {
-        "stevearc/dressing.nvim",      -- Optional: Improves the default Neovim UI
-        opts = {},
-      },
-    },
-    config = function()
-      require("codecompanion").setup({
-        strategies = {
-          chat   = { adapter = "copilot" },
-          inline = { adapter = "" },
-          agent  = { adapter = "copilot" },
-        }
-      })
-    end,
-  },
-
   -- {
   --   'pieces-app/plugin_neo_vim',
   --   config = function()
@@ -659,31 +637,85 @@ return {
   },
 
   {
-    "nvim-neorg/neorg",
-    lazy = false,  -- Disable lazy loading as some `lazy.nvim` distributions set `lazy = true` by default
-    version = "*", -- Pin Neorg to the latest stable release
+    'yousefakbar/notmuch.nvim',
     config = function()
-      require("neorg").setup {
-        load = {
-          ["core.defaults"] = {},
-          ["core.concealer"] = {},
-          ["core.dirman"] = {
-            config = {
-              workspaces = {
-                notes = "~/notes",
-              },
-              default_workspace = "notes",
-            },
+      -- Configuration goes here
+      local opts = {
+        open_cmd = 'open',
+      }
+      require('notmuch').setup(opts)
+    end,
+  },
+
+  {
+    "mfussenegger/nvim-dap",
+    lazy = true,
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      {
+        "microsoft/vscode-js-debug",
+        version = "1.x",
+        build = "npm i && npm run compile vsDebugServerBundle && mv dist out"
+      }
+    },
+    keys = {
+      { "<F1>",     function() require('dap').continue() end },
+      { "<F2>",     function() require('dap').toggle_breakpoint() end },
+      { "<F3>",     function() require('dap').step_over() end },
+      { "<F4>",     function() require('dap').step_into() end },
+      { "<F5>",     function() require('dap').step_out() end },
+      { "<F6>",     function() require('dap').run_to_cursor() end },
+      { "<F12>",    function() require("dapui").toggle() end },
+      { "<space>?", function() require("dapui").eval(nil, { enter = true }) end },
+      -- { "<leader>d",  function() require('dap').toggle_breakpoint() end },
+      -- { "<leader>x",  function() require('dap').continue() end },
+      -- { "<leader>si", function() require('dap').step_into() end },
+      -- { "<leader>so", function() require('dap').step_over() end },
+    },
+    config = function()
+      require('dap').adapters['pwa-node'] = {
+        type = 'server',
+        host = 'localhost',
+        port = '${port}',
+        executable = {
+          command = 'node',
+          args = {
+            vim.fn.stdpath("data") .. '/lazy/vscode-js-debug/dist/src/dapDebugServer.js',
+            '${port}',
           },
         },
       }
+      for _, language in ipairs({ "typescript", "javascript" }) do
+        require("dap").configurations[language] = {
+          {
+            type = "pwa-node",
+            request = "attach",
+            processId = require 'dap.utils'.pick_process,
+            name = "Attach debugger to existing `node --inspect` process",
+            sourceMaps = true,
+            resolveSourceMapLocations = {
+              "${workspaceFolder}/**",
+              "!**/node_modules/**" },
+            cwd = "${workspaceFolder}/src",
+            skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
+          },
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch file in new node process",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+          },
+        }
+      end
 
-      vim.wo.foldlevel = 99
-      vim.wo.conceallevel = 2
-    end,
-    dependencies = {
-      "nvim-neorg/lua-utils.nvim",
-      "pysan3/pathlib.nvim",
-    }
+      require("dapui").setup()
+      local dap, dapui = require("dap"), require("dapui")
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open({ reset = true })
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = dapui.close
+      dap.listeners.before.event_exited["dapui_config"] = dapui.close
+    end
   },
 }
