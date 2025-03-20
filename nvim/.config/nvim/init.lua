@@ -322,6 +322,15 @@ end
 -- Create a command to call the function
 vim.api.nvim_create_user_command("Sum", sum_first_column_and_paste, { range = true })
 
+-- Open current file in finder
+vim.api.nvim_create_user_command('Rfinder',
+  function()
+    local path = vim.api.nvim_buf_get_name(0)
+    os.execute('open -R ' .. path)
+  end,
+  {}
+)
+
 -- require('yap/noice')
 require('yap/autocmds')
 require('yap/gitsigns')
