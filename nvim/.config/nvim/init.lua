@@ -140,7 +140,7 @@ wo.scrolloff = 8
 opt.cursorline = true
 opt.guicursor = "n-v-c-i:block"
 opt.termguicolors = true
-opt.mouse = ""
+-- opt.mouse = ""
 
 -- =======================
 -- Custom Functions
