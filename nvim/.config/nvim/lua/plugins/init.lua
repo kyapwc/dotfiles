@@ -695,7 +695,8 @@ return {
             sourceMaps = true,
             resolveSourceMapLocations = {
               "${workspaceFolder}/**",
-              "!**/node_modules/**" },
+              "!**/node_modules/**"
+            },
             cwd = "${workspaceFolder}/src",
             skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
           },
@@ -706,6 +707,22 @@ return {
             program = "${file}",
             cwd = "${workspaceFolder}",
           },
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach to Docker Node.js",
+            address = "127.0.0.1",
+            port = 9229,
+            restart = true,
+            localRoot = vim.fn.getcwd(),
+            remoteRoot = "/app", -- Path inside Docker container
+            sourceMaps = true,
+            skipFiles = { "<node_internals>/**", "**/node_modules/**" },
+            resolveSourceMapLocations = {
+              "${workspaceFolder}/**",
+              "!**/node_modules/**"
+            },
+          }
         }
       end
 
