@@ -89,6 +89,8 @@ local config = {
     lualine_c = {},
     lualine_x = {},
   },
+  always_divide_middle = true,
+  globalstatus = false,
 }
 
 -- Inserts a component in lualine_c at left section
@@ -312,6 +314,9 @@ ins_right {
   'branch',
   icon = '',
   color = { fg = colors.violet, gui = 'bold' },
+  on_click = function()
+    require('fzf-lua').git_branches();
+  end,
 }
 
 ins_right {
