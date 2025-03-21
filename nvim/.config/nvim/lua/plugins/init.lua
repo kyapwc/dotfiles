@@ -726,7 +726,30 @@ return {
         }
       end
 
-      require("dapui").setup()
+      require("dapui").setup({
+        layouts = {
+          {
+            elements = {
+              -- 'hover',
+              'scopes',
+              'watches',
+              -- 'breakpoints',
+              -- 'stacks',
+              -- 'watches',
+            },
+            size = 40,
+            position = 'left',
+          },
+          {
+            elements = {
+              'repl',
+              --    'console',
+            },
+            size = 10,
+            position = 'bottom',
+          },
+        },
+      })
       local dap, dapui = require("dap"), require("dapui")
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open({ reset = true })
