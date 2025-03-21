@@ -209,6 +209,12 @@ ins_left {
   file_status = true,
   path = 1,
   show_filename_only = false,
+  on_click = function(numClicks, mouseButton, modifier)
+    if (mouseButton == "r" and string.find(modifier, "s") == 1) then
+      local path = vim.api.nvim_buf_get_name(0)
+      os.execute('open -R ' .. path)
+    end
+  end,
 }
 
 ins_left { 'location' }
