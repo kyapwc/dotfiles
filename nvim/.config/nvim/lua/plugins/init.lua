@@ -355,11 +355,6 @@ return {
     build = "make install_jsregexp"
   },
 
-  -- {
-  --   'stevearc/dressing.nvim',
-  --   opts = {},
-  -- },
-
   {
     'stevearc/oil.nvim',
     opts = {},
@@ -672,90 +667,5 @@ return {
       -- { "<leader>si", function() require('dap').step_into() end },
       -- { "<leader>so", function() require('dap').step_over() end },
     },
-    config = function()
-      require('dap').adapters['pwa-node'] = {
-        type = 'server',
-        host = 'localhost',
-        port = '${port}',
-        executable = {
-          command = 'node',
-          args = {
-            vim.fn.stdpath("data") .. '/lazy/vscode-js-debug/dist/src/dapDebugServer.js',
-            '${port}',
-          },
-        },
-      }
-      for _, language in ipairs({ "typescript", "javascript" }) do
-        require("dap").configurations[language] = {
-          {
-            type = "pwa-node",
-            request = "attach",
-            processId = require 'dap.utils'.pick_process,
-            name = "Attach debugger to existing `node --inspect` process",
-            sourceMaps = true,
-            resolveSourceMapLocations = {
-              "${workspaceFolder}/**",
-              "!**/node_modules/**"
-            },
-            cwd = "${workspaceFolder}/src",
-            skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
-          },
-          {
-            type = "pwa-node",
-            request = "launch",
-            name = "Launch file in new node process",
-            program = "${file}",
-            cwd = "${workspaceFolder}",
-          },
-          {
-            type = "pwa-node",
-            request = "attach",
-            name = "Attach to Docker Node.js",
-            address = "127.0.0.1",
-            port = 9229,
-            restart = true,
-            localRoot = vim.fn.getcwd(),
-            remoteRoot = "/app", -- Path inside Docker container
-            sourceMaps = true,
-            skipFiles = { "<node_internals>/**", "**/node_modules/**" },
-            resolveSourceMapLocations = {
-              "${workspaceFolder}/**",
-              "!**/node_modules/**"
-            },
-          }
-        }
-      end
-
-      require("dapui").setup({
-        layouts = {
-          {
-            elements = {
-              -- 'hover',
-              'scopes',
-              'watches',
-              -- 'breakpoints',
-              -- 'stacks',
-              -- 'watches',
-            },
-            size = 40,
-            position = 'left',
-          },
-          {
-            elements = {
-              'repl',
-              --    'console',
-            },
-            size = 10,
-            position = 'bottom',
-          },
-        },
-      })
-      local dap, dapui = require("dap"), require("dapui")
-      dap.listeners.after.event_initialized["dapui_config"] = function()
-        dapui.open({ reset = true })
-      end
-      dap.listeners.before.event_terminated["dapui_config"] = dapui.close
-      dap.listeners.before.event_exited["dapui_config"] = dapui.close
-    end
   },
 }
