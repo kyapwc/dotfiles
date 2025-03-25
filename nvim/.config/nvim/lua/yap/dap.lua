@@ -1,5 +1,6 @@
 local dap = require('dap')
-local dap_ui = require('dapui')
+local dapui = require('dapui')
+local widgets = require("dap.ui.widgets")
 
 dap.adapters['pwa-node'] = {
   type = 'server',
@@ -55,7 +56,7 @@ for _, language in ipairs({ "typescript", "javascript" }) do
   }
 end
 
-dap_ui.setup({
+dapui.setup({
   layouts = {
     {
       elements = {
@@ -81,7 +82,48 @@ dap_ui.setup({
 })
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
-  dap_ui.open({ reset = true })
+  dapui.open({ reset = true })
 end
-dap.listeners.before.event_terminated["dapui_config"] = dap_ui.close
-dap.listeners.before.event_exited["dapui_config"] = dap_ui.close
+dap.listeners.before.event_terminated["dapui_config"] = dapui.close
+dap.listeners.before.event_exited["dapui_config"] = dapui.close
+
+local dap_ui = function(widget, title)
+  return function()
+    widgets.cursor_float(widget, { title = title })
+  end
+end
+
+vim.keymap.set(
+  'n',
+  '<leader>ds',
+  dap_ui(widgets.scopes, "dap-scopes"),
+  { noremap = true, silent = true, desc = "Dap Scopes" }
+)
+
+vim.keymap.set(
+  'n',
+  '<leader>df',
+  dap_ui(widgets.frames, "dap-frames"),
+  { noremap = true, silent = true, desc = "Dap Frames" }
+)
+
+vim.keymap.set(
+  'n',
+  '<leader>de',
+  dap_ui(widgets.expression, "dap-expression"),
+  { noremap = true, silent = true, desc = "Dap Expression" }
+)
+
+vim.keymap.set(
+  'n',
+  '<leader>dt',
+  dap_ui(widgets.threads, "dap-threads"),
+  { noremap = true, silent = true, desc = "Dap Threads" }
+)
+
+vim.keymap.set(
+  'n',
+  '<leader>dS',
+  dap_ui(widgets.sessions, "dap-sessions"),
+  { noremap = true, silent = true, desc = "Dap Sessions" }
+)
