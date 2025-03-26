@@ -61,6 +61,10 @@ function M.get_current_repo()
 end
 
 function M.fetch_prs_for_repo(repo_name_include_organization)
+  if not repo_name_include_organization then
+    repo_name_include_organization = false
+  end
+
   if not M.current_repo then
     M.current_repo = M.get_current_repo()
   end

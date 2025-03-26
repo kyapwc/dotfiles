@@ -117,7 +117,7 @@ vim.keymap.set("n", "<space>pr", function()
   })
 end, { desc = "Create PR link for the current branch" })
 
-function M.fzf_prs_workflow(prs)
+function M.fzf_prs_workflow(prs, include_organization)
   fzfLua.fzf_exec(prs, {
     prompt = 'PRs (CTRL-O Open PR, Enter to Approve, CTRL-X Switch Repo)> ',
     actions = {
@@ -127,7 +127,7 @@ function M.fzf_prs_workflow(prs)
         if pr_number then
           local review_command = "gh pr review " ..
               pr_number .. " --approve --repo " ..
-              gh_functions.get_repo_name() ..
+              gh_functions.get_repo_name(include_organization) ..
               " 2>&1"
 
           local review_result = io.popen(review_command)
@@ -186,7 +186,7 @@ function M.fzf_organization_and_repo_selection(orgs)
           actions = {
             ['default'] = function(selectedRepo)
               local repos = gh_functions.set_and_fetch_repo(selectedRepo[1], true)
-              M.fzf_prs_workflow(repos)
+              M.fzf_prs_workflow(repos, true)
             end,
           },
         })
