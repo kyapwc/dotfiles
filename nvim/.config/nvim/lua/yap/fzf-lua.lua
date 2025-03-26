@@ -1,6 +1,7 @@
 local actions = require('fzf-lua.actions')
 local fzfLua = require('fzf-lua')
-local utils = require('fzf-lua.utils')
+local gh_functions = require('yap/custom_git')
+local M = {}
 
 fzfLua.setup({
   lsp = {
@@ -116,37 +117,20 @@ vim.keymap.set("n", "<space>pr", function()
   })
 end, { desc = "Create PR link for the current branch" })
 
-vim.keymap.set("n", "<space>ap", function()
-  vim.notify('Fetching the list of PRs...', vim.log.levels.INFO, { title = "GitHub PRs" })
-  local handle = io.popen("gh pr list --limit 250 --json title,number,url --jq '.[] | [.number, .title, .url] | @tsv'")
-  if handle == nil then
-    print("Failed to fetch PRs!")
-    return
-  end
-
-  local result = handle:read("*a")
-  handle:close()
-
-  if not result or result == "" then
-    vim.notify("No PRs found or error fetching PRs!", vim.log.levels.WARN, { title = "GitHub PRs" })
-    return
-  end
-
-  -- Step 2: Create list of PRs
-  local prs = {}
-  for line in result:gmatch("[^\r\n]+") do
-    table.insert(prs, line)
-  end
-
-  -- Step 3: Use fzf-lua to list PRs and approve selected PR
+function M.fzf_prs_workflow(prs)
   fzfLua.fzf_exec(prs, {
-    prompt = 'PRs> ',
+    prompt = 'PRs (CTRL-O Open PR, Enter to Approve, CTRL-X Switch Repo)> ',
     actions = {
       -- Approve the PR on pressing <Enter>
       ['default'] = function(selected)
-        local pr_number = utils.strsplit("\t", selected[1])[1]
+        local pr_number = selected[1]:match("^[^\t]+")
         if pr_number then
-          local review_result = io.popen("gh pr review " .. pr_number .. " --approve 2>&1")
+          local review_command = "gh pr review " ..
+              pr_number .. " --approve --repo " ..
+              gh_functions.get_repo_name() ..
+              " 2>&1"
+
+          local review_result = io.popen(review_command)
           if review_result == nil then
             vim.notify("Failed to approve PR #" .. pr_number, vim.log.levels.ERROR,
               { title = "GitHub PR Approval Error" })
@@ -172,14 +156,60 @@ vim.keymap.set("n", "<space>ap", function()
       ['ctrl-o'] = function(selected)
         local _, _, pr_url = selected[1]:match("([^\t]+)\t([^\t]+)\t([^\t]+)")
         if pr_url then
+          vim.notify("Opened PR in browser: " .. pr_url, vim.log.levels.INFO, { title = "GitHub PRs" })
           if IS_LINUX() then
             os.execute("xdg-open " .. pr_url .. " &")
           else
             os.execute("open " .. pr_url .. " &")
           end
-          vim.notify("Opened PR in browser: " .. pr_url, vim.log.levels.INFO, { title = "GitHub PRs" })
         end
+      end,
+
+      ['ctrl-x'] = function()
+        local organizations = gh_functions.get_organization_list()
+        M.fzf_organization_and_repo_selection(organizations)
+      end
+    },
+  })
+end
+
+function M.fzf_organization_and_repo_selection(orgs)
+  fzfLua.fzf_exec(orgs, {
+    prompt = 'Organization (Please choose organization)> ',
+    actions = {
+      ['default'] = function(selected)
+        gh_functions.current_organization = selected[1]
+        local repo_list = gh_functions.get_repo_list()
+
+        fzfLua.fzf_exec(repo_list, {
+          prompt = 'Repos (Please choose repo)> ',
+          actions = {
+            ['default'] = function(selectedRepo)
+              local repos = gh_functions.set_and_fetch_repo(selectedRepo[1], true)
+              M.fzf_prs_workflow(repos)
+            end,
+          },
+        })
       end,
     },
   })
-end, { desc = "Approve PR" })
+end
+
+local function fetch_prs_and_select()
+  vim.notify('Fetching the list of PRs...', vim.log.levels.INFO, { title = "GitHub PRs" })
+  local prs = gh_functions.fetch_prs_for_repo()
+
+  local repoName = gh_functions.get_repo_name()
+  if not prs then
+    vim.notify("No PRs found for " .. repoName .. '\nPlease choose an org and its repo to fetch new PRs',
+      vim.log.levels.WARN, { title = "GitHub PRs" })
+    local orgs = gh_functions.get_organization_list()
+
+    M.fzf_organization_and_repo_selection(orgs)
+    return
+  end
+
+  M.fzf_prs_workflow(prs)
+end
+
+vim.keymap.set("n", "<space>ap", fetch_prs_and_select, { desc = "Approve PR" })
