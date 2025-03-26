@@ -1,5 +1,6 @@
 local actions = require('fzf-lua.actions')
 local fzfLua = require('fzf-lua')
+local utils = require('fzf-lua.utils')
 
 fzfLua.setup({
   lsp = {
@@ -114,3 +115,71 @@ vim.keymap.set("n", "<space>pr", function()
     },
   })
 end, { desc = "Create PR link for the current branch" })
+
+vim.keymap.set("n", "<space>ap", function()
+  vim.notify('Fetching the list of PRs...', vim.log.levels.INFO, { title = "GitHub PRs" })
+  local handle = io.popen("gh pr list --limit 250 --json title,number,url --jq '.[] | [.number, .title, .url] | @tsv'")
+  if handle == nil then
+    print("Failed to fetch PRs!")
+    return
+  end
+
+  local result = handle:read("*a")
+  handle:close()
+
+  if not result or result == "" then
+    vim.notify("No PRs found or error fetching PRs!", vim.log.levels.WARN, { title = "GitHub PRs" })
+    return
+  end
+
+  -- Step 2: Create list of PRs
+  local prs = {}
+  for line in result:gmatch("[^\r\n]+") do
+    table.insert(prs, line)
+  end
+
+  -- Step 3: Use fzf-lua to list PRs and approve selected PR
+  fzfLua.fzf_exec(prs, {
+    prompt = 'PRs> ',
+    actions = {
+      -- Approve the PR on pressing <Enter>
+      ['default'] = function(selected)
+        local pr_number = utils.strsplit("\t", selected[1])[1]
+        if pr_number then
+          local review_result = io.popen("gh pr review " .. pr_number .. " --approve 2>&1")
+          if review_result == nil then
+            vim.notify("Failed to approve PR #" .. pr_number, vim.log.levels.ERROR,
+              { title = "GitHub PR Approval Error" })
+            return
+          end
+
+          local output = review_result:read("*a")
+          local success = review_result:close()
+
+          if success and not output:match('failed') then
+            vim.notify("Approved PR #" .. pr_number, vim.log.levels.INFO, { title = "GitHub PRs" })
+          else
+            -- Handle potential errors
+            vim.notify("Failed to approve PR #" .. pr_number .. "\nError: " .. output,
+              vim.log.levels.ERROR,
+              { title = "GitHub PR Approval Error" }
+            )
+          end
+        end
+      end,
+
+      -- Open PR in browser on <Ctrl-o>
+      ['ctrl-o'] = function(selected)
+        local _, _, pr_url = selected[1]:match("([^\t]+)\t([^\t]+)\t([^\t]+)")
+        if pr_url then
+          if IS_LINUX() then
+            os.execute("xdg-open " .. pr_url .. " &")
+          else
+            os.execute("open " .. pr_url .. " &")
+          end
+          vim.notify("Opened PR in browser: " .. pr_url, vim.log.levels.INFO, { title = "GitHub PRs" })
+        end
+      end,
+    },
+  })
+end, { desc = "Approve PR" })
