@@ -47,6 +47,8 @@ local vim = vim
 require('yap/tokyonight')
 vim.cmd [[
   colorscheme tokyonight
+  map <LeftDrag> ""
+  map <LeftRelease> ""
 ]]
 vim.g.colors_name = 'tokyonight-moon'
 vim.g.tokyonight_style = 'night' -- storm / night / day / moon
