@@ -119,7 +119,7 @@ end, { desc = "Create PR link for the current branch" })
 
 function M.fzf_prs_workflow(prs, include_organization)
   fzfLua.fzf_exec(prs, {
-    prompt = 'PRs (CTRL-O Open PR, Enter to Approve, CTRL-X Switch Repo)> ',
+    prompt = 'PRs (<C-o> Open PR, <Enter> to Approve, <C-x> Switch Repo, <C-y> Copy PR Url)> ',
     actions = {
       -- Approve the PR on pressing <Enter>
       ['default'] = function(selected)
@@ -168,7 +168,19 @@ function M.fzf_prs_workflow(prs, include_organization)
       ['ctrl-x'] = function()
         local organizations = gh_functions.get_organization_list()
         M.fzf_organization_and_repo_selection(organizations)
-      end
+      end,
+
+      ['ctrl-y'] = function(selected)
+        local _, _, pr_url = selected[1]:match("([^\t]+)\t([^\t]+)\t([^\t]+)")
+        if pr_url then
+          vim.notify("Copied PR URL into clipboard: " .. pr_url, vim.log.levels.INFO, { title = "GitHub PRs" })
+          if IS_LINUX() then
+            vim.notify("Not implemented yet")
+          else
+            os.execute("echo " .. pr_url .. " | pbcopy")
+          end
+        end
+      end,
     },
   })
 end
