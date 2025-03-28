@@ -673,6 +673,7 @@ return {
     "sphamba/smear-cursor.nvim",
     opts = {
       cursor_color = "#9d7cd8",
+      smear_insert_mode = false
     },
   }
 }
