@@ -668,4 +668,11 @@ return {
       -- { "<leader>so", function() require('dap').step_over() end },
     },
   },
+
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {
+      cursor_color = "#9d7cd8",
+    },
+  }
 }
