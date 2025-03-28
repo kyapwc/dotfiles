@@ -167,7 +167,7 @@ function M.fzf_prs_workflow(prs, include_organization)
 
       ['ctrl-x'] = function()
         local organizations = gh_functions.get_organization_list()
-        M.fzf_organization_and_repo_selection(organizations)
+        M.fzf_organization_and_repo_selection(organizations, M.fzf_prs_workflow)
       end,
 
       ['ctrl-y'] = function(selected)
@@ -185,7 +185,7 @@ function M.fzf_prs_workflow(prs, include_organization)
   })
 end
 
-function M.fzf_organization_and_repo_selection(orgs)
+function M.fzf_organization_and_repo_selection(orgs, callback)
   fzfLua.fzf_exec(orgs, {
     prompt = 'Organization (Please choose organization)> ',
     actions = {
@@ -198,7 +198,7 @@ function M.fzf_organization_and_repo_selection(orgs)
           actions = {
             ['default'] = function(selectedRepo)
               local repos = gh_functions.set_and_fetch_repo(selectedRepo[1], true)
-              M.fzf_prs_workflow(repos, true)
+              callback(repos, true)
             end,
           },
         })
@@ -217,11 +217,44 @@ local function fetch_prs_and_select()
       vim.log.levels.WARN, { title = "GitHub PRs" })
     local orgs = gh_functions.get_organization_list()
 
-    M.fzf_organization_and_repo_selection(orgs)
+    M.fzf_organization_and_repo_selection(orgs, M.fzf_prs_workflow)
     return
   end
 
   M.fzf_prs_workflow(prs)
 end
 
+local function fetch_my_prs()
+  local author = gh_functions.get_author()
+  vim.notify("Fetching the list of PRs for `" .. author .. "`", vim.log.levels.INFO, { title = "GitHub PRs" })
+
+  local prs = gh_functions.fetch_my_prs()
+
+  if not prs or next(prs) == nil then
+    vim.notify("No PRs found for " .. author .. " on " .. vim.fn.expand('%:p:h'), vim.log.levels.WARN,
+      { title = "GitHub PRs" })
+    return
+  end
+
+  fzfLua.fzf_exec(prs, {
+    prompt = 'My PRs <Enter> to Open in Browser)> ',
+    actions = {
+      -- Approve the PR on pressing <Enter>
+      -- Open PR in browser on <Ctrl-o>
+      ['default'] = function(selected)
+        local _, _, pr_url = selected[1]:match("([^\t]+)\t([^\t]+)\t([^\t]+)")
+        if pr_url then
+          vim.notify("Opened PR in browser: " .. pr_url, vim.log.levels.INFO, { title = "GitHub PRs" })
+          if IS_LINUX() then
+            os.execute("xdg-open " .. pr_url .. " &")
+          else
+            os.execute("open " .. pr_url .. " &")
+          end
+        end
+      end,
+    },
+  })
+end
+
 vim.keymap.set("n", "<space>ap", fetch_prs_and_select, { desc = "Approve PR" })
+vim.keymap.set("n", "<space>mpr", fetch_my_prs, { desc = "My PRs" })

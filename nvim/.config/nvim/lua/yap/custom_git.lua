@@ -130,4 +130,42 @@ function M.get_repo_name(include_organization)
   return repoName
 end
 
+function M.get_author()
+  local handle = io.popen('git config --list')
+
+  if not handle then return nil end
+
+  local result = handle:read('*a')
+  handle:close()
+
+  local author = nil
+  for line in result:gmatch("[^\r\n]+") do
+    if line:match("^user.email") then
+      author = line:match("^user.email=(.*)$")
+      break
+    end
+  end
+
+  return author
+end
+
+function M.fetch_my_prs()
+  local command = string.format(
+    "gh pr list --limit 250 --json title,number,url --author '@me' | jq -r '.[] | [.number, .title, .url] | @tsv'"
+  )
+
+  local handle = io.popen(command)
+  if not handle then return nil end
+
+  local result = handle:read("*a")
+  handle:close()
+
+  local prs = {}
+  for line in result:gmatch("[^\r\n]+") do
+    table.insert(prs, line)
+  end
+
+  return prs
+end
+
 return M
