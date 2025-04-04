@@ -212,9 +212,28 @@ ins_left {
   path = 1,
   show_filename_only = false,
   on_click = function(numClicks, mouseButton, modifier)
-    if (mouseButton == "r" and string.find(modifier, "s") == 1) then
-      local path = vim.api.nvim_buf_get_name(0)
-      os.execute('open -R ' .. path)
+    local full_path = vim.api.nvim_buf_get_name(0)
+    local cwd = vim.fn.getcwd()
+
+    -- Make the path relative to CWD
+    local relative_path = string.gsub(full_path, "^" .. vim.pesc(cwd) .. "/", "")
+
+    if numClicks == 2 and mouseButton == 'l' then
+      if IS_LINUX() then
+        os.execute("echo " .. vim.fn.shellescape(relative_path) .. " | xclip -selection clipboard")
+      else
+        os.execute("echo " .. vim.fn.shellescape(relative_path) .. " | pbcopy")
+      end
+      vim.notify("Copied to clipboard: " .. relative_path, vim.log.levels.INFO, { title = "File Path" })
+    end
+
+    -- Shift + Right-click: reveal file
+    if mouseButton == "r" and string.find(modifier, "s") == 1 then
+      if IS_LINUX() then
+        os.execute("xdg-open " .. vim.fn.fnamemodify(full_path, ":h"))
+      else
+        os.execute("open -R " .. vim.fn.shellescape(full_path))
+      end
     end
   end,
 }
