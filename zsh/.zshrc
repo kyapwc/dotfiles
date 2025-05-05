@@ -250,6 +250,36 @@ function respond_reinstall_packages() {
   echo "=================================================================="
 }
 
+# Function to run a package script
+run_node_package_script() {
+  [[ -f package.json ]] || { echo "No package.json found"; return 1 }
+
+  local selected
+  selected=$(jq -r '.scripts | to_entries[] | "\(.key)\t\(.value)"' package.json | \
+    fzf --with-nth=1 \
+        --delimiter='\t' \
+        --prompt="Select npm script: " \
+        --preview='echo "{}" | cut -f2- | bat --style=plain --language=sh --color=always' \
+        --preview-window=up:3:wrap)
+
+  script_name="${selected%%$'\t'*}"
+  script_cmd="${selected#*$'\t'}"
+
+  if [[ -n "$script_name" ]]; then
+    echo "Running: npm run $script_name"
+    npm run "$script_name"
+  fi
+}
+run-package-script-widget() {
+  zle -I                 # Reset current prompt input
+  run_node_package_script     # Call our function
+  zle reset-prompt       # Redraw prompt after it's done
+}
+zle -N run-package-script-widget
+
+stty -ixon
+bindkey '^S' run-package-script-widget
+
 zle -N replace_multiple_dots
 zle -N expand-dots-then-expand-or-complete
 zle -N expand-dots-then-accept-line
