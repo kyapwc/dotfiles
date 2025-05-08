@@ -23,6 +23,13 @@ if pgrep -f "ssm.*session" > /dev/null 2>&1; then
     kill -9 "$pid" 2>/dev/null
   done
 
+  for pid in $(pgrep -f "/opt/homebrew/bin/aws ssm start-session"); do
+    log_message "Killing stale SSM session PID $pid"
+    kill "$pid" 2>/dev/null
+  done
+
+  lsof -i :3306 | grep session-m | awk '{print $2}' | sort -u | xargs kill
+
   [ -f "$PID_FILE" ] && rm -f "$PID_FILE"
 
   sketchybar --trigger ssm_status_change
