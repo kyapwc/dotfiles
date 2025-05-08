@@ -172,8 +172,7 @@ sketchybar -m --add item ssm_access right                       \
                          icon.font.size=14                      \
                          icon.y_offset=2                       \
                          background.padding_right=1             \
-           --subscribe ssm_access ssm_status_change             \
-
+           --subscribe ssm_access ssm_status_change
 
 POPUP_SCRIPT="sketchybar -m --set media_ctrl.anchor popup.drawing=toggle"
 

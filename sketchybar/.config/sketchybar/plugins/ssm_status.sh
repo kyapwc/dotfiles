@@ -16,6 +16,15 @@ update_sketchybar() {
 
 log_message "Status check running"
 
+# If the script does not exist, then we display dead face emoji and grey background
+if [ ! -f "$HOME/ssm-access.sh" ]; then
+  log_message "SSM Access Script not found..."
+
+  update_sketchybar "😵" "0xff808080"
+
+  exit 0
+fi
+
 # Check if the SSM session is running using pgrep
 if pgrep -f "ssm.*session" > /dev/null 2>&1; then
   # SSM is running, get the actual PID
