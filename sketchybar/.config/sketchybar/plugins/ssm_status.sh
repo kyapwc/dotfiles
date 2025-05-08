@@ -10,7 +10,7 @@ log_message() {
 
 # Function to update sketchybar status
 update_sketchybar() {
-  sketchybar --set ssm_access icon="$1" icon.color="$2" label="SSM"
+  sketchybar --set ssm_access icon="$1" icon.color="$2" label="SSM" background.color="$2"
   log_message "Updated sketchybar icon to $1 with color $2"
 }
 
