@@ -198,7 +198,7 @@ return {
     end
   },
 
-  { 'fatih/vim-go' },
+  -- { 'fatih/vim-go' },
 
   { 'lewis6991/impatient.nvim' },
 

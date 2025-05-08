@@ -75,7 +75,6 @@
   "trouble.nvim": { "branch": "main", "commit": "e5d0e04121c662ce29190a57dd03655d43c59d44" },
   "twilight.nvim": { "branch": "main", "commit": "8b7b50c0cb2dc781b2f4262a5ddd57571556d1e4" },
   "vim-fugitive": { "branch": "master", "commit": "d0c1a437536778bcc8174b7cb2ffdf98f611e6fe" },
-  "vim-go": { "branch": "master", "commit": "a64d097a1af1772c24d13f34529b9be2a34b7721" },
   "vim-hexokinase": { "branch": "master", "commit": "62324b43ea858e268fb70665f7d012ae67690f43" },
   "vim-illuminate": { "branch": "master", "commit": "5eeb7951fc630682c322e88a9bbdae5c224ff0aa" },
   "vim-matchit": { "branch": "master", "commit": "f52e59b05a937fe3102d431dd23f8ae4d8752ba3" },
