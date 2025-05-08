@@ -128,6 +128,20 @@ sketchybar -m --add item battery right                         \
                          background.padding_right=5            \
            --subscribe battery system_woke power_source_change
 
+sketchybar --add event ssm_status_change
+
+sketchybar -m --add item ssm_access right                       \
+           --set ssm_access script="$PLUGIN_DIR/ssm_status.sh"  \
+                         icon="🔓"                              \
+                         icon.color=0xffff0000                  \
+                         label="SSM"                            \
+                         click_script="$PLUGIN_DIR/toggle_ssm.sh" \
+                         update_freq=1                          \
+                         background.corner_radius=8             \
+                         background.height=20                   \
+                         background.padding_right=5             \
+           --subscribe ssm_access ssm_status_change             \
+
 sketchybar  --add   item slack right \
             --set   slack \
                     update_freq=10 \
@@ -336,7 +350,7 @@ sketchybar --add bracket spaces_bracket '/space\..*/' \
                                         background.height=28
 
 # fix these later to have multiple brackets
-sketchybar --add bracket right_bracket mic slack clock volume battery \
+sketchybar --add bracket right_bracket ssm_access mic slack clock volume battery \
            --set         right_bracket background.color="${background_color}" \
                          background.corner_radius=8 \
                          background.height=32
