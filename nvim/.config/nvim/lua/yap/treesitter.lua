@@ -40,6 +40,8 @@ configs.setup {
     'vimdoc',
     'luadoc',
     'lua',
+    'c',
+    'c_sharp'
   },
   playground = {
     enable = true,

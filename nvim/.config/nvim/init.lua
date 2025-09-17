@@ -50,6 +50,9 @@ vim.cmd [[
   map <LeftDrag> ""
   map <LeftRelease> ""
 ]]
+vim.g.go_def_mode = 'gopls'
+vim.g.go_info_mode = 'gopls'
+
 vim.g.colors_name = 'tokyonight-moon'
 vim.g.tokyonight_style = 'night' -- storm / night / day / moon
 vim.g.tokyonight_italic_functions = true
@@ -250,6 +253,16 @@ key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<
 -- Close all buffer except current
 -- =======================
 key_mapper('n', '<leader>bx', '::%bd|e#<CR>', 'Close all buffer except for current')
+
+local cmake = require('cmake-tools')
+vim.keymap.set("n", "<leader>dz", function()
+  cmake.select_launch_target(function(item)
+    P("DAMN BRO")
+    P(item)
+    vim.cmd("CMakeRun")
+  end)
+end, { desc = "run with target select" })
+
 
 -- =======================
 -- Extras

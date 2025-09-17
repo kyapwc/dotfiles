@@ -675,5 +675,35 @@ return {
       cursor_color = "#9d7cd8",
       smear_insert_mode = false
     },
-  }
+  },
+
+  {
+    "dmtrKovalenko/fff.nvim",
+    build = "cargo build --release",
+    opts = {
+      prompt = '🪿 ',
+    },
+    keys = {
+      {
+        "ff",
+        function()
+          require("fff").find_files()
+        end,
+        desc = "Open file picker",
+      },
+    },
+  },
+
+  {
+    'Civitasv/cmake-tools.nvim',
+    requires = { 'nvim-lua/plenary.nvim', 'stevearc/overseer.nvim', 'akinsho/toggleterm.nvim' },
+    config = function()
+      require("cmake-tools").setup {
+        -- Customize as needed...
+        cmake_command = "cmake",
+        cmake_build_options = { "-j4" },
+        cmake_build_directory = "build/${variant:buildType}"
+      }
+    end,
+  },
 }

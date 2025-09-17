@@ -9,12 +9,12 @@ Trim = function(value)
   return value:gsub('%s+', '')
 end
 
-KEY_MAPPER = function(mode, key, result)
+KEY_MAPPER = function(mode, key, result, desc)
   vim.api.nvim_set_keymap(
     mode,
     key,
     result,
-    { noremap = true, silent = true }
+    { noremap = true, silent = true, desc = desc }
   )
 end
 

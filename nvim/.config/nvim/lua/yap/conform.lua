@@ -34,6 +34,7 @@ conform.setup({
     toml = { "taplo" },
     css = { { "prettierd", "prettier" } },
     scss = { { "prettierd", "prettier" } },
+    go = {}
   },
   format_on_save = function(bufnr)
     -- Disable with a global or buffer-local variable

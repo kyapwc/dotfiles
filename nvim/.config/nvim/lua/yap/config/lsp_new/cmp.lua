@@ -60,7 +60,7 @@ cmp.setup({
     ['<C-d>'] = cmp.mapping.scroll_docs(4),  -- Down
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-m>'] = cmp.mapping.complete(),
     ["<C-e>"] = cmp.mapping.abort(), -- close completion window
     ["<CR>"] = cmp.mapping.confirm({ select = false }),
   }),

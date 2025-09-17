@@ -172,9 +172,9 @@ local function on_attach(client, bufNo)
 end
 
 local servers = {
-  -- gopls = {
-  --   on_attach = on_attach,
-  -- },
+  gopls = {
+    on_attach = on_attach,
+  },
   html = {},
   jsonls = {},
   pyright = {},
@@ -251,6 +251,8 @@ local servers = {
   vuels = {},
   rust_analyzer = {},
   sqlls = {},
+  clangd = {},
+  csharp_ls = {}
 }
 
 
