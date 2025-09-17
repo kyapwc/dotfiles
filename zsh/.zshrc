@@ -10,14 +10,18 @@ export ZSH="$HOME/dotfiles/zsh/.oh-my-zsh"
 export ZSH_CUSTOM="$HOME/dotfiles/zsh/.oh-my-zsh/custom"
 
 export GO111MODULE=on
-export GOPATH=$HOME/go
 if [[ $OS == "Linux" ]]; then
   export GOROOT="/bin/go"
-else
-  export GOROOT="/opt/homebrew/opt/go/libexec"
+# else
+#   export GOROOT="/opt/homebrew/opt/go/libexec"
 fi
 
-export PATH="$GOPATH/bin:$GOROOT/bin:$PATH"
+# GOPATH for installed binaries and caches
+export GOPATH="$HOME/go"
+export GOTOOLCHAIN=local
+
+# PATH so "go install" binaries are available
+export PATH="$GOPATH/bin:/opt/homebrew/bin:$PATH"
 export GOPRIVATE="bitbucket.org/pick-up"
 # export TERM="xterm-256color"
 export TERM="screen-256color"
@@ -32,6 +36,8 @@ export PATH="$HOME/.config/emacs/bin:$PATH"
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 export GPG_TTY=$(tty)
 export TERMINFO=/usr/share/terminfo
+# export GS4JS_HOME="/usr/local/lib"
+export PATH="$HOME/.local/share/mise/installs/node/$(node --version | cut -c2-)/bin:$PATH"
 
 # Re-enable this later
 # export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
@@ -284,6 +290,15 @@ zle -N run-package-script-widget
 
 stty -ixon
 bindkey '^S' run-package-script-widget
+
+_comp_ssh_hosts() {
+  local -a hosts
+  hosts=(${(f)"$(awk '/^Host / {print $2}' ~/.ssh/config)"})
+  _describe -t hosts 'SSH hosts' hosts
+}
+compdef _comp_ssh_hosts ssh
+
+alias kssm="ps aux | grep '/opt/homebrew/bin/aws ssm start-session' | grep -v grep | awk '{print \$2}' | xargs kill"
 
 zle -N replace_multiple_dots
 zle -N expand-dots-then-expand-or-complete

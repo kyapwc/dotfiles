@@ -139,6 +139,8 @@ yabai -m rule --add app="^TablePlus$" title="tableplus plugins" manage=off sub-l
 yabai -m rule --add app="^TablePlus$" title="^$" manage=off sub-layer=above
 yabai -m rule --add app="^Arc$" title="^$" subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off sub-layer=above
 
+# yabai -m config mouse_follows_focus off
+
 yabai -m rule --apply
 
 # Refresh item
@@ -148,5 +150,7 @@ yabai -m rule --apply
 # borders active_color=0xff00b3f4 inactive_color=0xff555555 width=5.0 &
 yabai -m signal --add event=window_focused action="sketchybar -m --trigger window_focus &> /dev/null"
 yabai -m signal --add event=window_title_changed action="sketchybar -m --trigger title_change &> /dev/null"
+# yabai -m signal --add event=window_focused action="hs -c \"yabaidirectcall.window_focused()\""
+# yabai -m signal --add event=space_changed action="hs -c \"yabaidirectcall.space_changed()\""
 
 # yabai -m config menubar_opacity 0.0

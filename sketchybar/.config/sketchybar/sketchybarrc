@@ -107,6 +107,7 @@ sketchybar --add item front_app center                                   \
                                  icon.drawing=off                        \
                                  background.color="${transparent_color}" \
            --subscribe front_app front_app_switched                      \
+# Add another section to check if yabai space is stack then display available icons and currently selected window
 
 ##### Adding Right Items #####
 # In the same way as the left items we can add items to the right side.
@@ -302,48 +303,48 @@ update_freq=1
 script="$PLUGIN_DIR/media_ctrl.sh"
 )
 
-sketchybar --add item media_ctrl.anchor center                      \
-         --set media_ctrl.anchor "${media_ctrl_anchor[@]}"           \
-         --subscribe media_ctrl.anchor mouse.entered mouse.exited \
-                                    mouse.exited.global media_change \
-                                                               \
-         --add item media_ctrl.cover popup.media_ctrl.anchor         \
-         --set media_ctrl.cover "${media_ctrl_cover[@]}"             \
-                                                               \
-         --add item media_ctrl.title popup.media_ctrl.anchor         \
-         --set media_ctrl.title "${media_ctrl_title[@]}"             \
-                                                               \
-         --add item media_ctrl.artist popup.media_ctrl.anchor        \
-         --set media_ctrl.artist "${media_ctrl_artist[@]}"           \
-                                                               \
-         --add item media_ctrl.album popup.media_ctrl.anchor         \
-         --set media_ctrl.album "${media_ctrl_album[@]}"             \
-                                                               \
-         --add slider media_ctrl.playback_slider popup.media_ctrl.anchor         \
-         --set media_ctrl.playback_slider "${media_ctrl_playback_slider[@]}"             \
-                                                               \
-         --add item media_ctrl.playback popup.media_ctrl.anchor         \
-         --set media_ctrl.playback "${media_control_playback[@]}"             \
-                                                               \
-         --add item media_ctrl.back popup.media_ctrl.anchor          \
-         --set media_ctrl.back "${media_ctrl_back[@]}"               \
-         --subscribe media_ctrl.back mouse.clicked                \
-                                                               \
-         --add item media_ctrl.play popup.media_ctrl.anchor          \
-         --set media_ctrl.play "${media_ctrl_play[@]}"               \
-         --subscribe media_ctrl.play mouse.clicked media_change   \
-                                                               \
-         --add item media_ctrl.next popup.media_ctrl.anchor          \
-         --set media_ctrl.next "${media_ctrl_next[@]}"               \
-         --subscribe media_ctrl.next mouse.clicked                \
-                                                               \
-         --add item media_ctrl.spacer popup.media_ctrl.anchor        \
-         --set media_ctrl.spacer width=5                          \
-                                                               \
-         --add bracket media_ctrl.controls media_ctrl.back           \
-                                        media_ctrl.play           \
-                                        media_ctrl.next           \
-         --set media_ctrl.controls "${media_ctrl_controls[@]}"
+# sketchybar --add item media_ctrl.anchor center                      \
+#          --set media_ctrl.anchor "${media_ctrl_anchor[@]}"           \
+#          --subscribe media_ctrl.anchor mouse.entered mouse.exited \
+#                                     mouse.exited.global media_change \
+#                                                                \
+#          --add item media_ctrl.cover popup.media_ctrl.anchor         \
+#          --set media_ctrl.cover "${media_ctrl_cover[@]}"             \
+#                                                                \
+#          --add item media_ctrl.title popup.media_ctrl.anchor         \
+#          --set media_ctrl.title "${media_ctrl_title[@]}"             \
+#                                                                \
+#          --add item media_ctrl.artist popup.media_ctrl.anchor        \
+#          --set media_ctrl.artist "${media_ctrl_artist[@]}"           \
+#                                                                \
+#          --add item media_ctrl.album popup.media_ctrl.anchor         \
+#          --set media_ctrl.album "${media_ctrl_album[@]}"             \
+#                                                                \
+#          --add slider media_ctrl.playback_slider popup.media_ctrl.anchor         \
+#          --set media_ctrl.playback_slider "${media_ctrl_playback_slider[@]}"             \
+#                                                                \
+#          --add item media_ctrl.playback popup.media_ctrl.anchor         \
+#          --set media_ctrl.playback "${media_control_playback[@]}"             \
+#                                                                \
+#          --add item media_ctrl.back popup.media_ctrl.anchor          \
+#          --set media_ctrl.back "${media_ctrl_back[@]}"               \
+#          --subscribe media_ctrl.back mouse.clicked                \
+#                                                                \
+#          --add item media_ctrl.play popup.media_ctrl.anchor          \
+#          --set media_ctrl.play "${media_ctrl_play[@]}"               \
+#          --subscribe media_ctrl.play mouse.clicked media_change   \
+#                                                                \
+#          --add item media_ctrl.next popup.media_ctrl.anchor          \
+#          --set media_ctrl.next "${media_ctrl_next[@]}"               \
+#          --subscribe media_ctrl.next mouse.clicked                \
+#                                                                \
+#          --add item media_ctrl.spacer popup.media_ctrl.anchor        \
+#          --set media_ctrl.spacer width=5                          \
+#                                                                \
+#          --add bracket media_ctrl.controls media_ctrl.back           \
+#                                         media_ctrl.play           \
+#                                         media_ctrl.next           \
+#          --set media_ctrl.controls "${media_ctrl_controls[@]}"
 
 
 sketchybar --add bracket spaces_bracket '/space\..*/' \
