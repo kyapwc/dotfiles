@@ -1,5 +1,37 @@
 local wezterm = require 'wezterm'
 
+local function shorten_path(path, max_len)
+  -- replace $HOME with ~
+  local home = os.getenv("HOME")
+  if home and path:sub(1, #home) == home then
+    path = "~" .. path:sub(#home + 1)
+  end
+
+  -- if it's already short enough, return
+  if #path <= max_len then
+    return path
+  end
+
+  -- split into components
+  local parts = {}
+  for part in string.gmatch(path, "[^/]+") do
+    table.insert(parts, part)
+  end
+
+  -- rebuild with shortening
+  for i = 2, #parts - 1 do
+    if parts[i] ~= "~" then
+      parts[i] = parts[i]:sub(1, 1)
+    end
+    local candidate = table.concat(parts, "/")
+    if #candidate <= max_len then
+      return candidate
+    end
+  end
+
+  return table.concat(parts, "/")
+end
+
 -- Window Statuses
 wezterm.on('update-right-status', function(window, pane)
   -- Each element holds the text for a cell in a "powerline" style << fade
@@ -16,30 +48,9 @@ wezterm.on('update-right-status', function(window, pane)
   -- shell is using OSC 7 on the remote host.
   local cwd_uri = pane:get_current_working_dir()
   if cwd_uri then
-    local cwd = ''
-
-    if type(cwd_uri) == 'userdata' then
-      -- Running on a newer version of wezterm and we have
-      -- a URL object here, making this simple!
-
-      cwd = cwd_uri.file_path
-    else
-      -- an older version of wezterm, 20230712-072601-f4abf8fd or earlier,
-      -- which doesn't have the Url object
-      cwd_uri = cwd_uri:sub(8)
-      local slash = cwd_uri:find '/'
-      if slash then
-        -- and extract the cwd from the uri, decoding %-encoding
-        cwd = cwd_uri:sub(slash):gsub('%%(%x%x)', function(hex)
-          return string.char(tonumber(hex, 16))
-        end)
-
-        if cwd:sub(1, 13) == "/Users/kenyap" then
-          cwd = "~" .. cwd:sub(14)
-        end
-      end
-    end
-
+    local cwd = cwd_uri.file_path or cwd_uri
+    -- decode older URIs if necessary like in your code
+    cwd = shorten_path(cwd, 40) -- adjust 40 to your taste
     table.insert(cells, '  ' .. wezterm.nerdfonts.md_folder .. '  ' .. cwd)
   end
 

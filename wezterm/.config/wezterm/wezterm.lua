@@ -18,8 +18,10 @@ if wezterm.config_builder then
 end
 
 -- Tab Bar styling
+config.tab_max_width = 100
 config.tab_bar_at_bottom = true
 config.use_fancy_tab_bar = false
+
 config.colors = {
   tab_bar = {
     background = '#3c1361',

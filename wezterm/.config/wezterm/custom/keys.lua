@@ -191,6 +191,10 @@ local keys = {
 
   { key = 'a',          mods = 'LEADER',       action = act.AttachDomain('unix') },
   { key = 'd',          mods = 'LEADER',       action = act.DetachDomain({ DomainName = 'unix' }) },
+
+  { key = 'f',          mods = 'LEADER',       action = wezterm.action.ToggleAlwaysOnTop },
+
+  { key = 'K',          mods = 'CTRL|SHIFT',   action = wezterm.action.ClearScrollback('ScrollbackAndViewport') },
 }
 
 if utils.OS == 'Linux' then
