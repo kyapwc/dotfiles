@@ -41,7 +41,8 @@ configs.setup {
     'luadoc',
     'lua',
     'c',
-    'c_sharp'
+    'c_sharp',
+    'dockerfile'
   },
   playground = {
     enable = true,
