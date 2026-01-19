@@ -6,6 +6,36 @@ local cmp = require('cmp')
 local luasnip = require('luasnip')
 local signature = require('lsp_signature')
 
+local menu_icon = {
+  nvim_lsp   = "λ [LSP]",
+  vsnip      = "⋗ [VSnip]",
+  buffer     = "Ω [Buffer]",
+  path       = "~ [Path]",
+  Supermaven = " [Supermaven]",
+}
+
+local function common_format(entry, item)
+  local orig_kind = item.kind -- e.g. "Function", "Variable", etc.
+
+  local formatted = require("lspkind").cmp_format({
+    mode = "symbol_text",
+    show_labelDetails = true,
+  })(entry, item)
+
+  -- Keep your kind highlight groups working even if you later change formatted.kind text
+  formatted.kind_hl_group = "CmpItemKind" .. orig_kind
+
+  -- Source label on the right
+  formatted.menu = menu_icon[entry.source.name] or ""
+
+  formatted.concat = formatted.abbr
+
+  item.abbr = ' ' .. item.abbr
+  item.menu = (item.menu or '') .. ' '
+
+  return formatted
+end
+
 signature.setup({
   hint_enable = false,
   handler_opts = { border = "single" },
@@ -32,13 +62,19 @@ cmp.setup({
     end,
   },
   window = {
-    completion = cmp.config.window.bordered(),
     -- completion = {
     --   winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
     --   col_offset = -3,
     --   side_padding = 0,
     -- },
-    documentation = cmp.config.window.bordered(),
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+    completion = cmp.config.window.bordered({
+      winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None"
+    }),
+    documentation = cmp.config.window.bordered({
+      winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,Search:None",
+    }),
   },
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
@@ -65,42 +101,10 @@ cmp.setup({
     ["<CR>"] = cmp.mapping.confirm({ select = false }),
   }),
   formatting = {
-    fields = { "abbr", "kind", "menu", "kind" },
-    format = function(entry, vim_item)
-      local menu_icon = {
-        nvim_lsp = 'λ',
-        vsnip = '⋗',
-        buffer = 'Ω',
-        path = '~',
-        Supermaven = ""
-      }
-      local function commom_format(e, item)
-        local kind = require("lspkind").cmp_format({
-          mode = "symbol_text",
-          show_labelDetails = true, -- show labelDetails in menu. Disabled by default
-        })(e, item)
-        kind.menu = menu_icon[e.source.name] or ''
-        kind.concat = kind.abbr
-        return kind
-      end
-      return commom_format(entry, vim_item)
-    end,
+    fields = { "kind", "abbr", "menu" },
+    format = common_format
   }
 })
 
--- gray
-vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
--- blue
-vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', { bg = 'NONE', fg = '#569CD6' })
-vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
--- light blue
-vim.api.nvim_set_hl(0, 'CmpItemKindVariable', { bg = 'NONE', fg = '#9CDCFE' })
-vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { link = 'CmpItemKindVariable' })
-vim.api.nvim_set_hl(0, 'CmpItemKindText', { link = 'CmpItemKindVariable' })
--- pink
-vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { bg = 'NONE', fg = '#C586C0' })
-vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { link = 'CmpItemKindFunction' })
--- front
-vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { bg = 'NONE', fg = '#D4D4D4' })
-vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { link = 'CmpItemKindKeyword' })
-vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { link = 'CmpItemKindKeyword' })
+-- vim.cmd "highlight! BorderBG guibg=NONE guifg=#00ff00"
+vim.cmd "highlight! BorderBG guibg=NONE guifg=#565f89"

@@ -25,9 +25,10 @@ lsp_signature.setup {
 }
 
 local function validate_bufnr(bufnr)
-  vim.validate {
-    bufnr = { bufnr, 'n' },
-  }
+  local ok = pcall(vim.validate, "bufnr", bufnr, "number")
+  if not ok then
+    vim.validate({ bufnr = { bufnr, "n" } }) -- legacy form
+  end
   return bufnr == 0 and api.nvim_get_current_buf() or bufnr
 end
 

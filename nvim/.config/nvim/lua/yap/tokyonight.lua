@@ -12,4 +12,11 @@ tokyonight.setup({
   on_colors = function(colors)
     colors.border = '#76365B'
   end,
+  on_highlights = function(hl, c)
+    -- keep it theme-relative, not hex
+    hl.Pmenu      = { fg = c.fg, bg = c.bg_dark }
+    hl.PmenuSel   = { fg = c.fg, bg = c.bg_highlight, bold = true }
+    hl.PmenuSbar  = { bg = c.bg_dark }
+    hl.PmenuThumb = { bg = c.bg_highlight }
+  end,
 })
