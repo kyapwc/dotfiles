@@ -18,5 +18,9 @@ tokyonight.setup({
     hl.PmenuSel   = { fg = c.fg, bg = c.bg_highlight, bold = true }
     hl.PmenuSbar  = { bg = c.bg_dark }
     hl.PmenuThumb = { bg = c.bg_highlight }
+
+    -- Add this for completion menu borders
+    hl.CmpBorder  = { fg = '#bb9af7', bg = 'NONE' }
   end,
+  cache = true
 })
