@@ -603,6 +603,7 @@ return {
               print("Client", job_id, "exited with code", exit_code, "Event type:", event_type)
             end,
           })
+          -- Gracefully replace cur
           -- local cmd = ("wezterm cli set-tab-title --pane-id $(wezterm cli spawn nvim --server localhost:%s --remote-ui) %s")
           --     :format(
           --       port,
@@ -706,4 +707,67 @@ return {
       }
     end,
   },
+
+  {
+    "ravitemer/mcphub.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim"
+    },
+    build = "npm install -g mcp-hub@latest",
+    config = function()
+      require("mcphub").setup({
+        auto_approve = true,
+        port = 9999, -- Port for the mcp-hub Express server
+        config = vim.fn.expand("~/.config/nvim/mcpservers.json"),
+        log = {
+          level = vim.log.levels.WARN, -- Adjust verbosity (DEBUG, INFO, WARN, ERROR)
+          to_file = true,
+          file_path = vim.fn.expand("~/.local/state/nvim/mcphub.log"),
+        },
+        on_ready = function()
+          vim.notify("MCP Hub backend server is initialized and ready.", vim.log.levels.INFO)
+        end
+      })
+    end,
+  },
+
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "ravitemer/mcphub.nvim",
+    },
+    config = function()
+      require("codecompanion").setup({
+        strategies = {
+          chat = {
+            adapter = "openai",
+            tools = {
+              mcp = {
+                enabled = true,
+              }
+            }
+          },
+        },
+        extensions = {
+          mcphub = {
+            callback = "mcphub.extensions.codecompanion",
+            opts = {
+              -- MCP Tools
+              make_tools = true,                    -- Make individual tools (@server__tool) and server groups (@server) from MCP servers
+              show_server_tools_in_chat = true,     -- Show individual tools in chat completion (when make_tools=true)
+              add_mcp_prefix_to_tool_names = false, -- Add mcp__ prefix (e.g `@mcp__github`, `@mcp__neovim__list_issues`)
+              show_result_in_chat = true,           -- Show tool results directly in chat buffer
+              format_tool = nil,                    -- function(tool_name:string, tool: CodeCompanion.Agent.Tool) : string Function to format tool names to show in the chat buffer
+              -- MCP Resources
+              make_vars = true,                     -- Convert MCP resources to #variables for prompts
+              -- MCP Prompts
+              make_slash_commands = true,           -- Add MCP prompts as /slash commands
+            }
+          }
+        }
+      })
+    end,
+  }
 }
