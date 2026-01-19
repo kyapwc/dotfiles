@@ -70,7 +70,7 @@ cmp.setup({
     -- completion = cmp.config.window.bordered(),
     -- documentation = cmp.config.window.bordered(),
     completion = cmp.config.window.bordered({
-      winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None"
+      winhighlight = "Normal:Pmenu,FloatBorder:CmpBorder,CursorLine:PmenuSel,Search:None"
     }),
     documentation = cmp.config.window.bordered({
       winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,Search:None",
@@ -107,4 +107,7 @@ cmp.setup({
 })
 
 -- vim.cmd "highlight! BorderBG guibg=NONE guifg=#00ff00"
-vim.cmd "highlight! BorderBG guibg=NONE guifg=#565f89"
+vim.cmd [[
+  highlight! link CmpBorder Pmenu
+  highlight! CmpBorder guifg=#bb9af7 guibg=NONE
+]]
