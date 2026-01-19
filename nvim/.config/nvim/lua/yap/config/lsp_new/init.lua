@@ -1,5 +1,6 @@
 local navic = require('nvim-navic')
 local mason = require('mason')
+local util = require('lspconfig.util')
 
 local api = vim.api
 
@@ -72,6 +73,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '<space>rr', vim.lsp.buf.references, reference_opts)
+    vim.keymap.set('n', '<C-]>', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', '<space>f', function()
       vim.lsp.buf.format { async = true }
     end, opts)
@@ -154,6 +156,7 @@ local servers = {
   cssls = {},
   vuels = {},
   rust_analyzer = {
+    root_dir = util.root_pattern("Cargo.toml"),
     cmd = {
       "rustup",
       "run",
