@@ -40,6 +40,7 @@ local function on_attach(client, bufNo)
 
   api.nvim_buf_set_option(bufNo, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+  vim.lsp.inlay_hint.enable(false, { bufnr = bufNo })
   -- require('yap.config.lsp.keymaps').setup(client, bufNo)
 end
 
@@ -55,7 +56,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local reference_opts = { buffer = ev.buf, desc = '[LSP] References' }
     vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
     -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gD', vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set('n', 'gD', vim.lsp.buf.implementation, opts)
     -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
@@ -103,7 +104,7 @@ local servers = {
       },
     },
   },
-  tsserver = {
+  ts_ls = {
     on_attach = on_attach,
     init_options = {
       maxTsServerMemory = 8192,

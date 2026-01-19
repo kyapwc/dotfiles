@@ -1,36 +1,32 @@
 local mason_lspconfig = require('mason-lspconfig')
-local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local M = {}
 
 function M.setup(servers)
-  local config = {
-    function(server_name)
-      lspconfig[server_name].setup({
-        capabilities = capabilities,
-      })
-    end
-  }
-
-  local mason_config = {
-    ensure_installed = { 'eslint' },
-  }
-
-  for server_name, server_options in pairs(servers or {}) do
-    table.insert(mason_config.ensure_installed, server_name)
-    config[server_name] = function()
-      lspconfig[server_name].setup(vim.tbl_extend("force", {
-        capabilities = capabilities,
-      }, server_options))
-    end
-    -- config[server_name] = function()
-    --   -- lspconfig[server_name].setup(coq.lsp_ensure_capabilities(server_options))
-    -- end
+  -- 1) Tell mason-lspconfig what to install
+  local ensure = {}
+  for server_name, _ in pairs(servers or {}) do
+    table.insert(ensure, server_name)
   end
 
-  mason_lspconfig.setup(mason_config)
-  mason_lspconfig.setup_handlers(config)
+  mason_lspconfig.setup({
+    ensure_installed = ensure,
+    -- automatic_enable defaults to true in v2, but being explicit is fine:
+    automatic_enable = true,
+  }) -- :contentReference[oaicite:1]{index=1}
+
+  -- 2) Register configs with Neovim's native API
+  for server_name, server_opts in pairs(servers or {}) do
+    vim.lsp.config(server_name, vim.tbl_deep_extend("force", {
+      capabilities = capabilities,
+    }, server_opts or {}))
+  end
+
+  -- 3) If you want to be explicit (optional; mason-lspconfig will auto-enable installed servers by default):
+  for _, server_name in ipairs(ensure) do
+    vim.lsp.enable(server_name)
+  end
 end
 
 return M
