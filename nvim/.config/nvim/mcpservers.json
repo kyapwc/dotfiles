@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "clickup": {
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.clickup.com/mcp"
+      ],
+      "command": "npx",
+      "disabled": false
+    }
+  }
+}

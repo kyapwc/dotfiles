@@ -1,0 +1,34 @@
+[os]
+edit = 'nvim'
+editAtLine = "{{editor}} --remote-send '<C-\\><C-n>:5ToggleTerm<CR>:lua Edit({{filename}}, {{line}})<CR>'"
+
+[git]
+branchLogCmd = "git log --graph --color=always --abbrev-commit --decorate --date=relative --pretty=medium --oneline {{branchName}} --"
+skipHookPrefix = "WIP"
+autoFetch = true
+autoRefresh = true
+allBranchesLogCmd = 'git log --graph --all --color=always --abbrev-commit --decorate --date=relative --pretty=medium'
+overrideGpg = false
+disableForcePushing = false
+parseEmoji = false
+diffContextSize = 3
+
+[git.commitPrefixes.my_project]
+pattern = "^\\w+\\/(\\w+-\\w+).*"
+replace = '[$1] '
+
+[git.paging]
+colorArg = "always"
+pager = "delta --dark --paging=never"
+
+[git.commit]
+signOff = false
+
+[git.merging]
+manualCommit = false
+args = ''
+
+[git.log]
+order = "topo-order"
+showGraph = "when-maximised"
+showWholeGraph = false
