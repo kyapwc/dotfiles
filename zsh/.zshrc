@@ -229,7 +229,7 @@ function expand-dots-then-accept-line() {
 }
 
 function find_and_upgrade_package() {
-	find ./* -name "package.json" | xargs grep -l "\"$1\": \"*\"" | xargs -I {} bash -c "npm --prefix \$(dirname {}) install --no-audit --save-exact $1@$2 &" | >/dev/null
+	find ./* -name "package.json" | xargs grep -l "\"$1\": \"*\"" | xargs -I {} bash -c "npm --prefix \$(dirname {}) install --no-audit --save $1@$2 &" | >/dev/null
 }
 
 function respond_reinstall_packages() {
