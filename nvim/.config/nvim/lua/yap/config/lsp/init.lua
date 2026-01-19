@@ -32,7 +32,7 @@ local function validate_bufnr(bufnr)
 end
 
 local function get_active_client_by_name(bufnr, servername)
-  for _, client in pairs(vim.lsp.get_active_clients { bufnr = bufnr }) do
+  for _, client in pairs(vim.lsp.get_clients { bufnr = bufnr }) do
     if client.name == servername then
       return client
     end
