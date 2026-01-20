@@ -118,6 +118,7 @@ o.tabstop = 2
 o.softtabstop = 2
 o.shiftwidth = 2
 o.expandtab = true
+o.winborder = 'double'
 
 -- =======================
 -- Buffer options
@@ -411,12 +412,14 @@ vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPre", "BufNewFile" }, {
 
     -- Set diagnostic signs
     for _, sign in ipairs(signs) do
-      vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+      vim.diagnostic.config({ virtual_text = false })
+      -- vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
     end
   end,
   group = vim.api.nvim_create_augroup("DiagnosticConfigOnSave", { clear = true }),
   desc = "Set diagnostic configuration after file save",
 })
+
 -- require('yap/rest')
 -- require('yap/inlay-hints')
 -- require('fidget').setup({
