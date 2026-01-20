@@ -34,7 +34,8 @@ conform.setup({
     toml = { "taplo" },
     css = { { "prettierd", "prettier" } },
     scss = { { "prettierd", "prettier" } },
-    go = {}
+    -- disable golang formatter and let gopls do its work
+    -- go = {}
   },
   format_on_save = function(bufnr)
     -- Disable with a global or buffer-local variable
