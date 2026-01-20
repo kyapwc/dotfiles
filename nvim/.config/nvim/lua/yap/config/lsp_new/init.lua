@@ -84,9 +84,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 local servers = {
-  -- gopls = {
-  --   on_attach = on_attach,
-  -- },
+  gopls = { on_attach = on_attach },
   html = {},
   jsonls = {
     init_options = {
