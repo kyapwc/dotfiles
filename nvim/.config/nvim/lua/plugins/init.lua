@@ -759,5 +759,18 @@ return {
         }
       })
     end,
-  }
+  },
+
+  {
+    "OXY2DEV/markview.nvim",
+    lazy = false,
+    config = function()
+      local markview = require("markview")
+      local presets = require("markview.presets").headings;
+
+      markview.setup({
+        markdown = { headings = presets.numbered }
+      })
+    end,
+  },
 }
