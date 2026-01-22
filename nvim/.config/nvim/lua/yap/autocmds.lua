@@ -23,21 +23,6 @@ vim.cmd([[
 ]])
 
 -- =======================
--- Personal text objects
--- =======================
-vim.cmd [[
-  onoremap iq i'
-  onoremap iQ i"
-  onoremap aq a'
-  onoremap aQ a"
-  onoremap sq s'
-  onoremap sQ s"
-  onoremap , t,
-  vnoremap iq i'
-  vnoremap iQ i""
-]]
-
--- =======================
 -- Splitjoin config
 -- =======================
 vim.cmd [[

@@ -311,6 +311,16 @@ local function switch_case()
 end
 
 vim.keymap.set('n', '<Space>ss', switch_case, { noremap = true, silent = true })
+vim.keymap.set({ "o", "x" }, "iq", "i'", { noremap = true })
+vim.keymap.set({ "o", "x" }, "iQ", 'i"', { noremap = true })
+vim.keymap.set({ "o", "x" }, "aq", "a'", { noremap = true })
+vim.keymap.set({ "o", "x" }, "aQ", 'a"', { noremap = true })
+vim.keymap.set("n", ",", "t,", { noremap = true, silent = true })
+vim.keymap.set({ "o", "x" }, ",", "t,", { noremap = true, silent = true })
+vim.keymap.set("n", "sq", "ci'", { noremap = true, silent = true })
+vim.keymap.set("n", "sQ", 'ci"', { noremap = true, silent = true })
+vim.keymap.set({ "o", "x" }, "iq", "i'", { noremap = true, silent = true })
+vim.keymap.set({ "o", "x" }, "iQ", 'i"', { noremap = true, silent = true })
 -- vim.opt.termguicolors = true
 
 -- =======================
