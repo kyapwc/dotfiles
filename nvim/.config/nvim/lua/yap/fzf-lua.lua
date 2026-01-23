@@ -99,19 +99,19 @@ vim.keymap.set("n", "<space>pr", function()
   -- Open fzf-lua.git_branches() and create a PR link
   fzfLua.git_branches({
     actions = {
-      ["default"] = function(selected_branch)
-        if type(selected_branch) == "table" then
-          selected_branch = string.gsub(selected_branch[1], "%s+", "")
-        end
+      ["default"] = function(selected)
+        local line = type(selected) == "table" and selected[1] or selected
+        local selected_branch = line:match("^%*?%s*([^%s]+)") -- first token, skip leading "*"
+
+        -- optional: if it comes back like "origin/foo" and you want "foo"
+        selected_branch = selected_branch:gsub("^origin/", ""):gsub("^remotes/origin/", "")
 
         local pr_url = string.format("%s/pull/new/%s...%s", repo_url, selected_branch, current_branch)
         vim.fn.setreg("+", pr_url)
         vim.notify("PR Link Opened & In Clipboard")
 
-        local handle = io.popen('open ' .. pr_url)
-        if handle then
-          handle:close()
-        end
+        local handle = io.popen('open ' .. vim.fn.shellescape(pr_url))
+        if handle then handle:close() end
       end,
     },
   })
