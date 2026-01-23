@@ -188,7 +188,7 @@ key_mapper('n', '<space>gC', ':Git commit<CR>', 'Git commit')
 -- key_mapper('n', '<leader>fs', ':lua require("telescope.builtin").live_grep()<CR>')
 key_mapper('n', '<C-p>', ':lua require("fzf-lua").files()<CR>', 'FZF lua files')
 key_mapper('n', '<C-b>', ':lua require("fzf-lua").buffers()<CR>', 'FZF lua buffers')
-key_mapper('n', '<C-f>', ':lua require("fzf-lua").live_grep_native()<CR>', 'FZF Live Grep')
+-- key_mapper('n', '<C-f>', ':lua require("fzf-lua").live_grep_native()<CR>', 'FZF Live Grep')
 key_mapper('n', '<space>cb', ':lua require("fzf-lua").git_branches()<CR>', 'Change Git Branch')
 key_mapper('n', '<space>a', ':lua require("fzf-lua").lsp_code_actions()<CR>', 'FZF LSP Code Actions')
 key_mapper('n', '<space>lr', ':lua require("fzf-lua").lsp_references()<CR>', 'LSP Code references')
@@ -321,6 +321,14 @@ vim.keymap.set("n", "sq", "ci'", { noremap = true, silent = true })
 vim.keymap.set("n", "sQ", 'ci"', { noremap = true, silent = true })
 vim.keymap.set({ "o", "x" }, "iq", "i'", { noremap = true, silent = true })
 vim.keymap.set({ "o", "x" }, "iQ", 'i"', { noremap = true, silent = true })
+vim.keymap.set("n", "<C-f>", function()
+  require("yap.fzf-dir-grep").run()
+end, { desc = "Run grep (mode-dependent)" })
+
+vim.keymap.set("n", "<C-x>", function()
+  require("yap.fzf-dir-grep").toggle_mode()
+end, { desc = "Toggle grep mode" })
+
 -- vim.opt.termguicolors = true
 
 -- =======================
