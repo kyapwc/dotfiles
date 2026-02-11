@@ -7,7 +7,7 @@ fzfLua.setup({
   lsp = {
     code_actions = {
       previewer = 'codeaction_native',
-      preview_pager = "delta --side-by-side --width=$FZF_PREVIEW_COLUMNS --hunk-header-style='omit' --file-style='omit'",
+      preview_pager = "delta --side-by-side --width=$FZF_PREVIEW_COLUMNS --hunk-header-style=omit --file-style=omit",
     },
   },
   file_ignore_patterns = { "undodir$", "dist" },
@@ -39,6 +39,7 @@ fzfLua.setup({
       -- ['default'] = actions.file_edit,
       ['default'] = actions.file_edit_or_qf,
       ['ctrl-v'] = actions.file_vsplit,
+      ['ctrl-h'] = actions.file_split,
     }
   },
   keymap = {
