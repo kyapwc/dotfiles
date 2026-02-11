@@ -35,10 +35,14 @@ conform.setup({
     css = { { "prettierd", "prettier" } },
     scss = { { "prettierd", "prettier" } },
     -- disable golang formatter and let gopls do its work
-    -- go = {}
+    go = {}
   },
   format_on_save = function(bufnr)
     -- Disable with a global or buffer-local variable
+    if vim.bo[bufnr].filetype == "go" then
+      return nil -- disable format on save for go
+    end
+
     if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
