@@ -307,6 +307,7 @@ bindkey '.' replace_multiple_dots
 bindkey '^I' expand-dots-then-expand-or-complete
 bindkey '^M' expand-dots-then-accept-line
 bindkey '^[[Z' reverse-menu-complete
+alias killdevcontainer="devcontainer exec --workspace-folder . hostname | xargs -r docker rm -f"
 
 if [[ $OS == "Linux" ]]; then
   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
