@@ -255,15 +255,16 @@ key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<
 -- =======================
 key_mapper('n', '<leader>bx', '::%bd|e#<CR>', 'Close all buffer except for current')
 
-local cmake = require('cmake-tools')
-vim.keymap.set("n", "<leader>dz", function()
-  cmake.select_launch_target(function(item)
-    P("DAMN BRO")
-    P(item)
-    vim.cmd("CMakeRun")
-  end)
-end, { desc = "run with target select" })
-
+if not IS_DEVCONTAINER() then
+  local cmake = require('cmake-tools')
+  vim.keymap.set("n", "<leader>dz", function()
+    cmake.select_launch_target(function(item)
+      P("DAMN BRO")
+      P(item)
+      vim.cmd("CMakeRun")
+    end)
+  end, { desc = "run with target select" })
+end
 
 -- =======================
 -- Extras

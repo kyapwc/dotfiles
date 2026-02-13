@@ -44,3 +44,23 @@ IS_LINUX = function()
   local osName = OS_NAME()
   return osName == 'Linux'
 end
+
+IS_DEVCONTAINER = function()
+  -- Strong Docker signal
+  if vim.loop.fs_stat("/.dockerenv") then
+    return true
+  end
+
+  -- cgroup heuristic
+  local cgroup = "/proc/1/cgroup"
+  local fd = io.open(cgroup, "r")
+  if fd then
+    local content = fd:read("*a") or ""
+    fd:close()
+    if content:match("docker") or content:match("containerd") or content:match("kubepods") then
+      return true
+    end
+  end
+
+  return false
+end

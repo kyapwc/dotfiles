@@ -687,27 +687,7 @@ local plugins = {
   },
 }
 
-local function in_devcontainer()
-  -- Strong Docker signal
-  if vim.loop.fs_stat("/.dockerenv") then
-    return true
-  end
-
-  -- cgroup heuristic
-  local cgroup = "/proc/1/cgroup"
-  local fd = io.open(cgroup, "r")
-  if fd then
-    local content = fd:read("*a") or ""
-    fd:close()
-    if content:match("docker") or content:match("containerd") or content:match("kubepods") then
-      return true
-    end
-  end
-
-  return false
-end
-
-if not in_devcontainer() then
+if not IS_DEVCONTAINER() then
   local host_only = {
     {
       "dmtrKovalenko/fff.nvim",
@@ -796,6 +776,5 @@ if not in_devcontainer() then
 
   vim.list_extend(plugins, host_only)
 end
-
 
 return plugins
