@@ -1,4 +1,4 @@
-return {
+local plugins = {
   -- Treesitter and theme
   { 'nvim-treesitter/nvim-treesitter' },
   { 'nvim-treesitter/playground' },
@@ -222,11 +222,6 @@ return {
   },
 
   {
-    'rrethy/vim-hexokinase',
-    build = 'make hexokinase',
-  },
-
-  {
     'folke/trouble.nvim',
     opts = {},
     cmd = "Trouble",
@@ -332,21 +327,6 @@ return {
     config = function()
       require('fidget').setup({})
     end
-  },
-
-  {
-    "ray-x/go.nvim",
-    dependencies = { -- optional packages
-      "ray-x/guihua.lua",
-      "neovim/nvim-lspconfig",
-      "nvim-treesitter/nvim-treesitter",
-    },
-    config = function()
-      require("go").setup()
-    end,
-    event = { "CmdlineEnter" },
-    ft = { "go", 'gomod' },
-    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
   },
 
   {
@@ -623,79 +603,11 @@ return {
   },
 
   {
-    'yousefakbar/notmuch.nvim',
-    config = function()
-      -- Configuration goes here
-      local opts = {
-        open_cmd = 'open',
-      }
-      require('notmuch').setup(opts)
-    end,
-  },
-
-  {
-    "mfussenegger/nvim-dap",
-    lazy = true,
-    dependencies = {
-      "rcarriga/nvim-dap-ui",
-      {
-        "microsoft/vscode-js-debug",
-        version = "1.x",
-        build = "npm i && npm run compile vsDebugServerBundle && mv dist out"
-      }
-    },
-    keys = {
-      { "<F1>",     function() require('dap').continue() end },
-      { "<F2>",     function() require('dap').toggle_breakpoint() end },
-      { "<F3>",     function() require('dap').step_over() end },
-      { "<F4>",     function() require('dap').step_into() end },
-      { "<F5>",     function() require('dap').step_out() end },
-      { "<F6>",     function() require('dap').run_to_cursor() end },
-      { "<F12>",    function() require("dapui").toggle() end },
-      { "<space>?", function() require("dapui").eval(nil, { enter = true }) end },
-      -- { "<leader>d",  function() require('dap').toggle_breakpoint() end },
-      -- { "<leader>x",  function() require('dap').continue() end },
-      -- { "<leader>si", function() require('dap').step_into() end },
-      -- { "<leader>so", function() require('dap').step_over() end },
-    },
-  },
-
-  {
     "sphamba/smear-cursor.nvim",
     opts = {
       cursor_color = "#9d7cd8",
       smear_insert_mode = false
     },
-  },
-
-  {
-    "dmtrKovalenko/fff.nvim",
-    build = "cargo build --release",
-    opts = {
-      prompt = '🪿 ',
-    },
-    keys = {
-      {
-        "ff",
-        function()
-          require("fff").find_files()
-        end,
-        desc = "Open file picker",
-      },
-    },
-  },
-
-  {
-    'Civitasv/cmake-tools.nvim',
-    requires = { 'nvim-lua/plenary.nvim', 'stevearc/overseer.nvim', 'akinsho/toggleterm.nvim' },
-    config = function()
-      require("cmake-tools").setup {
-        -- Customize as needed...
-        cmake_command = "cmake",
-        cmake_build_options = { "-j4" },
-        cmake_build_directory = "build/${variant:buildType}"
-      }
-    end,
   },
 
   {
@@ -774,3 +686,116 @@ return {
     end,
   },
 }
+
+local function in_devcontainer()
+  -- Strong Docker signal
+  if vim.loop.fs_stat("/.dockerenv") then
+    return true
+  end
+
+  -- cgroup heuristic
+  local cgroup = "/proc/1/cgroup"
+  local fd = io.open(cgroup, "r")
+  if fd then
+    local content = fd:read("*a") or ""
+    fd:close()
+    if content:match("docker") or content:match("containerd") or content:match("kubepods") then
+      return true
+    end
+  end
+
+  return false
+end
+
+if not in_devcontainer() then
+  local host_only = {
+    {
+      "dmtrKovalenko/fff.nvim",
+      build = "cargo build --release",
+      opts = {
+        prompt = '🪿 ',
+      },
+      keys = {
+        {
+          "ff",
+          function()
+            require("fff").find_files()
+          end,
+          desc = "Open file picker",
+        },
+      },
+    },
+    {
+      "ray-x/go.nvim",
+      dependencies = { -- optional packages
+        "ray-x/guihua.lua",
+        "neovim/nvim-lspconfig",
+        "nvim-treesitter/nvim-treesitter",
+      },
+      config = function()
+        require("go").setup()
+      end,
+      event = { "CmdlineEnter" },
+      ft = { "go", 'gomod' },
+      build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+    },
+    {
+      'rrethy/vim-hexokinase',
+      build = 'make hexokinase',
+    },
+    {
+      "mfussenegger/nvim-dap",
+      lazy = true,
+      dependencies = {
+        "rcarriga/nvim-dap-ui",
+        {
+          "microsoft/vscode-js-debug",
+          version = "1.x",
+          build = "npm i && npm run compile vsDebugServerBundle && mv dist out"
+        }
+      },
+      keys = {
+        { "<F1>",     function() require('dap').continue() end },
+        { "<F2>",     function() require('dap').toggle_breakpoint() end },
+        { "<F3>",     function() require('dap').step_over() end },
+        { "<F4>",     function() require('dap').step_into() end },
+        { "<F5>",     function() require('dap').step_out() end },
+        { "<F6>",     function() require('dap').run_to_cursor() end },
+        { "<F12>",    function() require("dapui").toggle() end },
+        { "<space>?", function() require("dapui").eval(nil, { enter = true }) end },
+        -- { "<leader>d",  function() require('dap').toggle_breakpoint() end },
+        -- { "<leader>x",  function() require('dap').continue() end },
+        -- { "<leader>si", function() require('dap').step_into() end },
+        -- { "<leader>so", function() require('dap').step_over() end },
+      },
+    },
+    {
+      'Civitasv/cmake-tools.nvim',
+      requires = { 'nvim-lua/plenary.nvim', 'stevearc/overseer.nvim', 'akinsho/toggleterm.nvim' },
+      config = function()
+        require("cmake-tools").setup {
+          -- Customize as needed...
+          cmake_command = "cmake",
+          cmake_build_options = { "-j4" },
+          cmake_build_directory = "build/${variant:buildType}"
+        }
+      end,
+    },
+    {
+      'yousefakbar/notmuch.nvim',
+      config = function()
+        -- Configuration goes here
+        local opts = {
+          open_cmd = 'open',
+        }
+        require('notmuch').setup(opts)
+      end,
+    },
+
+  }
+
+  vim.list_extend(plugins, host_only)
+end
+
+
+return plugins

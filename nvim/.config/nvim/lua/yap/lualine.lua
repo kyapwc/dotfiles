@@ -305,7 +305,13 @@ ins_right {
     local command = nil
 
     if IS_LINUX() then
-      command = io.popen('cat /sys/class/power_supply/BAT0/capacity')
+      local f = io.open('/sys/class/power_supply/BAT0/capacity', 'r')
+      if f then
+        f:close()
+        command = io.popen('cat /sys/class/power_supply/BAT0/capacity')
+      else
+        return "N/A"
+      end
     else
       command = io.popen('pmset -g batt | grep -Eo "\\d+%" | cut -d% -f1')
     end
