@@ -2,40 +2,13 @@ local plugins = {
   -- Treesitter and theme
   { 'nvim-treesitter/nvim-treesitter' },
   { 'nvim-treesitter/playground' },
-  -- { 'junegunn/seoul256.vim' },
-  -- { 'sainnhe/everforest' },
+
   {
     'folke/tokyonight.nvim',
     lazy = false,
     priority = 1000,
     opts = {},
   },
-  -- { 'tiagovla/tokyodark.nvim' },
-  -- { 'Rigellute/shades-of-purple.vim' },
-  -- {
-  --   'catppuccin/nvim',
-  --   as = 'catppuccin',
-  --   config = function()
-  --     require('catppuccin').setup({
-  --       flavour = 'macchiato',
-  --       background = {
-  --         light = 'macchiato',
-  --         dark = 'macchiato',
-  --       },
-  --       term_colors = true,
-  --       show_end_of_buffer = false,
-  --       dim_inactive = {
-  --         enabled = true,
-  --         shade = 'dark',
-  --         percentage = 0.15,
-  --       },
-  --       custom_highlight = {
-  --         Comment = { style = { "italic" } },
-  --         ['@comment'] = { style = { "italic" } },
-  --       },
-  --     })
-  --   end
-  -- },
 
   -- Git-related
   'tpope/vim-fugitive',
@@ -55,7 +28,11 @@ local plugins = {
     'ibhagwan/fzf-lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' }
   },
-  { 'junegunn/fzf',                        build = './install --bin', },
+  {
+    'junegunn/fzf',
+    build = './install --bin'
+  },
+
   'jremmen/vim-ripgrep',
 
   -- LuaLine (status Line)
@@ -106,7 +83,7 @@ local plugins = {
   },
 
   -- MISC
-  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl',              opts = {} },
+  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl', opts = {} },
 
   -- Native LSP setup
   {
@@ -312,11 +289,6 @@ local plugins = {
 
   { 'adelarsq/vim-matchit' },
 
-  -- { 'kyapwc/gojira.nvim' },
-  -- {
-  --   dir = '/Users/kenyap/workspace/gojira.nvim',
-  -- },
-
   {
     "j-hui/fidget.nvim",
     tag = "legacy",
@@ -409,24 +381,9 @@ local plugins = {
   --   end,
   -- },
 
-  {
-    "ldelossa/gh.nvim",
-    dependencies = {
-      {
-        "ldelossa/litee.nvim",
-        config = function()
-          require("litee.lib").setup()
-        end,
-      },
-    },
-    config = function()
-      require("litee.gh").setup()
-    end,
-  },
-
   { "MunifTanjim/nui.nvim" },
 
-  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+  { "Bilal2453/luvit-meta",         lazy = true }, -- optional `vim.uv` typings
 
   {
     "hrsh7th/nvim-cmp",
@@ -533,13 +490,6 @@ local plugins = {
     end,
   },
 
-  -- {
-  --   'pieces-app/plugin_neo_vim',
-  --   config = function()
-  --     require('pieces.config').host = 'http://localhost:1000'
-  --   end,
-  -- },
-
   { "akinsho/toggleterm.nvim" },
 
   {
@@ -551,55 +501,6 @@ local plugins = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-neotest/neotest-jest"
     }
-  },
-
-  {
-    "amitds1997/remote-nvim.nvim",
-    version = "*",                     -- Pin to GitHub releases
-    dependencies = {
-      "nvim-lua/plenary.nvim",         -- For standard functions
-      "MunifTanjim/nui.nvim",          -- To build the plugin UI
-      "nvim-telescope/telescope.nvim", -- For picking b/w different remote methods
-    },
-    config = function()
-      require("remote-nvim").setup({
-        client_callback = function(port, workspace_config)
-          local cmd = ("neovide --server localhost:%s"):format(
-            port
-          )
-          vim.fn.jobstart(cmd, {
-            detach = true,
-            on_exit = function(job_id, exit_code, event_type)
-              print("Client", job_id, "exited with code", exit_code, "Event type:", event_type)
-            end,
-          })
-          -- Gracefully replace cur
-          -- local cmd = ("wezterm cli set-tab-title --pane-id $(wezterm cli spawn nvim --server localhost:%s --remote-ui) %s")
-          --     :format(
-          --       port,
-          --       ("'Remote: %s'"):format(workspace_config.host)
-          --     )
-          -- if vim.env.TERM == "xterm-kitty" then
-          --   cmd = ("kitty -e nvim --server localhost:%s --remote-ui"):format(port)
-          -- end
-          -- vim.fn.jobstart(cmd, {
-          --   detach = true,
-          --   on_exit = function(job_id, exit_code, event_type)
-          --     -- This function will be called when the job exits
-          --     print("Client", job_id, "exited with code", exit_code, "Event type:", event_type)
-          --   end,
-          -- })
-        end,
-        devpod = {
-          -- dotfiles = { },
-          container_list = "running_only",
-        },
-        offline_mode = {
-          enabled = true,
-          no_github = false,
-        }
-      })
-    end,
   },
 
   {
@@ -690,22 +591,6 @@ local plugins = {
 if not IS_DEVCONTAINER() then
   local host_only = {
     {
-      "dmtrKovalenko/fff.nvim",
-      build = "cargo build --release",
-      opts = {
-        prompt = '🪿 ',
-      },
-      keys = {
-        {
-          "ff",
-          function()
-            require("fff").find_files()
-          end,
-          desc = "Open file picker",
-        },
-      },
-    },
-    {
       "ray-x/go.nvim",
       dependencies = { -- optional packages
         "ray-x/guihua.lua",
@@ -723,57 +608,34 @@ if not IS_DEVCONTAINER() then
       'rrethy/vim-hexokinase',
       build = 'make hexokinase',
     },
-    {
-      "mfussenegger/nvim-dap",
-      lazy = true,
-      dependencies = {
-        "rcarriga/nvim-dap-ui",
-        {
-          "microsoft/vscode-js-debug",
-          version = "1.x",
-          build = "npm i && npm run compile vsDebugServerBundle && mv dist out"
-        }
-      },
-      keys = {
-        { "<F1>",     function() require('dap').continue() end },
-        { "<F2>",     function() require('dap').toggle_breakpoint() end },
-        { "<F3>",     function() require('dap').step_over() end },
-        { "<F4>",     function() require('dap').step_into() end },
-        { "<F5>",     function() require('dap').step_out() end },
-        { "<F6>",     function() require('dap').run_to_cursor() end },
-        { "<F12>",    function() require("dapui").toggle() end },
-        { "<space>?", function() require("dapui").eval(nil, { enter = true }) end },
-        -- { "<leader>d",  function() require('dap').toggle_breakpoint() end },
-        -- { "<leader>x",  function() require('dap').continue() end },
-        -- { "<leader>si", function() require('dap').step_into() end },
-        -- { "<leader>so", function() require('dap').step_over() end },
-      },
-    },
-    {
-      'Civitasv/cmake-tools.nvim',
-      requires = { 'nvim-lua/plenary.nvim', 'stevearc/overseer.nvim', 'akinsho/toggleterm.nvim' },
-      config = function()
-        require("cmake-tools").setup {
-          -- Customize as needed...
-          cmake_command = "cmake",
-          cmake_build_options = { "-j4" },
-          cmake_build_directory = "build/${variant:buildType}"
-        }
-      end,
-    },
-    {
-      'yousefakbar/notmuch.nvim',
-      config = function()
-        -- Configuration goes here
-        local opts = {
-          open_cmd = 'open',
-        }
-        require('notmuch').setup(opts)
-      end,
-    },
-
+    -- disable nvim-dap for now since i dont use it so much
+    -- {
+    --   "mfussenegger/nvim-dap",
+    --   lazy = true,
+    --   dependencies = {
+    --     "rcarriga/nvim-dap-ui",
+    --     {
+    --       "microsoft/vscode-js-debug",
+    --       version = "1.x",
+    --       build = "npm i && npm run compile vsDebugServerBundle && mv dist out"
+    --     }
+    --   },
+    --   keys = {
+    --     { "<F1>",     function() require('dap').continue() end },
+    --     { "<F2>",     function() require('dap').toggle_breakpoint() end },
+    --     { "<F3>",     function() require('dap').step_over() end },
+    --     { "<F4>",     function() require('dap').step_into() end },
+    --     { "<F5>",     function() require('dap').step_out() end },
+    --     { "<F6>",     function() require('dap').run_to_cursor() end },
+    --     { "<F12>",    function() require("dapui").toggle() end },
+    --     { "<space>?", function() require("dapui").eval(nil, { enter = true }) end },
+    --     -- { "<leader>d",  function() require('dap').toggle_breakpoint() end },
+    --     -- { "<leader>x",  function() require('dap').continue() end },
+    --     -- { "<leader>si", function() require('dap').step_into() end },
+    --     -- { "<leader>so", function() require('dap').step_over() end },
+    --   },
+    -- },
   }
-
   vim.list_extend(plugins, host_only)
 end
 

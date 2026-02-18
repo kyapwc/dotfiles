@@ -58,29 +58,10 @@ vim.g.tokyonight_style = 'night' -- storm / night / day / moon
 vim.g.tokyonight_italic_functions = true
 vim.g.tokyonight_lualine_bold = true
 -- vim.g.tokyonight_colors = { border = "#8D19C6" }
--- vim.cmd[[
+-- vim.cmd [[
 --   highlight WinSeparator guifg=#8D19C6
 --   highlight VertSplit guifg=#8D19C6
 -- ]]
-
--- ======================
--- Catppuccin config
--- ======================
--- vim.cmd.colorscheme 'catppuccin'
-
--- ======================
--- TokyoDark config
--- ======================
--- vim.g.colors_name = 'tokyodark'
--- vim.g.tokyodark_transparent_background = false
--- vim.g.tokyodark_enable_italic = true
--- vim.g.tokyodark_enable_italic_comment = true
--- vim.g.tokyodark_color_gamma = '0.9'
-
--- ======================
--- Shades of Purple config
--- ======================
--- vim.g.colors_name = 'shades_of_purple'
 
 -- =======================
 -- Declaring Local Variables
@@ -255,17 +236,6 @@ key_mapper('n', '<leader>gg', "<cmd>lua require('goto-preview').close_all_win()<
 -- =======================
 key_mapper('n', '<leader>bx', '::%bd|e#<CR>', 'Close all buffer except for current')
 
-if not IS_DEVCONTAINER() then
-  local cmake = require('cmake-tools')
-  vim.keymap.set("n", "<leader>dz", function()
-    cmake.select_launch_target(function(item)
-      P("DAMN BRO")
-      P(item)
-      vim.cmd("CMakeRun")
-    end)
-  end, { desc = "run with target select" })
-end
-
 -- =======================
 -- Extras
 -- =======================
@@ -397,7 +367,7 @@ require('yap/lint')
 require('yap/conform')
 require('yap/toggle-term')
 require('yap/neotest')
-require('yap/dap')
+-- require('yap/dap')
 
 vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPre", "BufNewFile" }, {
   callback = function()
