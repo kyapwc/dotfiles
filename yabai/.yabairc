@@ -137,6 +137,11 @@ yabai -m rule --add app="^Arc$" title="^Space [0-9]+" subrole="^AXSystemDialog$"
 yabai -m rule --add app="^TablePlus$" title="Window" manage=off sub-layer=above
 yabai -m rule --add app="^TablePlus$" title="tableplus plugins" manage=off sub-layer=above
 yabai -m rule --add app="^TablePlus$" title="^$" manage=off sub-layer=above
+yabai -m rule --add app="^TablePro$" title="Window" manage=off sub-layer=above
+yabai -m rule --add app="^TablePro$" title="tablepro plugins" manage=off sub-layer=above
+yabai -m rule --add app="^TablePro$" title="^$" manage=off sub-layer=above
+yabai -m rule --add app="^TablePro$" title="New Connection" manage=off sub-layer=above
+yabai -m rule --add app="^TablePro$" subrole="^AXStandardWindow$" manage=off sub-layer=above
 yabai -m rule --add app="^Arc$" title="^$" subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off sub-layer=above
 
 # yabai -m config mouse_follows_focus off
