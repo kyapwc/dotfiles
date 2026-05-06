@@ -37,7 +37,7 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 export GPG_TTY=$(tty)
 export TERMINFO=/usr/share/terminfo
 # export GS4JS_HOME="/usr/local/lib"
-export PATH="$HOME/.local/share/mise/installs/node/$(node --version | cut -c2-)/bin:$PATH"
+eval "$(mise activate zsh)"
 
 # Re-enable this later
 # export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
