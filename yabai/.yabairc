@@ -143,6 +143,7 @@ yabai -m rule --add app="^TablePro$" title="^$" manage=off sub-layer=above
 yabai -m rule --add app="^TablePro$" title="New Connection" manage=off sub-layer=above
 yabai -m rule --add app="^TablePro$" subrole="^AXStandardWindow$" manage=off sub-layer=above
 yabai -m rule --add app="^Arc$" title="^$" subrole="^AXSystemDialog$" manage=off mouse_follows_focus=off sub-layer=above
+yabai -m rule --add app="^Zen$" title="^Extension: \(Bitwarden Password Manager\) - Bitwarden$" subrole="^AXStandardWindow$" manage=off sub-layer=above
 
 # yabai -m config mouse_follows_focus off
 
