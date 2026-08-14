@@ -2,11 +2,21 @@ local wezterm = require('wezterm')
 
 local M = {}
 
--- if you are *NOT* lazy-loading smart-splits.nvim (recommended)
+-- Set by Neovim (lua/yap/smart-splits.lua) via an OSC 1337 SetUserVar escape
+-- sequence on startup, and unset on exit.
 local function is_vim(pane)
-  -- this is set by the plugin, and unset on ExitPre in Neovim
   return pane:get_user_vars().IS_NVIM == 'true'
 end
+
+-- Neovim sends this (also via OSC 1337 SetUserVar) when Ctrl-hjkl hits the
+-- edge of its window layout and there's nowhere left to move within Neovim.
+-- This is a direct escape-sequence signal (no `wezterm cli` subprocess
+-- involved), so it's effectively instant.
+wezterm.on('user-var-changed', function(window, pane, name, value)
+  if name == 'SMARTSPLITS_MOVE' then
+    window:perform_action(wezterm.action.ActivatePaneDirection(value), pane)
+  end
+end)
 
 local direction_keys = {
   Left = 'h',

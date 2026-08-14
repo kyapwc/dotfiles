@@ -1,5 +1,5 @@
 local wezterm = require('wezterm')
-local smart_splits = require('custom/smart-splits')
+local nvim_pane_switcher = require('custom/nvim-pane-switcher')
 local utils = require('custom/utils')
 local mux = wezterm.mux
 
@@ -115,10 +115,10 @@ local keys = {
   { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection('Up') },
   { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection('Right') },
 
-  smart_splits.split_nav('move', 'h'),
-  smart_splits.split_nav('move', 'j'),
-  smart_splits.split_nav('move', 'k'),
-  smart_splits.split_nav('move', 'l'),
+  nvim_pane_switcher.split_nav('move', 'h'),
+  nvim_pane_switcher.split_nav('move', 'j'),
+  nvim_pane_switcher.split_nav('move', 'k'),
+  nvim_pane_switcher.split_nav('move', 'l'),
 
   { key = 'z', mods = 'LEADER', action = act.TogglePaneZoomState },
 

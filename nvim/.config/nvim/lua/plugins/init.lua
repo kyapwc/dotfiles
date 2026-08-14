@@ -320,8 +320,6 @@ local plugins = {
     config = true,
   },
 
-  { 'mrjones2014/smart-splits.nvim' },
-
   {
     "HakonHarnes/img-clip.nvim",
     event = "VeryLazy",
