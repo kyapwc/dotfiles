@@ -37,7 +37,20 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 export GPG_TTY=$(tty)
 export TERMINFO=/usr/share/terminfo
 # export GS4JS_HOME="/usr/local/lib"
-eval "$(mise activate zsh)"
+# `mise activate zsh` just prints a static block of shell functions/hooks
+# that only changes when the `mise` binary itself is upgraded -- spawning it
+# on every shell startup costs ~30-40ms for no reason. Cache its output and
+# regenerate only when the binary is newer than the cache.
+MISE_ACTIVATE_CACHE="$HOME/.cache/mise/activate-zsh.zsh"
+MISE_BIN="$(command -v mise)"
+if [[ -n "$MISE_BIN" ]]; then
+  if [[ ! -s "$MISE_ACTIVATE_CACHE" || "$MISE_BIN" -nt "$MISE_ACTIVATE_CACHE" ]]; then
+    mkdir -p "$(dirname "$MISE_ACTIVATE_CACHE")"
+    mise activate zsh > "$MISE_ACTIVATE_CACHE"
+  fi
+  source "$MISE_ACTIVATE_CACHE"
+fi
+unset MISE_BIN
 
 # Re-enable this later
 # export DEPLOY_KEY=$(cat ~/.ssh/id_rsa.base)
@@ -124,7 +137,17 @@ alias evicclear='f() { kubectl get pod -n $1 | grep Evicted | awk "{print \$1}" 
 # alias ls="gls --color"
 alias ls="eza"
 # Export LS_COLORS according to tokyonight_moon theme
-export LS_COLORS="$(vivid generate $HOME/dotfiles/vivid/tokyonight_moon.yml)"
+# `vivid generate` output is fully determined by that yml file, so cache it
+# instead of spawning vivid on every shell startup; regenerate only when the
+# theme file is newer than the cache.
+VIVID_THEME="$HOME/dotfiles/vivid/tokyonight_moon.yml"
+VIVID_LSCOLORS_CACHE="$HOME/.cache/vivid/lscolors-tokyonight_moon"
+if [[ ! -s "$VIVID_LSCOLORS_CACHE" || "$VIVID_THEME" -nt "$VIVID_LSCOLORS_CACHE" ]]; then
+  mkdir -p "$(dirname "$VIVID_LSCOLORS_CACHE")"
+  vivid generate "$VIVID_THEME" > "$VIVID_LSCOLORS_CACHE"
+fi
+export LS_COLORS="$(<"$VIVID_LSCOLORS_CACHE")"
+unset VIVID_THEME
 
 function kill-node-port() {
   if [ -n "$1" ]; then
@@ -324,10 +347,69 @@ fi
 
 source $HOME/dotfiles/zsh/completion.zsh
 
+# Spaceship clears its whole segment cache on every precmd, so async segments
+# (git, node, rust, etc.) render blank and then pop in once their background
+# job resolves -- most noticeable as a flash-of-empty right after `cd`.
+# Override the render-start function to skip that clear, so the *previous*
+# value stays on screen until each section's own refresh overwrites it.
+# Must be redefined after spaceship.zsh is sourced above (last definition
+# wins), since it lives in our own dotfiles rather than the vendored plugin.
+spaceship::core::start() {
+  for section in $(spaceship::union $SPACESHIP_PROMPT_ORDER $SPACESHIP_RPROMPT_ORDER); do
+    spaceship::core::refresh_section "$section"
+  done
+}
+
+# Extend the same idea across shells/panes and per directory: SPACESHIP_CACHE
+# is normally a flat, in-memory, per-process map keyed only by section name
+# ("git" -> last computed value), so revisiting a directory you were in
+# before -- even in a different pane -- shows whatever the *most recently
+# computed* value happened to be, which is wrong if that came from a
+# different project (e.g. `cd segment-tracking-plan` then back to
+# `respond-io` would briefly show segment-tracking-plan's branch).
+#
+# Namespace the cache key by $PWD too, and persist it to a shared file that's
+# preloaded before the first prompt renders. So each directory remembers its
+# own last-known segment values, shared across every pane/shell, and only
+# self-corrects (via the normal async refresh) if something in that specific
+# directory actually changed since you were last there.
+SPACESHIP_CACHE_PERSIST_FILE="$HOME/.cache/spaceship/segment_cache.zsh"
+[[ -s "$SPACESHIP_CACHE_PERSIST_FILE" ]] && source "$SPACESHIP_CACHE_PERSIST_FILE" 2>/dev/null
+
+spaceship::cache::get() {
+  local key="$1"
+  local cache_key="$PWD:$key"
+  echo -n "${SPACESHIP_CACHE[$cache_key]}"
+}
+
+spaceship::cache::set() {
+  local key="$1" value="$2"
+  local cache_key="$PWD:$key"
+  SPACESHIP_CACHE[$cache_key]="$value"
+  mkdir -p "$(dirname "$SPACESHIP_CACHE_PERSIST_FILE")" 2>/dev/null
+  typeset -p SPACESHIP_CACHE > "$SPACESHIP_CACHE_PERSIST_FILE" 2>/dev/null
+}
+
 # zsh-syntax-highligting & zsh-autosuggestions & spaceship theme
 # source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 # source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # source /usr/lib/spaceship-prompt/spaceship.zsh
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/weichun/.lmstudio/bin"
+# End of LM Studio CLI section
+
+# Build env for opencv usage settings -- only needed when actually compiling
+# against opencv/llvm, not for everyday shell use. Was unconditional on every
+# shell startup (the `xcode-select` call alone cost ~15ms per spawn); call
+# `opencv-env` manually right before a build that needs it instead.
+opencv-env() {
+  export DYLD_FALLBACK_LIBRARY_PATH="$(xcode-select --print-path)/Toolchains/XcodeDefault.xctoolchain/usr/lib/"
+  export LDFLAGS=-L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib
+  export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+  export LDFLAGS="-L/opt/homebrew/opt/llvm/lib -lclang"
+}
 
 # zprof
