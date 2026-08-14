@@ -59,7 +59,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gD', vim.lsp.buf.implementation, opts)
     -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'K', function() vim.lsp.buf.hover({ border = "rounded" }) end, opts)
+    vim.keymap.set('n', 'K', function()
+      vim.lsp.buf.hover({
+        border = 'rounded',
+        max_width = math.floor(vim.o.columns * 1),
+        max_height = math.floor(vim.o.lines * 0.8),
+      })
+    end, opts)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-s>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
@@ -173,20 +179,6 @@ local servers = {
   },
   sqlls = {},
 }
-
-vim.api.nvim_create_autocmd({ 'VimEnter', 'VimResized' }, {
-  desc = 'Setup LSP hover window',
-  callback = function()
-    local width = math.floor(vim.o.columns * 1)
-    local height = math.floor(vim.o.lines * 0.8)
-
-    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-      border = 'rounded',
-      width = width,
-      height = height,
-    })
-  end,
-})
 
 function M.setup()
   require('yap.config.lsp_new.installer').setup(servers)

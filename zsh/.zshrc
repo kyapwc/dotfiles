@@ -166,7 +166,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 export SPACESHIP_NODE_SHOW=false
-export SPACESHIP_PROMPT_ASYNC=false
+export SPACESHIP_PROMPT_ASYNC=true
 export NEOVIDE_FRAME=none
 # Disable homebrew auto update
 export HOMEBREW_NO_AUTO_UPDATE=1

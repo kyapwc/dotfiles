@@ -4,3 +4,5 @@ env.pm2
 .DS_Store
 
 WorkspaceSettings.xcsettings
+
+**/.claude/settings.local.json

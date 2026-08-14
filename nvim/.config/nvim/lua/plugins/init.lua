@@ -1,6 +1,11 @@
 local plugins = {
   -- Treesitter and theme
-  { 'nvim-treesitter/nvim-treesitter' },
+  -- Pinned to the legacy `master` branch: `main` is a breaking rewrite that
+  -- drops the `nvim-treesitter.configs` module API used in yap/treesitter.lua
+  -- (and yap/config/lsp_new's hover treesitter-injection crash fix lives only
+  -- on this branch's query_predicates.lua). Don't remove this pin without
+  -- migrating that config to the new API first.
+  { 'nvim-treesitter/nvim-treesitter', branch = 'master' },
   { 'nvim-treesitter/playground' },
 
   {
@@ -509,29 +514,29 @@ local plugins = {
     },
   },
 
-  {
-    "ravitemer/mcphub.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim"
-    },
-    build = "npm install -g mcp-hub@latest",
-    config = function()
-      require("mcphub").setup({
-        auto_approve = true,
-        port = 9999, -- Port for the mcp-hub Express server
-        config = vim.fn.expand("~/.config/nvim/mcpservers.json"),
-        log = {
-          level = vim.log.levels.WARN, -- Adjust verbosity (DEBUG, INFO, WARN, ERROR)
-          to_file = true,
-          file_path = vim.fn.expand("~/.local/state/nvim/mcphub.log"),
-        },
-        on_ready = function()
-          vim.notify("MCP Hub backend server is initialized and ready.", vim.log.levels.INFO)
-        end
-      })
-    end,
-  },
+  -- {
+  --   "ravitemer/mcphub.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-telescope/telescope.nvim"
+  --   },
+  --   build = "npm install -g mcp-hub@latest",
+  --   config = function()
+  --     require("mcphub").setup({
+  --       auto_approve = true,
+  --       port = 9999, -- Port for the mcp-hub Express server
+  --       config = vim.fn.expand("~/.config/nvim/mcpservers.json"),
+  --       log = {
+  --         level = vim.log.levels.WARN, -- Adjust verbosity (DEBUG, INFO, WARN, ERROR)
+  --         to_file = true,
+  --         file_path = vim.fn.expand("~/.local/state/nvim/mcphub.log"),
+  --       },
+  --       on_ready = function()
+  --         vim.notify("MCP Hub backend server is initialized and ready.", vim.log.levels.INFO)
+  --       end
+  --     })
+  --   end,
+  -- },
 
   {
     "olimorris/codecompanion.nvim",
