@@ -14,17 +14,17 @@ end
 conform.setup({
   formatters_by_ft = {
     lua = { "stylua" },
-    svelte = { { "prettierd", "prettier" } },
+    svelte = { "prettierd", "prettier", stop_after_first = true },
     javascript = has_prettier_config() and { "prettierd", "prettier", stop_after_first = true } or {},
     typescript = has_prettier_config() and { "prettierd", "prettier", stop_after_first = true } or {},
     javascriptreact = has_prettier_config() and { "prettierd", "prettier", stop_after_first = true } or {},
     typescriptreact = has_prettier_config() and { "prettierd", "prettier", stop_after_first = true } or {},
-    -- json = { { "prettierd", "prettier" } },
-    graphql = { { "prettierd", "prettier" } },
+    -- json = { "prettierd", "prettier", stop_after_first = true },
+    graphql = { "prettierd", "prettier", stop_after_first = true },
     java = { "google-java-format" },
     kotlin = { "ktlint" },
     ruby = { "standardrb" },
-    markdown = { { "prettierd", "prettier" } },
+    markdown = { "prettierd", "prettier", stop_after_first = true },
     erb = { "htmlbeautifier" },
     html = { "htmlbeautifier" },
     bash = { "beautysh" },
@@ -32,8 +32,8 @@ conform.setup({
     rust = { "rustfmt" },
     yaml = { "yamlfix" },
     toml = { "taplo" },
-    css = { { "prettierd", "prettier" } },
-    scss = { { "prettierd", "prettier" } },
+    css = { "prettierd", "prettier", stop_after_first = true },
+    scss = { "prettierd", "prettier", stop_after_first = true },
     -- disable golang formatter and let gopls do its work
     go = {}
   },

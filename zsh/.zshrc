@@ -60,7 +60,7 @@ export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
 export INTEL_HAXM_HOME=/usr/local/Caskroom/intel-haxm
 
 # Setting aliases for dev
-alias gs='git status'
+# alias gs='git status'
 alias glog='git log --oneline --decorate --color --graph --all'
 alias gl='git pull'
 alias gp='git push'
@@ -232,7 +232,20 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 fpath=(~/.zsh $fpath)
 zmodload -i zsh/complist
 setopt globdots
-compinit
+# compinit's compaudit security check (verifying no completion dir in $fpath
+# is group/world-writable) costs ~25-30ms on every shell startup. It only
+# needs to actually re-run once the dump is stale; skip it (-C) as long as
+# .zcompdump is less than a day old.
+_zcompdump_stale() {
+  setopt localoptions extendedglob
+  [[ -n ${1}(#qN.mh+24) ]]
+}
+if _zcompdump_stale "${ZDOTDIR:-$HOME}/.zcompdump"; then
+  compinit
+else
+  compinit -C
+fi
+unfunction _zcompdump_stale
 
 # .. expansion
 function replace_multiple_dots() {
@@ -266,7 +279,7 @@ function respond_reinstall_packages() {
       echo "$dir/package.json check..."
       if [ -f "$dir/package.json" ]; then
         echo "package.json exists. Running npm install."
-        (cd "$dir" && npm install)
+        (cd "$dir" && npm install --legacy-peer-deps)
       else
         echo "package.json does not exist."
       fi
@@ -322,6 +335,28 @@ _comp_ssh_hosts() {
 compdef _comp_ssh_hosts ssh
 
 alias kssm="ps aux | grep '/opt/homebrew/bin/aws ssm start-session' | grep -v grep | awk '{print \$2}' | xargs kill"
+exercism-cd() {
+  exercism download "$@" || return
+
+  local track exercise base dir
+  base="$HOME/Exercism"
+
+  track="$(printf '%s\n' "$*" | sed -nE 's/.*--track[= ]([^ ]+).*/\1/p')"
+  exercise="$(printf '%s\n' "$*" | sed -nE 's/.*--exercise[= ]([^ ]+).*/\1/p')"
+
+  if [ -z "$track" ] || [ -z "$exercise" ]; then
+    echo "Usage: exercism-cd --track=<track> --exercise=<exercise> [other flags]" >&2
+    return 1
+  fi
+
+  dir="$base/$track/$exercise"
+  if [ -d "$dir" ]; then
+    cd "$dir"
+  else
+    echo "Downloaded, but directory not found: $dir" >&2
+    return 1
+  fi
+}
 
 zle -N replace_multiple_dots
 zle -N expand-dots-then-expand-or-complete

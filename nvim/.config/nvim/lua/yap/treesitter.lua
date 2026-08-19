@@ -119,3 +119,21 @@ require('vim.treesitter.query').add_directive('set-lang-from-info-string!', func
   local injection_alias = vim.treesitter.get_node_text(node, bufnr):lower()
   metadata['injection.language'] = get_parser_from_markdown_info_string(injection_alias)
 end, { force = true, all = false })
+
+-- Same Nvim 0.12 list-wrapped-node issue as above, but hitting `kind-eq?`
+-- (and its auto-derived `not-kind-eq?` negation) instead. This predicate is
+-- used throughout queries/ecma/indents.scm -- inherited by javascript,
+-- typescript and tsx -- to decide @indent.begin/@indent.dedent for ordinary
+-- constructs like if-blocks and arrow functions. Unpatched, calling
+-- `node:type()` on the list throws on nearly every `o`/`O`/`=` in JS/TS
+-- files; Vim's indentexpr silently swallows that error and falls back to
+-- indent level 0, which is why new lines were landing at column 0 instead
+-- of matching the surrounding code.
+require('vim.treesitter.query').add_predicate('kind-eq?', function(match, _pattern, _bufnr, pred)
+  local node = unwrap_ts_node(match[pred[2]])
+  if not node then
+    return true
+  end
+  local types = { unpack(pred, 3) }
+  return vim.tbl_contains(types, node:type())
+end, { force = true, all = false })

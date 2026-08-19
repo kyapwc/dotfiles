@@ -30,7 +30,19 @@ bindkey -M menuselect '^xh' accept-and-hold                # Hold
 bindkey -M menuselect '^xn' accept-and-infer-next-history  # Next
 bindkey -M menuselect '^xu' undo                           # Undo
 
-autoload -U compinit; compinit
+# .zshrc already ran a guarded compinit before sourcing this file; avoid
+# paying the compaudit cost a second time on every startup.
+autoload -U compinit
+_zcompdump_stale() {
+  setopt localoptions extendedglob
+  [[ -n ${1}(#qN.mh+24) ]]
+}
+if _zcompdump_stale "${ZDOTDIR:-$HOME}/.zcompdump"; then
+  compinit
+else
+  compinit -C
+fi
+unfunction _zcompdump_stale
 _comp_options+=(globdots) # With hidden files
 
 # Only work with the Zsh function vman

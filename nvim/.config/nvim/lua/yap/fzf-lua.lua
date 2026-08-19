@@ -83,6 +83,15 @@ local function get_repo_url()
   return nil
 end
 
+local function make_branch_diff_preview(current_branch)
+  local escaped_current = vim.fn.shellescape(current_branch)
+  return string.format(
+    [[b={1}; echo "target: $b  current: %s" && echo && ]] ..
+    [[git diff --color "$b"...%s | delta --paging=never --side-by-side --width=$COLUMNS --hunk-header-style=omit --file-style=omit]],
+    current_branch, escaped_current
+  )
+end
+
 -- Mapping to create the GitHub PR link
 vim.keymap.set("n", "<space>pr", function()
   local current_branch = get_current_branch()
@@ -99,6 +108,17 @@ vim.keymap.set("n", "<space>pr", function()
 
   -- Open fzf-lua.git_branches() and create a PR link
   fzfLua.git_branches({
+    preview = make_branch_diff_preview(current_branch),
+    -- Each line is `<*/space marker><branch name>  <sha> <commit message>`.
+    -- fzf strips ANSI before matching (--ansi is on by default), so a
+    -- delimiter matching runs of the marker/whitespace collapses the leading
+    -- "* "/"  " into one empty field, landing the branch name consistently
+    -- in field 2 for every row (marked or not) -- restrict fuzzy matching to
+    -- just that field so the commit message/sha no longer match queries.
+    fzf_opts = {
+      ["--delimiter"] = "[* ]+",
+      ["--nth"] = "2",
+    },
     actions = {
       ["default"] = function(selected)
         local line = type(selected) == "table" and selected[1] or selected
@@ -117,6 +137,32 @@ vim.keymap.set("n", "<space>pr", function()
     },
   })
 end, { desc = "Create PR link for the current branch" })
+
+-- Browse commit history (git log) with each commit's full patch (`git show`,
+-- equivalent to `git log -p` one commit at a time) in the preview pane --
+-- move up/down the commit list to switch commits, scroll the preview to
+-- read a large diff. fzf-lua's own default preview_pager for this picker
+-- (M._preview_pager_fn) builds a delta command without --paging=never, so
+-- it has the same nested-pager-eats-scroll-keys problem as the branch diff
+-- preview above; override it here with the same fix.
+--
+-- The global `keymap.builtin` config (<C-u>/<C-d> -> preview-page-up/down)
+-- only applies to fzf-lua's own Neovim-rendered "builtin" previewer, not to
+-- providers like this one that shell out to a real preview command (bat/
+-- git/etc) -- those use `keymap.fzf` instead, whose defaults leave ctrl-d
+-- unbound and ctrl-u bound to `unix-line-discard` (clearing the query, not
+-- scrolling). Rebind them here to actually scroll the diff on the right.
+vim.keymap.set("n", "<space>gl", function()
+  fzfLua.git_commits({
+    preview_pager = "delta --paging=never --side-by-side --width=$COLUMNS --hunk-header-style=omit --file-style=omit",
+    keymap = {
+      fzf = {
+        ["ctrl-d"] = "preview-page-down",
+        ["ctrl-u"] = "preview-page-up",
+      },
+    },
+  })
+end, { desc = "Browse git log with per-commit diff" })
 
 function M.fzf_prs_workflow(prs, include_organization)
   fzfLua.fzf_exec(prs, {
