@@ -370,8 +370,6 @@ local plugins = {
     },
   },
 
-  { "github/copilot.vim" },
-
   -- {
   --   "supermaven-inc/supermaven-nvim",
   --   config = function()
@@ -386,7 +384,7 @@ local plugins = {
 
   { "MunifTanjim/nui.nvim" },
 
-  { "Bilal2453/luvit-meta",         lazy = true }, -- optional `vim.uv` typings
+  { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
 
   {
     "hrsh7th/nvim-cmp",
@@ -413,13 +411,6 @@ local plugins = {
     dependencies = { "nvim-lua/plenary.nvim" },
     ft = "json",
     config = function()
-    end
-  },
-
-  {
-    "zbirenbaum/copilot-cmp",
-    config = function()
-      require("copilot_cmp").setup()
     end
   },
 
@@ -676,6 +667,51 @@ local plugins = {
       end)
     end,
   },
+
+  {
+    "milanglacier/minuet-ai.nvim",
+    lazy = false,
+    config = function()
+      require("minuet").setup({
+        provider = "codestral",
+
+        throttle = 1000,
+        debounce = 400,
+
+        virtualtext = {
+          -- Automatically enable virtual text in every filetype.
+          auto_trigger_ft = { "*" },
+          auto_trigger_ignore_ft = {
+            "TelescopePrompt",
+            "snacks_picker_input",
+            "oil",
+          },
+
+          keymap = {
+            accept = "<Tab>",
+            accept_line = "<C-l>",
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-e>",
+          },
+        },
+
+        provider_options = {
+          codestral = {
+            model = "codestral-latest",
+            api_key = "MISTRAL_API_KEY",
+            end_point = "https://api.mistral.ai/v1/fim/completions",
+            stream = true,
+
+            optional = {
+              max_tokens = 128,
+              stop = { "\n\n" },
+            },
+          },
+        },
+      })
+    end,
+  }
 }
 
 if not IS_DEVCONTAINER() then
