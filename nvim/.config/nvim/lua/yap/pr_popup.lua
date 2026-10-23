@@ -245,7 +245,7 @@ local function open_diff_popup(pr_number, repo)
   open_pager_popup(
     string.format(" PR #%s diff (q to go back) ", pr_number),
     string.format(
-      "gh pr diff %s --repo %s | delta --paging=always --side-by-side --width=%d --hunk-header-style=omit --file-style=omit",
+      "gh pr diff %s --repo %s | delta --paging=always --side-by-side --width=%d --hunk-header-style=omit",
       pr_number, repo, width
     )
   )
@@ -257,7 +257,7 @@ local function open_commit_diff_popup(sha, repo)
     string.format(" Commit %s diff (q to go back) ", sha:sub(1, 7)),
     string.format(
       'gh api -H "Accept: application/vnd.github.v3.diff" repos/%s/commits/%s | ' ..
-      "delta --paging=always --side-by-side --width=%d --hunk-header-style=omit --file-style=omit",
+      "delta --paging=always --side-by-side --width=%d --hunk-header-style=omit",
       repo, sha, width
     )
   )
@@ -351,6 +351,11 @@ local function render_review_body(block)
 
     if c.diff_hunk and c.diff_hunk ~= "" then
       table.insert(lines, "")
+      -- GitHub's diff_hunk is just the "@@ ... @@" hunk, never the filename
+      -- (that lives in a separate "diff --git"/"+++" line GitHub doesn't
+      -- give us here) -- repeat the path right above the fence so it's
+      -- visible without scrolling back up past the whole comment body.
+      table.insert(lines, REVIEW_TEXT_INDENT .. string.format("`%s:%s`", c.path or "?", c.line or "?"))
       table.insert(lines, REVIEW_FENCE_INDENT .. "```diff")
       for _, l in ipairs(trim_diff_hunk(c.diff_hunk)) do
         table.insert(lines, REVIEW_FENCE_INDENT .. l)
@@ -623,28 +628,49 @@ function M.review_pr(pr_number, repo)
     highlight_severity_tags(buf, new_lines)
   end
 
-  -- Re-fetches the PR (so approving/merging shows up -- new review, updated
-  -- state/mergedBy, etc.) and redraws in place, without touching the window.
-  -- Used after approve/merge instead of closing, so e.g. approving now and
-  -- merging later once someone gives the go-ahead can happen in one sitting.
-  local function refresh()
-    local new_pr, new_err = gh.view_pr_json(pr_number, repo)
-    if not new_pr then
-      vim.notify("Failed to refresh PR #" .. pr_number .. "\n" .. (new_err or ""), vim.log.levels.WARN,
-        { title = "GitHub PRs" })
-      return
-    end
+  -- Approving/merging already tells us the exact outcome via their own
+  -- success response, so there's no need to pay for a full re-fetch (a `gh
+  -- pr view` plus two more `gh api` calls for reviews/comments) just to
+  -- redraw -- that was most of why approve+merge felt slow, on top of the
+  -- approve and merge calls themselves. Update the few fields that changed
+  -- locally instead and redraw from that -- no network round trip at all.
+  local function mark_approved_locally()
+    local review = {
+      author = { login = gh.get_viewer_login() or "you" },
+      state = "APPROVED",
+      body = "",
+      inline_comments = {},
+    }
+    table.insert(pr.reviews, review)
+    -- Extend state.review_blocks to match rather than rebuilding all of it,
+    -- so any reviews you'd already expanded stay expanded.
+    table.insert(state.review_blocks, build_review_block(review))
+  end
 
-    local new_reviews, new_reviews_err = gh.list_pr_reviews_with_comments(pr_number, repo)
-    new_pr.reviews = new_reviews or {}
-    if not new_reviews then
-      vim.notify("Couldn't reload review comments: " .. (new_reviews_err or ""), vim.log.levels.WARN,
-        { title = "GitHub PRs" })
-    end
+  local function mark_merged_locally()
+    pr.state = "MERGED"
+    pr.mergedBy = { login = gh.get_viewer_login() or "you" }
+    pr.mergedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
+  end
 
-    pr = new_pr
-    state = build_state(pr)
-    redraw()
+  -- The local update above is an educated guess (exact merge timestamp,
+  -- any concurrent reviews from someone else, etc.), so quietly reconcile
+  -- it with the real server state once it's actually available -- without
+  -- blocking on it, since the popup already looks right in the meantime.
+  local function background_reconcile()
+    gh.view_pr_json_async(pr_number, repo, function(fresh_pr)
+      if not fresh_pr then return end
+      if not (vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_win_is_valid(win)) then return end
+
+      gh.list_pr_reviews_with_comments_async(pr_number, repo, function(fresh_reviews)
+        if not (vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_win_is_valid(win)) then return end
+
+        fresh_pr.reviews = fresh_reviews or fresh_pr.reviews or {}
+        pr = fresh_pr
+        state = build_state(pr)
+        redraw()
+      end)
+    end)
   end
 
   -- j/k jump straight to the next/previous commit, review or comment header
@@ -702,11 +728,13 @@ function M.review_pr(pr_number, repo)
       return
     end
     vim.notify("Approved PR #" .. pr_number, vim.log.levels.INFO, { title = "GitHub PRs" })
+    mark_approved_locally()
 
     if strategy then
       local merged, merge_out = gh.merge_pr(pr_number, repo, strategy)
       if merged then
         vim.notify("Merged PR #" .. pr_number .. " (" .. strategy .. ")", vim.log.levels.INFO, { title = "GitHub PRs" })
+        mark_merged_locally()
       else
         -- Best effort: approval already landed, so a failed merge (checks
         -- pending, strategy not enabled, conflicts, etc.) is not an error --
@@ -716,10 +744,11 @@ function M.review_pr(pr_number, repo)
       end
     end
 
-    -- Leave the popup open (just refreshed) rather than closing it -- e.g.
-    -- approving now and merging later once someone gives the go-ahead can
-    -- then happen in the same sitting, from the same panel.
-    refresh()
+    -- Leave the popup open rather than closing it -- e.g. approving now and
+    -- merging later once someone gives the go-ahead can then happen in the
+    -- same sitting, from the same panel.
+    redraw()
+    background_reconcile()
   end
 
   local function do_merge_only(strategy)
@@ -728,14 +757,15 @@ function M.review_pr(pr_number, repo)
     local merged, merge_out = gh.merge_pr(pr_number, repo, strategy)
     if merged then
       vim.notify("Merged PR #" .. pr_number .. " (" .. strategy .. ")", vim.log.levels.INFO, { title = "GitHub PRs" })
+      mark_merged_locally()
+      redraw()
+      background_reconcile()
     else
       -- Unlike the approve+merge flow, nothing succeeded here if the merge
       -- fails -- no approval went through either -- so this is a real error.
       vim.notify("Failed to merge PR #" .. pr_number .. "\n" .. vim.trim(merge_out or ""), vim.log.levels.ERROR,
         { title = "GitHub PR Merge Error" })
     end
-
-    refresh()
   end
 
   local keymap_opts = { buffer = buf, nowait = true, silent = true }

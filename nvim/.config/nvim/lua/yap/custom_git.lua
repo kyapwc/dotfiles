@@ -244,6 +244,24 @@ function M.resolve_repo_name(name)
   return nil
 end
 
+-- Cached for the session: used to optimistically update the popup's local
+-- state after approving/merging (an extra "whoami" call is still far cheaper
+-- than the full re-fetch it replaces, and only ever runs once).
+M._viewer_login = nil
+
+function M.get_viewer_login()
+  if M._viewer_login then return M._viewer_login end
+
+  local handle = io.popen("gh api user -q .login 2>/dev/null")
+  if not handle then return nil end
+
+  local login = handle:read("*a"):gsub("%s+", "")
+  handle:close()
+
+  if login ~= "" then M._viewer_login = login end
+  return M._viewer_login
+end
+
 function M.get_author()
   local handle = io.popen('git config --list')
 
@@ -269,15 +287,15 @@ end
 -- GraphQL `reviews` field only carries a review's own summary text, missing
 -- the inline comments left on specific diff lines -- which is usually where
 -- the actual review content lives for line-by-line reviewers (bots included).
-function M.view_pr_json(pr_number, repo)
-  local fields = table.concat({
-    "number", "title", "url", "author", "body", "state", "isDraft",
-    "headRefName", "baseRefName", "mergeable", "mergedAt", "mergedBy",
-    "comments", "commits",
-    "additions", "deletions", "changedFiles",
-  }, ",")
+local PR_VIEW_FIELDS = table.concat({
+  "number", "title", "url", "author", "body", "state", "isDraft",
+  "headRefName", "baseRefName", "mergeable", "mergedAt", "mergedBy",
+  "comments", "commits",
+  "additions", "deletions", "changedFiles",
+}, ",")
 
-  local cmd = string.format("gh pr view %s --repo %s --json %s 2>&1", pr_number, repo, fields)
+function M.view_pr_json(pr_number, repo)
+  local cmd = string.format("gh pr view %s --repo %s --json %s 2>&1", pr_number, repo, PR_VIEW_FIELDS)
   local handle = io.popen(cmd)
   if not handle then return nil, "Failed to run gh pr view" end
 
@@ -295,6 +313,24 @@ function M.view_pr_json(pr_number, repo)
   return data, nil
 end
 
+-- Same as view_pr_json but non-blocking: calls `callback(data, err)` once
+-- `gh` returns, instead of making the caller wait on io.popen. Used for
+-- reconciling the popup's optimistic local state with the real server state
+-- in the background, without freezing the UI on another `gh pr view` call.
+function M.view_pr_json_async(pr_number, repo, callback)
+  local cmd = string.format("gh pr view %s --repo %s --json %s", pr_number, repo, PR_VIEW_FIELDS)
+  vim.system({ "sh", "-c", cmd }, { text = true }, function(result)
+    vim.schedule(function()
+      if result.code ~= 0 then
+        callback(nil, result.stderr ~= "" and result.stderr or result.stdout)
+        return
+      end
+      local ok, data = pcall(vim.json.decode, result.stdout)
+      callback(ok and data or nil, ok and nil or ("Failed to parse PR JSON: " .. result.stdout))
+    end)
+  end)
+end
+
 local function run_gh_json(cmd)
   local handle = io.popen(cmd)
   if not handle then return nil, "Failed to run: " .. cmd end
@@ -309,21 +345,29 @@ local function run_gh_json(cmd)
   return data, nil
 end
 
--- Reviews, normalized to {author={login=...}, state=..., body=..., inline_comments={...}}.
+local function run_gh_json_async(cmd, callback)
+  vim.system({ "sh", "-c", cmd }, { text = true }, function(result)
+    vim.schedule(function()
+      if result.code ~= 0 then
+        callback(nil, result.stderr ~= "" and result.stderr or result.stdout)
+        return
+      end
+      local ok, data = pcall(vim.json.decode, result.stdout)
+      callback(ok and data or nil, ok and nil or ("Failed to parse JSON: " .. result.stdout))
+    end)
+  end)
+end
+
+-- Shared by list_pr_reviews_with_comments and its async twin: reviews,
+-- normalized to {author={login=...}, state=..., body=..., inline_comments={...}}.
 -- `body` is the review's own summary text (often empty for line-by-line
 -- reviewers -- gh pr view's GraphQL reviews field stops there, missing the
 -- actual feedback). `inline_comments` carries each comment left on a specific
 -- diff line, including `diff_hunk` -- the surrounding diff context GitHub
 -- shows above the comment on the PR page -- so the popup can render it too.
-function M.list_pr_reviews_with_comments(pr_number, repo)
-  local reviews, err = run_gh_json(string.format("gh api repos/%s/pulls/%s/reviews --paginate 2>&1", repo, pr_number))
-  if not reviews then return nil, err end
-
-  local comments = run_gh_json(string.format("gh api repos/%s/pulls/%s/comments --paginate 2>&1", repo, pr_number))
-    or {}
-
+local function normalize_reviews(reviews, comments)
   local comments_by_review = {}
-  for _, c in ipairs(comments) do
+  for _, c in ipairs(comments or {}) do
     local rid = c.pull_request_review_id
     if rid then
       comments_by_review[rid] = comments_by_review[rid] or {}
@@ -346,7 +390,34 @@ function M.list_pr_reviews_with_comments(pr_number, repo)
     })
   end
 
-  return result, nil
+  return result
+end
+
+function M.list_pr_reviews_with_comments(pr_number, repo)
+  local reviews, err = run_gh_json(string.format("gh api repos/%s/pulls/%s/reviews --paginate 2>&1", repo, pr_number))
+  if not reviews then return nil, err end
+
+  local comments = run_gh_json(string.format("gh api repos/%s/pulls/%s/comments --paginate 2>&1", repo, pr_number))
+    or {}
+
+  return normalize_reviews(reviews, comments), nil
+end
+
+-- Non-blocking twin of list_pr_reviews_with_comments, calling
+-- `callback(reviews, err)` once both `gh api` calls return.
+function M.list_pr_reviews_with_comments_async(pr_number, repo, callback)
+  run_gh_json_async(string.format("gh api repos/%s/pulls/%s/reviews --paginate", repo, pr_number),
+    function(reviews, err)
+      if not reviews then
+        callback(nil, err)
+        return
+      end
+
+      run_gh_json_async(string.format("gh api repos/%s/pulls/%s/comments --paginate", repo, pr_number),
+        function(comments)
+          callback(normalize_reviews(reviews, comments or {}), nil)
+        end)
+    end)
 end
 
 function M.approve_pr(pr_number, repo)
