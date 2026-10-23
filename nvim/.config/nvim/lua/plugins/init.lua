@@ -685,6 +685,7 @@ local plugins = {
             "TelescopePrompt",
             "snacks_picker_input",
             "oil",
+            "gitcommit"
           },
 
           keymap = {

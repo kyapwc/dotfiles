@@ -1,6 +1,7 @@
 local actions = require('fzf-lua.actions')
 local fzfLua = require('fzf-lua')
 local gh_functions = require('yap/custom_git')
+local pr_popup = require('yap/pr_popup')
 local M = {}
 
 fzfLua.setup({
@@ -303,5 +304,8 @@ local function fetch_my_prs()
   })
 end
 
-vim.keymap.set("n", "<space>ap", fetch_prs_and_select, { desc = "Approve PR" })
+vim.keymap.set("n", "<space>ap", pr_popup.prompt_and_review_pr,
+  { desc = "Review PR by number (approve/merge)" })
+vim.keymap.set("n", "<space>ar", pr_popup.switch_repo, { desc = "Switch active repo for PR review" })
+vim.keymap.set("n", "<space>lap", fetch_prs_and_select, { desc = "List PRs (approve)" })
 vim.keymap.set("n", "<space>mpr", fetch_my_prs, { desc = "My PRs" })

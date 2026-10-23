@@ -130,6 +130,120 @@ function M.get_repo_name(include_organization)
   return repoName
 end
 
+-- The repo the PR popup workflow (<space>ap) is currently pointed at, as a
+-- bare "owner/repo" string. Distinct from M.current_repo/M.current_organization
+-- above, which belong to the older org->repo fzf-list workflow and store the
+-- repo name split across two fields.
+M.active_repo = nil
+
+-- Most PRs reviewed day-to-day are in the main repo, regardless of which
+-- project's cwd nvim happens to be open in -- so default there rather than
+-- to a cwd-detected repo (<space>ar or "repo#123" still switch freely).
+local DEFAULT_REPO = "respond-io/respond-io"
+
+function M.get_active_repo()
+  if M.active_repo then return M.active_repo end
+  M.active_repo = DEFAULT_REPO
+  return M.active_repo
+end
+
+function M.set_active_repo(repo)
+  M.active_repo = repo
+end
+
+-- Repo list is slow to fetch (several `gh repo list` calls across orgs), so
+-- it's cached to disk for 30 days on top of the in-memory cache -- a fresh
+-- `nvim` still gets an instant list instead of re-paying that cost every
+-- session. Pass force_refresh to bypass both caches.
+local REPO_CACHE_PATH = vim.fn.stdpath('cache') .. '/gh_repo_list.json'
+local REPO_CACHE_TTL_SECONDS = 30 * 24 * 60 * 60
+
+local function read_repo_disk_cache()
+  local f = io.open(REPO_CACHE_PATH, 'r')
+  if not f then return nil end
+  local content = f:read('*a')
+  f:close()
+
+  local ok, data = pcall(vim.json.decode, content)
+  if not ok or type(data) ~= 'table' or type(data.repos) ~= 'table' or type(data.timestamp) ~= 'number' then
+    return nil
+  end
+  if (os.time() - data.timestamp) > REPO_CACHE_TTL_SECONDS then
+    return nil
+  end
+
+  return data.repos
+end
+
+local function write_repo_disk_cache(repos)
+  local f = io.open(REPO_CACHE_PATH, 'w')
+  if not f then return end
+  f:write(vim.json.encode({ timestamp = os.time(), repos = repos }))
+  f:close()
+end
+
+-- Lists every repo the user can see (their own + every org they belong to)
+-- as "owner/repo" strings, for the repo picker. Pass force_refresh to bypass
+-- both the in-memory and on-disk caches and hit `gh` again.
+function M.list_repos_for_picker(force_refresh)
+  if M._repo_list_cache and not force_refresh then
+    return M._repo_list_cache
+  end
+
+  if not force_refresh then
+    local cached = read_repo_disk_cache()
+    if cached then
+      M._repo_list_cache = cached
+      return cached
+    end
+  end
+
+  vim.notify("Fetching repo list from GitHub (cached for 30 days after this)...", vim.log.levels.INFO,
+    { title = "GitHub PRs" })
+
+  local repos = {}
+  local seen = {}
+
+  local function add_repos(cmd)
+    local handle = io.popen(cmd)
+    if not handle then return end
+    local output = handle:read('*a')
+    handle:close()
+    for line in output:gmatch("[^\r\n]+") do
+      line = line:match("^%s*(.-)%s*$")
+      if line ~= "" and not seen[line] then
+        seen[line] = true
+        table.insert(repos, line)
+      end
+    end
+  end
+
+  add_repos("gh repo list --limit 250 --no-archived --json nameWithOwner -q '.[].nameWithOwner' 2>/dev/null")
+
+  for _, org in ipairs(M.get_organization_list() or {}) do
+    add_repos(string.format(
+      "gh repo list %s --limit 250 --no-archived --json nameWithOwner -q '.[].nameWithOwner' 2>/dev/null", org))
+  end
+
+  M._repo_list_cache = repos
+  write_repo_disk_cache(repos)
+  return repos
+end
+
+-- Resolves a bare repo name (no "owner/") against the cached repo list, so
+-- "myrepo#123" typed into the PR prompt doesn't require spelling out the
+-- owner. Returns nil without hitting the network if nothing cached matches.
+function M.resolve_repo_name(name)
+  if name:find("/", 1, true) then return name end
+
+  for _, r in ipairs(M._repo_list_cache or read_repo_disk_cache() or {}) do
+    if r:match("/" .. vim.pesc(name) .. "$") then
+      return r
+    end
+  end
+  return nil
+end
+
 function M.get_author()
   local handle = io.popen('git config --list')
 
@@ -147,6 +261,118 @@ function M.get_author()
   end
 
   return author
+end
+
+-- Fetch full PR details (title, body, comments, etc.) as a decoded table,
+-- for building a preview popup before approving/merging. Reviews come from
+-- a separate call (see list_pr_reviews_with_comments) since gh pr view's
+-- GraphQL `reviews` field only carries a review's own summary text, missing
+-- the inline comments left on specific diff lines -- which is usually where
+-- the actual review content lives for line-by-line reviewers (bots included).
+function M.view_pr_json(pr_number, repo)
+  local fields = table.concat({
+    "number", "title", "url", "author", "body", "state", "isDraft",
+    "headRefName", "baseRefName", "mergeable", "mergedAt", "mergedBy",
+    "comments", "commits",
+    "additions", "deletions", "changedFiles",
+  }, ",")
+
+  local cmd = string.format("gh pr view %s --repo %s --json %s 2>&1", pr_number, repo, fields)
+  local handle = io.popen(cmd)
+  if not handle then return nil, "Failed to run gh pr view" end
+
+  local output = handle:read("*a")
+  local ok = handle:close()
+  if not ok then
+    return nil, output
+  end
+
+  local decode_ok, data = pcall(vim.json.decode, output)
+  if not decode_ok then
+    return nil, "Failed to parse PR JSON: " .. output
+  end
+
+  return data, nil
+end
+
+local function run_gh_json(cmd)
+  local handle = io.popen(cmd)
+  if not handle then return nil, "Failed to run: " .. cmd end
+
+  local output = handle:read("*a")
+  local ok = handle:close()
+  if not ok then return nil, output end
+
+  local decode_ok, data = pcall(vim.json.decode, output)
+  if not decode_ok then return nil, "Failed to parse JSON: " .. output end
+
+  return data, nil
+end
+
+-- Reviews, normalized to {author={login=...}, state=..., body=..., inline_comments={...}}.
+-- `body` is the review's own summary text (often empty for line-by-line
+-- reviewers -- gh pr view's GraphQL reviews field stops there, missing the
+-- actual feedback). `inline_comments` carries each comment left on a specific
+-- diff line, including `diff_hunk` -- the surrounding diff context GitHub
+-- shows above the comment on the PR page -- so the popup can render it too.
+function M.list_pr_reviews_with_comments(pr_number, repo)
+  local reviews, err = run_gh_json(string.format("gh api repos/%s/pulls/%s/reviews --paginate 2>&1", repo, pr_number))
+  if not reviews then return nil, err end
+
+  local comments = run_gh_json(string.format("gh api repos/%s/pulls/%s/comments --paginate 2>&1", repo, pr_number))
+    or {}
+
+  local comments_by_review = {}
+  for _, c in ipairs(comments) do
+    local rid = c.pull_request_review_id
+    if rid then
+      comments_by_review[rid] = comments_by_review[rid] or {}
+      table.insert(comments_by_review[rid], {
+        path = c.path,
+        line = c.line or c.original_line,
+        body = c.body or "",
+        diff_hunk = c.diff_hunk or "",
+      })
+    end
+  end
+
+  local result = {}
+  for _, r in ipairs(reviews) do
+    table.insert(result, {
+      author = { login = r.user and r.user.login or "unknown" },
+      state = r.state,
+      body = r.body or "",
+      inline_comments = comments_by_review[r.id] or {},
+    })
+  end
+
+  return result, nil
+end
+
+function M.approve_pr(pr_number, repo)
+  local cmd = string.format("gh pr review %s --approve --repo %s 2>&1", pr_number, repo)
+  local handle = io.popen(cmd)
+  if not handle then return false, "Failed to run gh pr review" end
+
+  local output = handle:read("*a")
+  local ok = handle:close()
+
+  return ok and not output:match("[Ff]ailed"), output
+end
+
+-- Best-effort merge: tries the requested strategy ("merge" | "squash" |
+-- "rebase") and simply reports failure back to the caller -- the PR stays
+-- approved either way, merging is just a convenience on top.
+function M.merge_pr(pr_number, repo, strategy)
+  local flag = ({ merge = "--merge", squash = "--squash", rebase = "--rebase" })[strategy] or "--merge"
+  local cmd = string.format("gh pr merge %s --repo %s %s 2>&1", pr_number, repo, flag)
+  local handle = io.popen(cmd)
+  if not handle then return false, "Failed to run gh pr merge" end
+
+  local output = handle:read("*a")
+  local ok = handle:close()
+
+  return ok and not output:match("[Ff]ailed") and not output:lower():match("error"), output
 end
 
 function M.fetch_my_prs()
