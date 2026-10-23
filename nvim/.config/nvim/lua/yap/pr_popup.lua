@@ -5,6 +5,12 @@ local markview_spec_ok, markview_spec = pcall(require, 'markview.spec')
 
 local M = {}
 
+-- Neovim's floating-window default is 50, which nvim-notify's windows also
+-- use (it never sets its own). All of this module's popups ask for
+-- something lower so a notify() fired while one is open always draws on
+-- top of it instead of being hidden behind it.
+local POPUP_ZINDEX = 45
+
 -- Review text uses bare "[COMMENTED]"/"[critical]"/"[bot]" brackets a lot,
 -- none of which are actual links -- but markdown's shortcut-reference-link
 -- syntax is just "[text]", so markview's hyperlink renderer lights all of
@@ -172,6 +178,10 @@ local function open_floating_window(lines, opts)
     border = "rounded",
     title = opts.title,
     title_pos = "center",
+    -- Below the default 50 (what nvim-notify's windows use, unset) so
+    -- notifications fired while this popup is open always render on top of
+    -- it instead of being hidden behind it.
+    zindex = POPUP_ZINDEX,
   })
 
   local footer_buf, footer_win
@@ -191,6 +201,7 @@ local function open_floating_window(lines, opts)
       border = "rounded",
       focusable = false,
       noautocmd = true,
+      zindex = POPUP_ZINDEX,
     })
 
     -- Keys get their own bright highlight (set by the caller); the rest of
@@ -221,6 +232,7 @@ local function open_pager_popup(title, cmd)
     border = "rounded",
     title = title,
     title_pos = "center",
+    zindex = POPUP_ZINDEX,
   })
 
   vim.fn.termopen(cmd, {
@@ -531,30 +543,31 @@ end
 -- re-picking the same repo is just <CR>. <C-r> refetches the list (it's
 -- cached otherwise since `gh repo list` across several orgs takes a beat).
 local function pick_repo(on_picked, force_refresh)
-  local repos = gh.list_repos_for_picker(force_refresh)
-  if not repos or #repos == 0 then
-    vim.notify("No repos found", vim.log.levels.ERROR, { title = "GitHub PRs" })
-    return
-  end
+  gh.list_repos_for_picker_async(force_refresh, function(repos)
+    if not repos or #repos == 0 then
+      vim.notify("No repos found", vim.log.levels.ERROR, { title = "GitHub PRs" })
+      return
+    end
 
-  local active = gh.get_active_repo()
-  if active then
-    for i, r in ipairs(repos) do
-      if r == active then
-        table.remove(repos, i)
-        table.insert(repos, 1, r)
-        break
+    local active = gh.get_active_repo()
+    if active then
+      for i, r in ipairs(repos) do
+        if r == active then
+          table.remove(repos, i)
+          table.insert(repos, 1, r)
+          break
+        end
       end
     end
-  end
 
-  fzfLua.fzf_exec(repos, {
-    prompt = "Repo (<C-r> refresh list)> ",
-    actions = {
-      ["default"] = function(selected) on_picked(selected[1]) end,
-      ["ctrl-r"] = function() pick_repo(on_picked, true) end,
-    },
-  })
+    fzfLua.fzf_exec(repos, {
+      prompt = "Repo (<C-r> refresh list)> ",
+      actions = {
+        ["default"] = function(selected) on_picked(selected[1]) end,
+        ["ctrl-r"] = function() pick_repo(on_picked, true) end,
+      },
+    })
+  end)
 end
 
 local function prompt_pr_number_in_repo(repo)
@@ -572,32 +585,11 @@ local function prompt_pr_number_in_repo(repo)
 end
 
 -- repo is a bare "owner/repo" string; falls back to the active repo (set by
--- the <space>ap repo picker, or auto-detected from cwd) if omitted.
-function M.review_pr(pr_number, repo)
-  repo = repo or gh.get_active_repo()
-  if not repo then
-    vim.notify("Failed to determine repo", vim.log.levels.ERROR, { title = "GitHub PRs" })
-    return
-  end
-  gh.set_active_repo(repo)
-
-  vim.notify("Fetching PR #" .. pr_number .. " from " .. repo .. "...", vim.log.levels.INFO, { title = "GitHub PRs" })
-  local pr, err = gh.view_pr_json(pr_number, repo)
-  if not pr then
-    vim.notify("Failed to fetch PR #" .. pr_number .. "\n" .. (err or ""), vim.log.levels.ERROR,
-      { title = "GitHub PRs" })
-    return
-  end
-
-  local reviews, reviews_err = gh.list_pr_reviews_with_comments(pr_number, repo)
-  if reviews then
-    pr.reviews = reviews
-  else
-    pr.reviews = {}
-    vim.notify("Couldn't load review comments (reviews will look empty): " .. (reviews_err or ""),
-      vim.log.levels.WARN, { title = "GitHub PRs" })
-  end
-
+-- the <space>ap repo picker, or auto-detected from cwd) if omitted. Does all
+-- the actual popup-building work, once pr (with pr.reviews already filled
+-- in) is in hand -- see M.review_pr below, which fetches it asynchronously
+-- and calls this when it's ready, so none of this blocks the UI.
+local function render_review_popup(pr_number, repo, pr)
   local state = build_state(pr)
   local lines, actions, item_rows = build_pr_lines(pr, state)
   local legend_lines, legend_highlights = build_legend()
@@ -610,6 +602,11 @@ function M.review_pr(pr_number, repo)
 
   render_markdown(buf, true)
   highlight_severity_tags(buf, lines)
+
+  -- Pre-warm so the synchronous gh.get_viewer_login() calls inside
+  -- mark_approved_locally/mark_merged_locally (below) almost always hit the
+  -- cache instead of blocking on a "whoami" call at the moment you approve.
+  gh.get_viewer_login_async(function() end)
 
   local function close()
     if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_close(win, true) end
@@ -721,51 +718,59 @@ function M.review_pr(pr_number, repo)
   local function do_approve_and_maybe_merge(strategy)
     vim.notify("Approving PR #" .. pr_number .. "...", vim.log.levels.INFO, { title = "GitHub PRs" })
 
-    local approved, approve_out = gh.approve_pr(pr_number, repo)
-    if not approved then
-      vim.notify("Failed to approve PR #" .. pr_number .. "\n" .. approve_out, vim.log.levels.ERROR,
-        { title = "GitHub PR Approval Error" })
-      return
-    end
-    vim.notify("Approved PR #" .. pr_number, vim.log.levels.INFO, { title = "GitHub PRs" })
-    mark_approved_locally()
-
-    if strategy then
-      local merged, merge_out = gh.merge_pr(pr_number, repo, strategy)
-      if merged then
-        vim.notify("Merged PR #" .. pr_number .. " (" .. strategy .. ")", vim.log.levels.INFO, { title = "GitHub PRs" })
-        mark_merged_locally()
-      else
-        -- Best effort: approval already landed, so a failed merge (checks
-        -- pending, strategy not enabled, conflicts, etc.) is not an error --
-        -- just leave it approved and mention why in case it's useful.
-        vim.notify("Left PR #" .. pr_number .. " approved; merge did not go through.\n" .. vim.trim(merge_out or ""),
-          vim.log.levels.WARN, { title = "GitHub PRs" })
+    gh.approve_pr_async(pr_number, repo, function(approved, approve_out)
+      if not approved then
+        vim.notify("Failed to approve PR #" .. pr_number .. "\n" .. approve_out, vim.log.levels.ERROR,
+          { title = "GitHub PR Approval Error" })
+        return
       end
-    end
+      vim.notify("Approved PR #" .. pr_number, vim.log.levels.INFO, { title = "GitHub PRs" })
+      mark_approved_locally()
 
-    -- Leave the popup open rather than closing it -- e.g. approving now and
-    -- merging later once someone gives the go-ahead can then happen in the
-    -- same sitting, from the same panel.
-    redraw()
-    background_reconcile()
+      if not strategy then
+        redraw()
+        background_reconcile()
+        return
+      end
+
+      gh.merge_pr_async(pr_number, repo, strategy, function(merged, merge_out)
+        if merged then
+          vim.notify("Merged PR #" .. pr_number .. " (" .. strategy .. ")", vim.log.levels.INFO,
+            { title = "GitHub PRs" })
+          mark_merged_locally()
+        else
+          -- Best effort: approval already landed, so a failed merge (checks
+          -- pending, strategy not enabled, conflicts, etc.) is not an error
+          -- -- just leave it approved and mention why in case it's useful.
+          vim.notify("Left PR #" .. pr_number .. " approved; merge did not go through.\n" .. vim.trim(merge_out or ""),
+            vim.log.levels.WARN, { title = "GitHub PRs" })
+        end
+
+        -- Leave the popup open rather than closing it -- e.g. approving now
+        -- and merging later once someone gives the go-ahead can then happen
+        -- in the same sitting, from the same panel.
+        redraw()
+        background_reconcile()
+      end)
+    end)
   end
 
   local function do_merge_only(strategy)
     vim.notify("Merging PR #" .. pr_number .. " (no approval)...", vim.log.levels.INFO, { title = "GitHub PRs" })
 
-    local merged, merge_out = gh.merge_pr(pr_number, repo, strategy)
-    if merged then
-      vim.notify("Merged PR #" .. pr_number .. " (" .. strategy .. ")", vim.log.levels.INFO, { title = "GitHub PRs" })
-      mark_merged_locally()
-      redraw()
-      background_reconcile()
-    else
-      -- Unlike the approve+merge flow, nothing succeeded here if the merge
-      -- fails -- no approval went through either -- so this is a real error.
-      vim.notify("Failed to merge PR #" .. pr_number .. "\n" .. vim.trim(merge_out or ""), vim.log.levels.ERROR,
-        { title = "GitHub PR Merge Error" })
-    end
+    gh.merge_pr_async(pr_number, repo, strategy, function(merged, merge_out)
+      if merged then
+        vim.notify("Merged PR #" .. pr_number .. " (" .. strategy .. ")", vim.log.levels.INFO, { title = "GitHub PRs" })
+        mark_merged_locally()
+        redraw()
+        background_reconcile()
+      else
+        -- Unlike the approve+merge flow, nothing succeeded here if the merge
+        -- fails -- no approval went through either -- so this is a real error.
+        vim.notify("Failed to merge PR #" .. pr_number .. "\n" .. vim.trim(merge_out or ""), vim.log.levels.ERROR,
+          { title = "GitHub PR Merge Error" })
+      end
+    end)
   end
 
   local keymap_opts = { buffer = buf, nowait = true, silent = true }
@@ -817,6 +822,41 @@ function M.review_pr(pr_number, repo)
   for _, key in ipairs({ "<C-h>", "<C-j>", "<C-k>", "<C-l>", "<C-w>" }) do
     vim.keymap.set("n", key, close, keymap_opts)
   end
+end
+
+-- repo is a bare "owner/repo" string; falls back to the active repo (set by
+-- the <space>ap repo picker, or auto-detected from cwd) if omitted. Fetches
+-- asynchronously (gh pr view, then reviews+comments) and only builds the
+-- popup once both are back, so opening a PR never blocks the UI.
+function M.review_pr(pr_number, repo)
+  repo = repo or gh.get_active_repo()
+  if not repo then
+    vim.notify("Failed to determine repo", vim.log.levels.ERROR, { title = "GitHub PRs" })
+    return
+  end
+  gh.set_active_repo(repo)
+
+  vim.notify("Fetching PR #" .. pr_number .. " from " .. repo .. "...", vim.log.levels.INFO, { title = "GitHub PRs" })
+
+  gh.view_pr_json_async(pr_number, repo, function(pr, err)
+    if not pr then
+      vim.notify("Failed to fetch PR #" .. pr_number .. "\n" .. (err or ""), vim.log.levels.ERROR,
+        { title = "GitHub PRs" })
+      return
+    end
+
+    gh.list_pr_reviews_with_comments_async(pr_number, repo, function(reviews, reviews_err)
+      if reviews then
+        pr.reviews = reviews
+      else
+        pr.reviews = {}
+        vim.notify("Couldn't load review comments (reviews will look empty): " .. (reviews_err or ""),
+          vim.log.levels.WARN, { title = "GitHub PRs" })
+      end
+
+      render_review_popup(pr_number, repo, pr)
+    end)
+  end)
 end
 
 -- Switches which repo <space>ap targets, via the fuzzy picker above. Its own

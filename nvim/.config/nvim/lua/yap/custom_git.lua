@@ -23,6 +23,21 @@ function M.get_organization_list()
   return org_list
 end
 
+function M.get_organization_list_async(callback)
+  vim.system({ "sh", "-c", "gh org list" }, { text = true }, function(result)
+    vim.schedule(function()
+      local org_list = {}
+      for line in (result.stdout or ""):gmatch("[^\r\n]+") do
+        if not line:match("^Showing") and line ~= "" then
+          line = line:match("^%s*(.-)%s*$")
+          table.insert(org_list, line)
+        end
+      end
+      callback(org_list)
+    end)
+  end)
+end
+
 function M.get_repo_list()
   local handle = io.popen('gh repo list ' ..
     M.current_organization .. " --visibility private --limit 250 --no-archived --json name | jq -r '.[].name'")
@@ -230,6 +245,72 @@ function M.list_repos_for_picker(force_refresh)
   return repos
 end
 
+-- Non-blocking twin of list_repos_for_picker: same caches, same repo list,
+-- but chains the `gh repo list` calls (one for personal repos, one per org)
+-- through vim.system instead of io.popen, so a cold cache (or a forced
+-- refresh) doesn't freeze the UI for however long those calls take.
+function M.list_repos_for_picker_async(force_refresh, callback)
+  if M._repo_list_cache and not force_refresh then
+    callback(M._repo_list_cache)
+    return
+  end
+
+  if not force_refresh then
+    local cached = read_repo_disk_cache()
+    if cached then
+      M._repo_list_cache = cached
+      callback(cached)
+      return
+    end
+  end
+
+  vim.notify("Fetching repo list from GitHub (cached for 30 days after this)...", vim.log.levels.INFO,
+    { title = "GitHub PRs" })
+
+  local repos = {}
+  local seen = {}
+
+  local function add_repos(output)
+    for line in output:gmatch("[^\r\n]+") do
+      line = line:match("^%s*(.-)%s*$")
+      if line ~= "" and not seen[line] then
+        seen[line] = true
+        table.insert(repos, line)
+      end
+    end
+  end
+
+  local function run_and_add(cmd, next_fn)
+    vim.system({ "sh", "-c", cmd }, { text = true }, function(result)
+      vim.schedule(function()
+        add_repos(result.stdout or "")
+        next_fn()
+      end)
+    end)
+  end
+
+  run_and_add("gh repo list --limit 250 --no-archived --json nameWithOwner -q '.[].nameWithOwner' 2>/dev/null",
+    function()
+      M.get_organization_list_async(function(orgs)
+        local i = 0
+        local function next_org()
+          i = i + 1
+          local org = orgs[i]
+          if not org then
+            M._repo_list_cache = repos
+            write_repo_disk_cache(repos)
+            callback(repos)
+            return
+          end
+          run_and_add(string.format(
+            "gh repo list %s --limit 250 --no-archived --json nameWithOwner -q '.[].nameWithOwner' 2>/dev/null", org),
+            next_org)
+        end
+        next_org()
+      end)
+    end)
+end
+
 -- Resolves a bare repo name (no "owner/") against the cached repo list, so
 -- "myrepo#123" typed into the PR prompt doesn't require spelling out the
 -- owner. Returns nil without hitting the network if nothing cached matches.
@@ -260,6 +341,25 @@ function M.get_viewer_login()
 
   if login ~= "" then M._viewer_login = login end
   return M._viewer_login
+end
+
+-- Non-blocking twin, for pre-warming the cache (see pr_popup.lua) so the
+-- synchronous M.get_viewer_login() call made right after approving/merging
+-- -- itself needed so the optimistic local update can show the right
+-- username -- almost always just returns the already-cached value instantly.
+function M.get_viewer_login_async(callback)
+  if M._viewer_login then
+    callback(M._viewer_login)
+    return
+  end
+
+  vim.system({ "sh", "-c", "gh api user -q .login" }, { text = true }, function(result)
+    vim.schedule(function()
+      local login = (result.stdout or ""):gsub("%s+", "")
+      if login ~= "" then M._viewer_login = login end
+      callback(M._viewer_login)
+    end)
+  end)
 end
 
 function M.get_author()
@@ -444,6 +544,34 @@ function M.merge_pr(pr_number, repo, strategy)
   local ok = handle:close()
 
   return ok and not output:match("[Ff]ailed") and not output:lower():match("error"), output
+end
+
+-- Non-blocking: runs `cmd` via the shell and calls `callback(output, exit_ok)`
+-- once it exits, instead of making the caller wait on io.popen. `exit_ok` is
+-- just the process exit code being 0 -- callers still grep `output` for
+-- "failed"/"error" the same way the sync versions do, since `gh` sometimes
+-- exits 0 on a soft failure.
+local function run_shell_async(cmd, callback)
+  vim.system({ "sh", "-c", cmd }, { text = true }, function(result)
+    vim.schedule(function()
+      callback((result.stdout or "") .. (result.stderr or ""), result.code == 0)
+    end)
+  end)
+end
+
+function M.approve_pr_async(pr_number, repo, callback)
+  local cmd = string.format("gh pr review %s --approve --repo %s", pr_number, repo)
+  run_shell_async(cmd, function(output, exit_ok)
+    callback(exit_ok and not output:match("[Ff]ailed"), output)
+  end)
+end
+
+function M.merge_pr_async(pr_number, repo, strategy, callback)
+  local flag = ({ merge = "--merge", squash = "--squash", rebase = "--rebase" })[strategy] or "--merge"
+  local cmd = string.format("gh pr merge %s --repo %s %s", pr_number, repo, flag)
+  run_shell_async(cmd, function(output, exit_ok)
+    callback(exit_ok and not output:match("[Ff]ailed") and not output:lower():match("error"), output)
+  end)
 end
 
 function M.fetch_my_prs()
