@@ -158,7 +158,8 @@ key_mapper('', '<right>', '<nop>', 'Disable right arrow key')
 -- Git-related mappings
 -- =======================
 key_mapper('n', '<space>gs', ':Git<CR>', 'Git Status')
-key_mapper('n', '<space>gp', ':Git push<CR>', 'Git push')
+-- <space>gp (git push) now lives in yap/fzf-lua.lua -- a non-blocking
+-- spinner popup instead of fugitive's own job-output buffer.
 key_mapper('n', '<space>gb', ':Git blame<CR>', 'Git blame')
 key_mapper('n', '<space>gC', ':Git commit<CR>', 'Git commit')
 

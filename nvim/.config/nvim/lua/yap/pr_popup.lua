@@ -77,6 +77,7 @@ local LEGEND_GROUPS = {
   { { "a", "approve" }, { "m", "approve+merge" }, { "s", "approve+squash" }, { "r", "approve+rebase" } },
   { { "M", "merge only (no approve)" } },
   { { "d", "diff" }, { "o", "open" }, { "y", "copy url" }, { "R", "switch repo" } },
+  { { "<C-r>", "reload now (auto every 10s)" } },
   { { "<space>", "expand/collapse/view diff" }, { "j/k", "next/prev item" } },
   { { "q/<Esc>", "close" } },
 }
@@ -589,13 +590,16 @@ end
 -- the actual popup-building work, once pr (with pr.reviews already filled
 -- in) is in hand -- see M.review_pr below, which fetches it asynchronously
 -- and calls this when it's ready, so none of this blocks the UI.
+local RELOAD_INTERVAL_MS = 10000
+
 local function render_review_popup(pr_number, repo, pr)
   local state = build_state(pr)
   local lines, actions, item_rows = build_pr_lines(pr, state)
   local legend_lines, legend_highlights = build_legend()
 
+  local base_title = string.format(" PR #%s (%s) ", pr_number, repo)
   local buf, win, _, footer_win = open_floating_window(lines, {
-    title = string.format(" PR #%s (%s) ", pr_number, repo),
+    title = base_title,
     footer = legend_lines,
     footer_highlights = legend_highlights,
   })
@@ -608,7 +612,22 @@ local function render_review_popup(pr_number, repo, pr)
   -- cache instead of blocking on a "whoami" call at the moment you approve.
   gh.get_viewer_login_async(function() end)
 
+  local function set_loading(loading)
+    if not vim.api.nvim_win_is_valid(win) then return end
+    pcall(vim.api.nvim_win_set_config, win, {
+      title = loading and (base_title:gsub("%s*$", "") .. " ⟳ reloading... ") or base_title,
+      title_pos = "center",
+    })
+  end
+
+  local reload_timer
+
   local function close()
+    if reload_timer then
+      reload_timer:stop()
+      reload_timer:close()
+      reload_timer = nil
+    end
     if vim.api.nvim_win_is_valid(win) then vim.api.nvim_win_close(win, true) end
     if footer_win and vim.api.nvim_win_is_valid(footer_win) then vim.api.nvim_win_close(footer_win, true) end
   end
@@ -650,25 +669,64 @@ local function render_review_popup(pr_number, repo, pr)
     pr.mergedAt = os.date("!%Y-%m-%dT%H:%M:%SZ")
   end
 
-  -- The local update above is an educated guess (exact merge timestamp,
-  -- any concurrent reviews from someone else, etc.), so quietly reconcile
-  -- it with the real server state once it's actually available -- without
-  -- blocking on it, since the popup already looks right in the meantime.
-  local function background_reconcile()
-    gh.view_pr_json_async(pr_number, repo, function(fresh_pr)
-      if not fresh_pr then return end
-      if not (vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_win_is_valid(win)) then return end
+  -- Re-fetches the PR + reviews and redraws in place. Used three ways: quietly
+  -- after an optimistic local update (approve/merge, see mark_*_locally above)
+  -- to reconcile any guess with real server state; on a 10s timer so the view
+  -- stays current without you doing anything; and manually via <C-r> when you
+  -- want it right now. Shows a loading indicator in the title except for the
+  -- post-action reconcile, which is already covered by that action's own
+  -- "Approved"/"Merged" notification and doesn't need a second visual cue.
+  local reload_in_progress = false
+
+  local function reload(opts)
+    opts = opts or {}
+    if reload_in_progress then return end
+    reload_in_progress = true
+    if opts.show_loading then set_loading(true) end
+
+    gh.view_pr_json_async(pr_number, repo, function(fresh_pr, err)
+      if not fresh_pr then
+        reload_in_progress = false
+        if opts.show_loading then set_loading(false) end
+        if opts.manual then
+          vim.notify("Failed to reload PR #" .. pr_number .. "\n" .. (err or ""), vim.log.levels.WARN,
+            { title = "GitHub PRs" })
+        end
+        return
+      end
+      if not (vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_win_is_valid(win)) then
+        reload_in_progress = false
+        return
+      end
 
       gh.list_pr_reviews_with_comments_async(pr_number, repo, function(fresh_reviews)
+        reload_in_progress = false
+        if opts.show_loading then set_loading(false) end
         if not (vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_win_is_valid(win)) then return end
 
         fresh_pr.reviews = fresh_reviews or fresh_pr.reviews or {}
         pr = fresh_pr
         state = build_state(pr)
         redraw()
+        if opts.manual then
+          vim.notify("Reloaded PR #" .. pr_number, vim.log.levels.INFO, { title = "GitHub PRs" })
+        end
       end)
     end)
   end
+
+  reload_timer = vim.uv.new_timer()
+  reload_timer:start(RELOAD_INTERVAL_MS, RELOAD_INTERVAL_MS, vim.schedule_wrap(function()
+    if not (vim.api.nvim_buf_is_valid(buf) and vim.api.nvim_win_is_valid(win)) then
+      if reload_timer then
+        reload_timer:stop()
+        reload_timer:close()
+        reload_timer = nil
+      end
+      return
+    end
+    reload({ show_loading = true })
+  end))
 
   -- j/k jump straight to the next/previous commit, review or comment header
   -- instead of stepping line-by-line -- which, through an expanded review's
@@ -729,7 +787,7 @@ local function render_review_popup(pr_number, repo, pr)
 
       if not strategy then
         redraw()
-        background_reconcile()
+        reload()
         return
       end
 
@@ -750,7 +808,7 @@ local function render_review_popup(pr_number, repo, pr)
         -- and merging later once someone gives the go-ahead can then happen
         -- in the same sitting, from the same panel.
         redraw()
-        background_reconcile()
+        reload()
       end)
     end)
   end
@@ -763,7 +821,7 @@ local function render_review_popup(pr_number, repo, pr)
         vim.notify("Merged PR #" .. pr_number .. " (" .. strategy .. ")", vim.log.levels.INFO, { title = "GitHub PRs" })
         mark_merged_locally()
         redraw()
-        background_reconcile()
+        reload()
       else
         -- Unlike the approve+merge flow, nothing succeeded here if the merge
         -- fails -- no approval went through either -- so this is a real error.
@@ -805,6 +863,8 @@ local function render_review_popup(pr_number, repo, pr)
       prompt_pr_number_in_repo(new_repo)
     end)
   end, keymap_opts)
+
+  vim.keymap.set("n", "<C-r>", function() reload({ show_loading = true, manual = true }) end, keymap_opts)
 
   vim.keymap.set("n", "<space>", handle_space_at_cursor, keymap_opts)
 

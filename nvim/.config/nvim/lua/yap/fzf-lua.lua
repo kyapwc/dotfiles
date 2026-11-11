@@ -2,6 +2,7 @@ local actions = require('fzf-lua.actions')
 local fzfLua = require('fzf-lua')
 local gh_functions = require('yap/custom_git')
 local pr_popup = require('yap/pr_popup')
+local progress_popup = require('yap/progress_popup')
 local M = {}
 
 fzfLua.setup({
@@ -65,25 +66,6 @@ local function get_current_branch()
   return nil
 end
 
-local function get_repo_url()
-  -- local handle = io.popen("git config --get remote.origin.url")
-  local handle = io.popen('git ls-remote --get-url origin')
-  if handle then
-    local origin_url = handle:read("*a"):gsub("%s+", "")
-    handle:close()
-
-    -- Convert SSH URL to HTTPS if needed
-    if origin_url:find("git@github.com:") then
-      origin_url = origin_url:gsub("git@github.com:", "https://github.com/")
-    end
-
-    -- Remove .git suffix if present
-    origin_url = origin_url:gsub("%.git$", "")
-    return origin_url
-  end
-  return nil
-end
-
 local function make_branch_diff_preview(current_branch)
   local escaped_current = vim.fn.shellescape(current_branch)
   return string.format(
@@ -93,7 +75,7 @@ local function make_branch_diff_preview(current_branch)
   )
 end
 
--- Mapping to create the GitHub PR link
+-- Mapping to create a GitHub PR for the current branch
 vim.keymap.set("n", "<space>pr", function()
   local current_branch = get_current_branch()
   if not current_branch then
@@ -101,14 +83,15 @@ vim.keymap.set("n", "<space>pr", function()
     return
   end
 
-  local repo_url = get_repo_url()
-  if not repo_url then
-    vim.notify("Failed to retrieve Git repository URL!", vim.log.levels.ERROR)
-    return
-  end
-
-  -- Open fzf-lua.git_branches() and create a PR link
+  -- Open fzf-lua.git_branches() to pick the base branch. fzf-lua's own
+  -- default cmd lists --all (local + remote-tracking) with -vv (ahead/behind
+  -- + last commit per branch, which needs a merge-base walk for every ref) --
+  -- on a repo with thousands of stale remote branches (19638 in
+  -- respond-io/respond-io) that took ~0.86s. A PR's base is always one of
+  -- your own local branches, so skip the remote refs and the -vv lookup
+  -- entirely: same repo, 781 local branches, ~0.03s.
   fzfLua.git_branches({
+    cmd = "git branch --color --sort=-committerdate",
     preview = make_branch_diff_preview(current_branch),
     -- Each line is `<*/space marker><branch name>  <sha> <commit message>`.
     -- fzf strips ANSI before matching (--ansi is on by default), so a
@@ -128,16 +111,53 @@ vim.keymap.set("n", "<space>pr", function()
         -- optional: if it comes back like "origin/foo" and you want "foo"
         selected_branch = selected_branch:gsub("^origin/", ""):gsub("^remotes/origin/", "")
 
-        local pr_url = string.format("%s/pull/new/%s...%s", repo_url, selected_branch, current_branch)
-        vim.fn.setreg("+", pr_url)
-        vim.notify("PR Link Opened & In Clipboard")
+        local progress = progress_popup.start("Creating PR into " .. selected_branch .. "...")
 
-        local handle = io.popen('open ' .. vim.fn.shellescape(pr_url))
-        if handle then handle:close() end
+        gh_functions.create_pr_async(selected_branch, current_branch, function(ok, pr_url, output, existing_url)
+          if not ok then
+            if existing_url then
+              -- A PR for this branch already exists -- no point erroring out
+              -- when what's actually wanted (a look at that PR) is one
+              -- `gh-approver open` away.
+              progress.finish("↪ PR already exists: " .. existing_url, 4000, vim.log.levels.WARN)
+              local handle = io.popen("gh-approver open " .. vim.fn.shellescape(existing_url))
+              if handle then handle:close() end
+            else
+              progress.finish("✗ Failed to create PR\n" .. vim.trim(output), 5000, vim.log.levels.ERROR)
+            end
+            return
+          end
+
+          progress.finish("✓ Created PR: " .. pr_url, 3000)
+          vim.fn.setreg("+", pr_url)
+
+          -- Hands straight to gh-approver instead of the system default
+          -- browser, so the brand-new PR opens directly in its TUI.
+          local handle = io.popen("gh-approver open " .. vim.fn.shellescape(pr_url))
+          if handle then handle:close() end
+        end)
       end,
     },
   })
-end, { desc = "Create PR link for the current branch" })
+end, { desc = "Create a GitHub PR for the current branch" })
+
+-- Git push, with a non-blocking spinner (see yap/progress_popup.lua) instead
+-- of fugitive's own `:Git push` -- that opens a job-output buffer in the
+-- current layout, which is disruptive for something you just want to fire
+-- and keep editing through. `git push` alone is enough: `push.autoSetupRemote
+-- = true` (set globally, ~/.gitconfig) already makes a first push of a new
+-- branch set its upstream automatically, no interactive prompt either way.
+vim.keymap.set("n", "<space>gp", function()
+  local progress = progress_popup.start("Pushing to origin...")
+
+  gh_functions.push_async(function(ok, output)
+    if ok then
+      progress.finish("✓ Pushed", 1500)
+    else
+      progress.finish("✗ Push failed\n" .. vim.trim(output), 5000, vim.log.levels.ERROR)
+    end
+  end)
+end, { desc = "Git push" })
 
 -- Browse commit history (git log) with each commit's full patch (`git show`,
 -- equivalent to `git log -p` one commit at a time) in the preview pane --

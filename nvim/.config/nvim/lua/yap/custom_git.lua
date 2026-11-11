@@ -574,6 +574,36 @@ function M.merge_pr_async(pr_number, repo, strategy, callback)
   end)
 end
 
+-- --fill auto-populates title/body from the branch's commit(s), so this never
+-- blocks on an interactive prompt. `gh pr create` prints the new PR's URL as
+-- its own stdout on success, which is all the caller actually needs back.
+--
+-- When a PR for this branch already exists, `gh` fails but still prints the
+-- existing PR's URL in its error text ("a pull request for branch ... already
+-- exists: <url>") -- surface that as `existing_url` so the caller can offer
+-- to just open it instead of only reporting a bare failure.
+function M.create_pr_async(base, head, callback)
+  local cmd = string.format(
+    "gh pr create --base %s --head %s --fill",
+    vim.fn.shellescape(base), vim.fn.shellescape(head)
+  )
+  run_shell_async(cmd, function(output, exit_ok)
+    local url = output:match("(https://github%.com/%S+)")
+    if exit_ok and url then
+      callback(true, url, output)
+      return
+    end
+    local existing_url = output:lower():match("already exists") and url or nil
+    callback(false, nil, output, existing_url)
+  end)
+end
+
+function M.push_async(callback)
+  run_shell_async("git push", function(output, exit_ok)
+    callback(exit_ok, output)
+  end)
+end
+
 function M.fetch_my_prs()
   local command = string.format(
     "gh pr list --limit 250 --json title,number,url --author '@me' | jq -r '.[] | [.number, .title, .url] | @tsv'"
